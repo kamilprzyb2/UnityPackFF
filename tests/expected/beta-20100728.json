@@ -304,6 +304,2401 @@
    "sharedassets0.assets"
   ]
  },
+ "clips/FutureNano.resourceFile": {
+  "CustomAssetBundle-FutureNano": {
+   "2453492631054": {
+    "name": "laugh",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 2.166666030883789,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 598
+     },
+     "position": {
+      "curves": 46,
+      "keys": 151
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "e12b32e16099b984"
+   },
+   "7009555473696": {
+    "name": "call",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 0.7666668891906738,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 296
+     },
+     "position": {
+      "curves": 44,
+      "keys": 121
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "adfc5382854c230d"
+   },
+   "8863881857917": {
+    "name": "dance4",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 3.999997615814209,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 2245
+     },
+     "position": {
+      "curves": 46,
+      "keys": 283
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 6
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "a39f87d771b93e25"
+   },
+   "15336519117049": {
+    "name": "dance1",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 5.666662693023682,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 1243
+     },
+     "position": {
+      "curves": 44,
+      "keys": 335
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 7
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "dd89c9f7434c4af5"
+   },
+   "17559082188176": {
+    "name": "dance4",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 3.999997615814209,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 2082
+     },
+     "position": {
+      "curves": 33,
+      "keys": 468
+     },
+     "scale": {
+      "curves": 11,
+      "keys": 42
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "1ed9ed3937ba4242"
+   },
+   "18291304058257": {
+    "name": "stand2",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 0.9666670560836792,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 154
+     },
+     "position": {
+      "curves": 44,
+      "keys": 141
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "00b981ba558add0b"
+   },
+   "21102547511941": {
+    "name": "agree",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.6666663885116577,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 413
+     },
+     "position": {
+      "curves": 44,
+      "keys": 129
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "8a514a09c078daf4"
+   },
+   "21577887005743": {
+    "name": "skill3",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.3333333730697632,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 395
+     },
+     "position": {
+      "curves": 46,
+      "keys": 120
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "particle",
+     "sound",
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "eedb534e9ee628d8"
+   },
+   "22156883395078": {
+    "name": "goodbye",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.6666663885116577,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 391
+     },
+     "position": {
+      "curves": 46,
+      "keys": 146
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "4ae4540c71779cb1"
+   },
+   "25155146424610": {
+    "name": "discharge",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 3.33333158493042,
+    "curves": {
+     "rotation": {
+      "curves": 46,
+      "keys": 192
+     },
+     "position": {
+      "curves": 44,
+      "keys": 116
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "2a19fd26bc1b5daf"
+   },
+   "30258129922569": {
+    "name": "flex",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.7333329916000366,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 463
+     },
+     "position": {
+      "curves": 44,
+      "keys": 170
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "b6a3d93a7c3f3904"
+   },
+   "44627135389112": {
+    "name": "no",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.7333329916000366,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 352
+     },
+     "position": {
+      "curves": 44,
+      "keys": 188
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "68fa6fd827e82dac"
+   },
+   "55633637991308": {
+    "name": "hello",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.6666663885116577,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 253
+     },
+     "position": {
+      "curves": 34,
+      "keys": 109
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 24
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "5721d2028ce01c01"
+   },
+   "56307657907022": {
+    "name": "skill2",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.033333659172058,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 492
+     },
+     "position": {
+      "curves": 46,
+      "keys": 123
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "sound",
+     "particle",
+     "end"
+    ],
+    "samples_sha256": "7fc1586e854870db"
+   },
+   "56760019715742": {
+    "name": "dance2",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 3.999997615814209,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 1126
+     },
+     "position": {
+      "curves": 46,
+      "keys": 195
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 6
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "02a2334c0f9db08a"
+   },
+   "59178161094649": {
+    "name": "win",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 2.9999985694885254,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 609
+     },
+     "position": {
+      "curves": 46,
+      "keys": 168
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "particle",
+     "end"
+    ],
+    "samples_sha256": "50838435a078b222"
+   },
+   "62497936253386": {
+    "name": "skill3",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.8666661977767944,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 390
+     },
+     "position": {
+      "curves": 34,
+      "keys": 158
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 35
+     }
+    },
+    "events": [
+     "sound",
+     "sound",
+     "particle",
+     "end"
+    ],
+    "samples_sha256": "b0893735f2645329"
+   },
+   "66901158966109": {
+    "name": "lose",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.5999997854232788,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 616
+     },
+     "position": {
+      "curves": 46,
+      "keys": 115
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "particle",
+     "end"
+    ],
+    "samples_sha256": "e227510299bfeea8"
+   },
+   "68918059654961": {
+    "name": "readyspell",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 0.7000001668930054,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 233
+     },
+     "position": {
+      "curves": 44,
+      "keys": 116
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "38f0df6f0c302119"
+   },
+   "79608181079885": {
+    "name": "skill1",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.2333334684371948,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 288
+     },
+     "position": {
+      "curves": 44,
+      "keys": 146
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "particle",
+     "sound",
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "e8867beff6229a77"
+   },
+   "86493022766978": {
+    "name": "stand3",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 3.999997615814209,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 351
+     },
+     "position": {
+      "curves": 46,
+      "keys": 223
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 6
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "64187d7d785b9d89"
+   },
+   "86855283064296": {
+    "name": "yes",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.7999995946884155,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 209
+     },
+     "position": {
+      "curves": 46,
+      "keys": 118
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "724eef10a6ca20bc"
+   },
+   "88209600854731": {
+    "name": "skill3",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 2.2666659355163574,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 529
+     },
+     "position": {
+      "curves": 44,
+      "keys": 229
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "4cab57aaa356c0d2"
+   },
+   "95751169809885": {
+    "name": "thanks",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.9999994039535522,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 552
+     },
+     "position": {
+      "curves": 46,
+      "keys": 158
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "d6bc13638e99ae6b"
+   },
+   "98791552437126": {
+    "name": "dance3",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 3.199998378753662,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 1397
+     },
+     "position": {
+      "curves": 46,
+      "keys": 170
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "becfac7a45aa01c9"
+   },
+   "99990007803617": {
+    "name": "stand2",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.4999998807907104,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 148
+     },
+     "position": {
+      "curves": 46,
+      "keys": 98
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "106aeb874dc2628f"
+   },
+   "102989035706319": {
+    "name": "flex",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.9999994039535522,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 771
+     },
+     "position": {
+      "curves": 46,
+      "keys": 140
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "fcf4e4b1a35f8f89"
+   },
+   "103775717580633": {
+    "name": "angry",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.7333329916000366,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 378
+     },
+     "position": {
+      "curves": 34,
+      "keys": 152
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 35
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "35c48123f0b279b9"
+   },
+   "104715897011239": {
+    "name": "angry",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.9999994039535522,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 458
+     },
+     "position": {
+      "curves": 46,
+      "keys": 133
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "898c79236d1334c0"
+   },
+   "105997891789420": {
+    "name": "discharge",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.6666663885116577,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 207
+     },
+     "position": {
+      "curves": 46,
+      "keys": 105
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "803a219ddfd153cf"
+   },
+   "107759843905701": {
+    "name": "stand1",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.4,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 463
+     },
+     "position": {
+      "curves": 44,
+      "keys": 145
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "665d71ad6641e6d6"
+   },
+   "108537359478133": {
+    "name": "stand3",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.3333333730697632,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 378
+     },
+     "position": {
+      "curves": 44,
+      "keys": 153
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "a8ad9149b6a39b6e"
+   },
+   "109050807789351": {
+    "name": "sad",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 2.9999985694885254,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 566
+     },
+     "position": {
+      "curves": 46,
+      "keys": 173
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "e22cd2ec3fd820e8"
+   },
+   "116376116086135": {
+    "name": "happy",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.100000262260437,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 497
+     },
+     "position": {
+      "curves": 34,
+      "keys": 208
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 24
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "49106703b1f4244f"
+   },
+   "116822573248380": {
+    "name": "kiss",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.5333331823349,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 394
+     },
+     "position": {
+      "curves": 44,
+      "keys": 130
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "e11ecf30563cf80d"
+   },
+   "119429581516016": {
+    "name": "skill2",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 3.5999979972839355,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 369
+     },
+     "position": {
+      "curves": 34,
+      "keys": 226
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 46
+     }
+    },
+    "events": [
+     "sound",
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "dee66f42984579b3"
+   },
+   "124896641598692": {
+    "name": "shocked",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.166666865348816,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 384
+     },
+     "position": {
+      "curves": 34,
+      "keys": 122
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 24
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "08351eeec43c670a"
+   },
+   "125001566389126": {
+    "name": "discharge",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.6666663885116577,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 126
+     },
+     "position": {
+      "curves": 34,
+      "keys": 82
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 24
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "1b38b12785e8a55f"
+   },
+   "125085455563590": {
+    "name": "withdraw",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 0.5666667222976685,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 255
+     },
+     "position": {
+      "curves": 44,
+      "keys": 104
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "9f30034a07cde400"
+   },
+   "125474875785528": {
+    "name": "shocked",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.166666865348816,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 359
+     },
+     "position": {
+      "curves": 44,
+      "keys": 132
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "e3f854e29b331ed8"
+   },
+   "127001703909677": {
+    "name": "angry",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.9333328008651733,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 473
+     },
+     "position": {
+      "curves": 44,
+      "keys": 279
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "e873aa88211645de"
+   },
+   "133943384672027": {
+    "name": "stand2",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.5999997854232788,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 151
+     },
+     "position": {
+      "curves": 34,
+      "keys": 80
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 24
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "b5f47fc5acdf41b6"
+   },
+   "134957224420981": {
+    "name": "dance3",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 3.199998378753662,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 1248
+     },
+     "position": {
+      "curves": 44,
+      "keys": 216
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "7887c52e304ebdec"
+   },
+   "135786100669229": {
+    "name": "call",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 0.7666668891906738,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 256
+     },
+     "position": {
+      "curves": 34,
+      "keys": 121
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 24
+     }
+    },
+    "events": [
+     "sound",
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "3312bf5cf7115bd6"
+   },
+   "139331765312034": {
+    "name": "tease",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 2.1999993324279785,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 443
+     },
+     "position": {
+      "curves": 34,
+      "keys": 160
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 35
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "b13995114ec2b76e"
+   },
+   "139944205981472": {
+    "name": "goodbye",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.6666663885116577,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 253
+     },
+     "position": {
+      "curves": 34,
+      "keys": 109
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 24
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "7422a48966733706"
+   },
+   "144310024944417": {
+    "name": "yes",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.8666661977767944,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 208
+     },
+     "position": {
+      "curves": 34,
+      "keys": 121
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 35
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "22f94e056c9a2cd7"
+   },
+   "144623861765842": {
+    "name": "sad",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 2.9999985694885254,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 500
+     },
+     "position": {
+      "curves": 44,
+      "keys": 174
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "f26cc1c4aabca75c"
+   },
+   "147224953030671": {
+    "name": "withdraw",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 0.7666668891906738,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 397
+     },
+     "position": {
+      "curves": 46,
+      "keys": 105
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "5b7a8ee83c75396f"
+   },
+   "147484386487540": {
+    "name": "happy",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.100000262260437,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 662
+     },
+     "position": {
+      "curves": 44,
+      "keys": 140
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "31cca239e93cb42b"
+   },
+   "149711434557034": {
+    "name": "laugh",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 2.3999991416931152,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 471
+     },
+     "position": {
+      "curves": 44,
+      "keys": 183
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "b3248bdb7cb16893"
+   },
+   "154049098383036": {
+    "name": "dance5",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 4.266664028167725,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 1646
+     },
+     "position": {
+      "curves": 44,
+      "keys": 339
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 6
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "d5f78ba7229e74c8"
+   },
+   "154122657844535": {
+    "name": "skill2",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.6666663885116577,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 653
+     },
+     "position": {
+      "curves": 44,
+      "keys": 160
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "bb6b783aaa4adf66"
+   },
+   "155589058047821": {
+    "name": "dance3",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 6.39999532699585,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 2479
+     },
+     "position": {
+      "curves": 33,
+      "keys": 615
+     },
+     "scale": {
+      "curves": 11,
+      "keys": 52
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "0d04f07eb3961be2"
+   },
+   "158170913169971": {
+    "name": "thanks",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.5999997854232788,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 238
+     },
+     "position": {
+      "curves": 44,
+      "keys": 146
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "2fa5a073ecac2ae6"
+   },
+   "160363908200336": {
+    "name": "lose",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.5999997854232788,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 543
+     },
+     "position": {
+      "curves": 44,
+      "keys": 140
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "particle",
+     "end"
+    ],
+    "samples_sha256": "c61aea5e501dbe2a"
+   },
+   "160569216244237": {
+    "name": "dance2",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 3.999997615814209,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 1231
+     },
+     "position": {
+      "curves": 44,
+      "keys": 227
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 6
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "a09ec22e5c58a7ed"
+   },
+   "161248595880424": {
+    "name": "win",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 2.9999985694885254,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 500
+     },
+     "position": {
+      "curves": 34,
+      "keys": 211
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 35
+     }
+    },
+    "events": [
+     "sound",
+     "particle",
+     "end"
+    ],
+    "samples_sha256": "ce915969b86ffd7d"
+   },
+   "163934607507559": {
+    "name": "readyspell",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.033333659172058,
+    "curves": {
+     "rotation": {
+      "curves": 29,
+      "keys": 139
+     },
+     "position": {
+      "curves": 29,
+      "keys": 73
+     },
+     "scale": {
+      "curves": 7,
+      "keys": 14
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "9435fbf4adc13c31"
+   },
+   "171192263161722": {
+    "name": "skill1",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 2.9333319664001465,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 509
+     },
+     "position": {
+      "curves": 34,
+      "keys": 158
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 35
+     }
+    },
+    "events": [
+     "sound",
+     "sound",
+     "particle",
+     "end"
+    ],
+    "samples_sha256": "e98a4b7568b2c783"
+   },
+   "171977579813644": {
+    "name": "yes",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.8666661977767944,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 221
+     },
+     "position": {
+      "curves": 44,
+      "keys": 152
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "de974f7ee38315d6"
+   },
+   "172408472363021": {
+    "name": "tease",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 2.7333321571350098,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 609
+     },
+     "position": {
+      "curves": 44,
+      "keys": 240
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "2715160e9da732f3"
+   },
+   "175283151411647": {
+    "name": "agree",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.7999995946884155,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 423
+     },
+     "position": {
+      "curves": 46,
+      "keys": 145
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "cedba482071ca081"
+   },
+   "178112645987023": {
+    "name": "dance1",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 5.666662693023682,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 1417
+     },
+     "position": {
+      "curves": 46,
+      "keys": 314
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 7
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "123d8c85ccc043b0"
+   },
+   "183561591215067": {
+    "name": "dance5",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 2.1333327293395996,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 1065
+     },
+     "position": {
+      "curves": 46,
+      "keys": 224
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "444092b4257464b4"
+   },
+   "187519812091698": {
+    "name": "skill1",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 3.33333158493042,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 1897
+     },
+     "position": {
+      "curves": 46,
+      "keys": 219
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "sound",
+     "tag_p",
+     "end"
+    ],
+    "samples_sha256": "02e0317400e7e71d"
+   },
+   "195013307169087": {
+    "name": "sad",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 2.9999985694885254,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 415
+     },
+     "position": {
+      "curves": 34,
+      "keys": 179
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 35
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "74fc1c69efabe4fc"
+   },
+   "200746346781552": {
+    "name": "tie",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.4,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 379
+     },
+     "position": {
+      "curves": 44,
+      "keys": 131
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "particle",
+     "end"
+    ],
+    "samples_sha256": "1e7c95f6772c92d4"
+   },
+   "204685892859579": {
+    "name": "lose",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.5999997854232788,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 450
+     },
+     "position": {
+      "curves": 34,
+      "keys": 157
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 24
+     }
+    },
+    "events": [
+     "sound",
+     "particle",
+     "end"
+    ],
+    "samples_sha256": "3f8228dba1216a6d"
+   },
+   "208592065853667": {
+    "name": "dance1",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 5.666662693023682,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 1518
+     },
+     "position": {
+      "curves": 33,
+      "keys": 514
+     },
+     "scale": {
+      "curves": 11,
+      "keys": 52
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "48b6543a0e83a76a"
+   },
+   "209588540320600": {
+    "name": "stand3",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 3.5999979972839355,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 359
+     },
+     "position": {
+      "curves": 34,
+      "keys": 229
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 46
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "b79deaa770110e5d"
+   },
+   "210542928688150": {
+    "name": "laugh",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.7333329916000366,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 321
+     },
+     "position": {
+      "curves": 34,
+      "keys": 156
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 35
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "90e2f5e856abb9bf"
+   },
+   "211041917414424": {
+    "name": "tie",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.4,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 280
+     },
+     "position": {
+      "curves": 34,
+      "keys": 169
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 24
+     }
+    },
+    "events": [
+     "sound",
+     "particle",
+     "end"
+    ],
+    "samples_sha256": "81ca0e3ebdb56974"
+   },
+   "211183784546355": {
+    "name": "dance5",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 4.266664028167725,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 1397
+     },
+     "position": {
+      "curves": 33,
+      "keys": 551
+     },
+     "scale": {
+      "curves": 11,
+      "keys": 42
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "4aba2bfb6875fc6e"
+   },
+   "211437064849655": {
+    "name": "tie",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.4,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 450
+     },
+     "position": {
+      "curves": 46,
+      "keys": 111
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "particle",
+     "end"
+    ],
+    "samples_sha256": "4211fddefa347c3c"
+   },
+   "220076706057917": {
+    "name": "tease",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.7999995946884155,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 393
+     },
+     "position": {
+      "curves": 46,
+      "keys": 153
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "0caa8b02d77277bd"
+   },
+   "229296398648773": {
+    "name": "withdraw",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 0.7666668891906738,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 275
+     },
+     "position": {
+      "curves": 34,
+      "keys": 139
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 24
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "a2c4bcc5f1ed602c"
+   },
+   "230159656958469": {
+    "name": "goodbye",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.6666663885116577,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 312
+     },
+     "position": {
+      "curves": 44,
+      "keys": 162
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "98288cc87552b848"
+   },
+   "235383032108155": {
+    "name": "thanks",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.6666663885116577,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 279
+     },
+     "position": {
+      "curves": 34,
+      "keys": 113
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 24
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "74c945330e5b96b1"
+   },
+   "243806855948369": {
+    "name": "hello",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.6666663885116577,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 391
+     },
+     "position": {
+      "curves": 46,
+      "keys": 146
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "0393de6f4d80499d"
+   },
+   "245562184768023": {
+    "name": "dance2",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 3.999997615814209,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 1479
+     },
+     "position": {
+      "curves": 33,
+      "keys": 332
+     },
+     "scale": {
+      "curves": 11,
+      "keys": 42
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "71ecb487a34ffb3a"
+   },
+   "247729297689802": {
+    "name": "spellcasting",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 0.9666670560836792,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 379
+     },
+     "position": {
+      "curves": 46,
+      "keys": 105
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "1a58f8f63d120afb"
+   },
+   "251732613436977": {
+    "name": "no",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.7333329916000366,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 353
+     },
+     "position": {
+      "curves": 34,
+      "keys": 139
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 35
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "39c4ff01aa93607b"
+   },
+   "256324344939324": {
+    "name": "shocked",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.7999995946884155,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 590
+     },
+     "position": {
+      "curves": 46,
+      "keys": 162
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "c28a318b454a8a60"
+   },
+   "257501349972533": {
+    "name": "kiss",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.7333329916000366,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 360
+     },
+     "position": {
+      "curves": 34,
+      "keys": 149
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 35
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "7a225624c66cc573"
+   },
+   "259178690049073": {
+    "name": "stand1",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.4999998807907104,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 217
+     },
+     "position": {
+      "curves": 46,
+      "keys": 98
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "c1ad7407f97b35a0"
+   },
+   "260517251699224": {
+    "name": "call",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.033333659172058,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 505
+     },
+     "position": {
+      "curves": 46,
+      "keys": 107
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "7dd3c37bfe4cb389"
+   },
+   "261001240955648": {
+    "name": "nif-default",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 0.0,
+    "curves": {},
+    "events": [],
+    "samples_sha256": "4f53cda18c2baa0c"
+   },
+   "268981895834582": {
+    "name": "flex",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.7333329916000366,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 366
+     },
+     "position": {
+      "curves": 34,
+      "keys": 134
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 35
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "8c868b1f5bbc0037"
+   },
+   "271044895609251": {
+    "name": "happy",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.100000262260437,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 848
+     },
+     "position": {
+      "curves": 46,
+      "keys": 120
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "fbff6faeff3c2c54"
+   },
+   "271332152800437": {
+    "name": "win",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 2.9999985694885254,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 527
+     },
+     "position": {
+      "curves": 44,
+      "keys": 163
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "particle",
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "029d7d46a2231f02"
+   },
+   "274150262305795": {
+    "name": "kiss",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.5999997854232788,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 499
+     },
+     "position": {
+      "curves": 46,
+      "keys": 118
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "6a6a963bc46d9b82"
+   },
+   "274772683049338": {
+    "name": "dance4",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 3.999997615814209,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 1939
+     },
+     "position": {
+      "curves": 44,
+      "keys": 319
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 6
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "487cf280f711a18a"
+   },
+   "277296182271339": {
+    "name": "hello",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.6666663885116577,
+    "curves": {
+     "rotation": {
+      "curves": 42,
+      "keys": 312
+     },
+     "position": {
+      "curves": 44,
+      "keys": 162
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 4
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "c13146d9c9a01656"
+   },
+   "281079647976865": {
+    "name": "no",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.9999994039535522,
+    "curves": {
+     "rotation": {
+      "curves": 48,
+      "keys": 605
+     },
+     "position": {
+      "curves": 46,
+      "keys": 144
+     },
+     "scale": {
+      "curves": 2,
+      "keys": 5
+     }
+    },
+    "events": [
+     "sound",
+     "end"
+    ],
+    "samples_sha256": "b2d3adc3a27986df"
+   },
+   "281291630656421": {
+    "name": "stand1",
+    "compressed": true,
+    "sample_rate": 30.0,
+    "length": 1.5999997854232788,
+    "curves": {
+     "rotation": {
+      "curves": 34,
+      "keys": 170
+     },
+     "position": {
+      "curves": 34,
+      "keys": 80
+     },
+     "scale": {
+      "curves": 12,
+      "keys": 24
+     }
+    },
+    "events": [
+     "end"
+    ],
+    "samples_sha256": "2e294e4020f01128"
+   }
+  }
+ },
  "dumpxdt/TableData.resourceFile": {
   "m_pAnimationTable": 3,
   "m_pAvatarTable": 2,

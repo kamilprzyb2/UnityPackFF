@@ -8,6 +8,7 @@ Command-line tools that run the same operations as the integration tests, but wr
 | `survey.py` | Describes every file: format, type trees, class IDs, what UnityPackFF can read | `integration/test_survey.py` |
 | `roundtrip.py` | ffbuildtool extract → UnityPackFF save → ffbuildtool pack → re-open and compare; optionally a whole playable build | `integration/test_roundtrip.py` |
 | `meshes.py` | Exports every mesh of an archive as OBJ, plus the skin weights of skinned meshes | `integration/test_meshes.py` |
+| `clips.py` | Reads every AnimationClip of an archive and samples each curve at the clip's rate | `integration/test_clips.py` |
 | `_common.py` | The options all the scripts share (not run directly) | |
 
 Run them from the repository root (`UnityPackFF/`).
@@ -112,3 +113,12 @@ Prints how many meshes each archive has and how many of them are skinned. Writes
 | `<path ID>_<name>.skin.json` | skinned meshes only: per vertex, its `[bone index, weight]` pairs (1 to 4, adding up to 1). The bone index points into the `m_Bones` list of the mesh's SkinnedMeshRenderer |
 
 and `out/meshes/<build>.json` with the statistics the integration test checks (vertex and triangle counts, OBJ digest, how many vertices have how many weights).
+
+## clips.py
+
+```sh
+python3 tests/demo/clips.py --build 104 --bundle FutureNano.resourceFile
+python3 tests/demo/clips.py --build retro --bundle Retro_shared_part2.resourceFile
+```
+
+Prints how many clips each archive has and how many store their rotations compressed. Writes, per serialized file, `out/clips/<build>/<archive>/<file>/<path ID>_<name>.json` for each clip: its name, sample rate, length and events, then per curve its kind (`rotation`, `position`, `scale` or `float`), the transform path it moves (for a `float` curve, path and property), its keys, and its values at every frame from 0 to the clip's length. Rotations are sampled as `evaluate()` returns them, without normalizing. Also writes `out/clips/<build>.json` with the statistics the integration test checks (curve and key counts per kind, length, event names, a digest of the samples).
