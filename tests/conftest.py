@@ -3,7 +3,8 @@ Shared pytest setup.
 
   pytest                          unit tests only (offline)
   pytest -m integration           curated archives of all four builds
-  pytest --sweep                  every archive of every build (2.7 GB)
+  pytest --sweep                  every archive of every build (2.7 GB; only the curated
+                                  archives have recorded values yet, see tests/README.md)
   pytest -m integration --build 1013
   pytest -m integration --record  rewrite tests/expected/<build>.json
 

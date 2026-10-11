@@ -1,0 +1,1869 @@
+{
+ "archive/CharacterSelection.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 24906130,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     24906066,
+     100827900
+    ]
+   ],
+   "bundle_size": 24906130
+  },
+  "files": [
+   "CustomAssetBundle-CharacterSelection"
+  ]
+ },
+ "archive/DongResources_04_02.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.6.1f3",
+   "min_streamed_bytes": 4778349,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     4778285,
+     30774972
+    ]
+   ],
+   "bundle_size": 4778349
+  },
+  "files": [
+   "CustomAssetBundle-DongResources_04_02"
+  ]
+ },
+ "archive/FUSound.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 2702944,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     2702880,
+     3034816
+    ]
+   ],
+   "bundle_size": 2702944
+  },
+  "files": [
+   "CustomAssetBundle-FUSound"
+  ]
+ },
+ "archive/FutureNano.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 1665795,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     1665731,
+     4225332
+    ]
+   ],
+   "bundle_size": 1665795
+  },
+  "files": [
+   "CustomAssetBundle-FutureNano"
+  ]
+ },
+ "archive/Icons.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 5472012,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     5471948,
+     17072472
+    ]
+   ],
+   "bundle_size": 5472012
+  },
+  "files": [
+   "CustomAssetBundle-Icons"
+  ]
+ },
+ "archive/LobbyMusic.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 1044747,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     1044683,
+     1055396
+    ]
+   ],
+   "bundle_size": 1044747
+  },
+  "files": [
+   "CustomAssetBundle-LobbyMusic"
+  ]
+ },
+ "archive/Map_00_00.unity3d": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 188401,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     188337,
+     1518156
+    ]
+   ],
+   "bundle_size": 188401
+  },
+  "files": [
+   "BuildPlayer-Map_00_00",
+   "BuildPlayer-Map_00_00.sharedAssets"
+  ]
+ },
+ "archive/Map_04_02.unity3d": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.6.1f3",
+   "min_streamed_bytes": 11321669,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     11321605,
+     48653400
+    ]
+   ],
+   "bundle_size": 11321669
+  },
+  "files": [
+   "BuildPlayer-Map_04_02",
+   "BuildPlayer-Map_04_02.sharedAssets"
+  ]
+ },
+ "archive/Map_18_14.unity3d": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.4b4",
+   "min_streamed_bytes": 32961,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     32897,
+     169068
+    ]
+   ],
+   "bundle_size": 32961
+  },
+  "files": [
+   "BuildPlayer-Map_18_14",
+   "BuildPlayer-Map_18_14.sharedAssets"
+  ]
+ },
+ "archive/NpcTexture.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 10876242,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     10876178,
+     29176308
+    ]
+   ],
+   "bundle_size": 10876242
+  },
+  "files": [
+   "CustomAssetBundle-NpcTexture"
+  ]
+ },
+ "archive/TableData.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 698236,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     698172,
+     6500528
+    ]
+   ],
+   "bundle_size": 698236
+  },
+  "files": [
+   "CustomAssetBundle-TableData"
+  ]
+ },
+ "archive/World_shared_part1.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 11137363,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     11137299,
+     36153196
+    ]
+   ],
+   "bundle_size": 11137363
+  },
+  "files": [
+   "CustomAssetBundle-World_shared_part1"
+  ]
+ },
+ "archive/main.unity3d": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 7548638,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     7548574,
+     54133152
+    ]
+   ],
+   "bundle_size": 7548638
+  },
+  "files": [
+   "Assembly - CSharp - first pass.dll",
+   "Assembly - CSharp.dll",
+   "Assembly - UnityScript - first pass.dll",
+   "Mono.Data.Tds.dll",
+   "Mono.Security.dll",
+   "System.Configuration.Install.dll",
+   "System.Configuration.dll",
+   "System.Data.dll",
+   "System.Drawing.dll",
+   "System.EnterpriseServices.dll",
+   "System.Security.dll",
+   "System.Transactions.dll",
+   "System.Xml.dll",
+   "System.dll",
+   "mainData",
+   "mysql.data.dll",
+   "sharedassets0.assets"
+  ]
+ },
+ "roundtrip/Icons.resourceFile": {
+  "CustomAssetBundle-Icons": {
+   "saved": "f6c00ffc373ad619c128daa1a3197cff084c48539f1df9f0c91c246442c3d30f",
+   "identical": false,
+   "save_error": null
+  }
+ },
+ "roundtrip/LobbyMusic.resourceFile": {
+  "CustomAssetBundle-LobbyMusic": {
+   "saved": "97bc60328cfa8de1e74044ed768d4f9e9be997a77dc46633c25aaa8e2c4ea150",
+   "identical": true,
+   "save_error": null
+  }
+ },
+ "roundtrip/Map_00_00.unity3d": {
+  "BuildPlayer-Map_00_00": {
+   "saved": "35911c3c8c8e0a67fc5a5d609c4be7e0fe76ce2449aa33af34a4d31a8998edb9",
+   "identical": false,
+   "save_error": null
+  },
+  "BuildPlayer-Map_00_00.sharedAssets": {
+   "saved": "ac993c62884f4bc56ed8e540841df35fd2b0da404671305a9f52b54ec006acce",
+   "identical": false,
+   "save_error": null
+  }
+ },
+ "roundtrip/Map_04_02.unity3d": {
+  "BuildPlayer-Map_04_02": {
+   "saved": "8357d191a4d53c7ca9f09cae25090c418c8df75d502fd9e8003f83e1ac778350",
+   "identical": false,
+   "save_error": null
+  },
+  "BuildPlayer-Map_04_02.sharedAssets": {
+   "saved": "97f3409ca18921972e1a2d0da94550999c7778ff0aea3f0833a7ec2702b4fa7f",
+   "identical": false,
+   "save_error": null
+  }
+ },
+ "roundtrip/TableData.resourceFile": {
+  "CustomAssetBundle-TableData": {
+   "saved": "2d261e80168dd835bcedd7befd67134faed560e47fef1f5d09c75573290afa24",
+   "identical": false,
+   "save_error": null
+  }
+ },
+ "survey/CharacterSelection.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 24906130,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     24906066,
+     100827900
+    ]
+   ],
+   "bundle_size": 24906130
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-CharacterSelection"
+  ],
+  "files": {
+   "CustomAssetBundle-CharacterSelection": {
+    "size": 100827846,
+    "sha256": "048d0898c39a20080b541bd1c016424fa1895c5262970fadc32acc2f5f537941",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 18,
+    "tree_class_ids": [
+     -4,
+     -3,
+     -2,
+     -1,
+     1,
+     4,
+     21,
+     23,
+     28,
+     33,
+     43,
+     48,
+     74,
+     83,
+     111,
+     115,
+     137,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 258388,
+    "destroyed": 0,
+    "script_objects": 2259,
+    "classes": {
+     "1": 88523,
+     "4": 88523,
+     "21": 1550,
+     "23": 917,
+     "28": 489,
+     "33": 36027,
+     "43": 37032,
+     "48": 12,
+     "74": 570,
+     "83": 220,
+     "111": 1252,
+     "114": 2259,
+     "115": 4,
+     "137": 1009,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ValueError: Duplicate asset object: <GameObject 1> (path_id=154824314944763)"
+    }
+   }
+  }
+ },
+ "survey/DongResources_04_02.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.6.1f3",
+   "min_streamed_bytes": 4778349,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     4778285,
+     30774972
+    ]
+   ],
+   "bundle_size": 4778349
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-DongResources_04_02"
+  ],
+  "files": {
+   "CustomAssetBundle-DongResources_04_02": {
+    "size": 30774918,
+    "sha256": "201adcf82bc5607594d52eb0934c6f5bf47d888a964df2c9d3b3149c4945b20a",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 23,
+    "tree_class_ids": [
+     -7,
+     -6,
+     -5,
+     -4,
+     -3,
+     -2,
+     -1,
+     1,
+     4,
+     21,
+     23,
+     28,
+     33,
+     43,
+     54,
+     64,
+     74,
+     83,
+     111,
+     135,
+     137,
+     142,
+     156
+    ],
+    "big_ids": 1,
+    "objects": 2046,
+    "destroyed": 0,
+    "script_objects": 28,
+    "classes": {
+     "1": 543,
+     "4": 543,
+     "21": 101,
+     "23": 130,
+     "28": 81,
+     "33": 205,
+     "43": 176,
+     "54": 9,
+     "64": 39,
+     "74": 58,
+     "83": 81,
+     "111": 45,
+     "114": 28,
+     "135": 1,
+     "137": 4,
+     "142": 1,
+     "156": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "customassetbundle-tutorial",
+     "customassetbundle-world_shared_part3",
+     "customassetbundle-characterselection",
+     "customassetbundle-effects",
+     "customassetbundle-npctexture",
+     "library/unity default resources"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 2046,
+     "no_struct": [],
+     "read_ok": 2046,
+     "errors": {},
+     "first_error": null,
+     "digest": "6bf8a96581285a7dbd7a21190c38c9ed52bad157d5dc63cec83f94f3fa947e00"
+    }
+   }
+  }
+ },
+ "survey/FUSound.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 2702944,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     2702880,
+     3034816
+    ]
+   ],
+   "bundle_size": 2702944
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-FUSound"
+  ],
+  "files": {
+   "CustomAssetBundle-FUSound": {
+    "size": 3034775,
+    "sha256": "d9f29113784eeece4a43bbb7d677681ea93f0f14310816f870f0f7816fc85209",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 2,
+    "tree_class_ids": [
+     83,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 86,
+    "destroyed": 0,
+    "script_objects": 0,
+    "classes": {
+     "83": 85,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 86,
+     "no_struct": [],
+     "read_ok": 86,
+     "errors": {},
+     "first_error": null,
+     "digest": "107ae73a370349f6f845a3943ad00160170f67cc565d6aceab4a338ea1479262"
+    }
+   }
+  }
+ },
+ "survey/FutureNano.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 1665795,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     1665731,
+     4225332
+    ]
+   ],
+   "bundle_size": 1665795
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-FutureNano"
+  ],
+  "files": {
+   "CustomAssetBundle-FutureNano": {
+    "size": 4225287,
+    "sha256": "1edddfdbb53b17a143156b9bfd24827a1d358cf5c90a5d07cde3e5c8bd950de2",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 11,
+    "tree_class_ids": [
+     -1,
+     1,
+     4,
+     21,
+     33,
+     43,
+     74,
+     83,
+     111,
+     137,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 679,
+    "destroyed": 0,
+    "script_objects": 3,
+    "classes": {
+     "1": 171,
+     "4": 171,
+     "21": 4,
+     "33": 16,
+     "43": 22,
+     "74": 96,
+     "83": 186,
+     "111": 3,
+     "114": 3,
+     "137": 6,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "customassetbundle-charactercreation",
+     "customassetbundle-tutorial",
+     "customassetbundle-npctexture",
+     "customassetbundle-icons"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 679,
+     "no_struct": [],
+     "read_ok": 679,
+     "errors": {},
+     "first_error": null,
+     "digest": "002200b00c539804772d0ddd5bd04c74b5c3d3a835525eabc01a9c0b33c6cc1d"
+    }
+   }
+  }
+ },
+ "survey/Icons.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 5472012,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     5471948,
+     17072472
+    ]
+   ],
+   "bundle_size": 5472012
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-Icons"
+  ],
+  "files": {
+   "CustomAssetBundle-Icons": {
+    "size": 17072433,
+    "sha256": "ea7156170121cae9d398fc093a6f917b7a45aba5cb8e3f40b52dbf6ea5cef060",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 2,
+    "tree_class_ids": [
+     28,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 3017,
+    "destroyed": 0,
+    "script_objects": 0,
+    "classes": {
+     "28": 3016,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "customassetbundle-tutorial"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 3017,
+     "no_struct": [],
+     "read_ok": 3017,
+     "errors": {},
+     "first_error": null,
+     "digest": "653952e553f05cdb41f2a4561d0893cd71b549dd803bc157986ad35f8a1e5b49"
+    }
+   }
+  }
+ },
+ "survey/LobbyMusic.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 1044747,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     1044683,
+     1055396
+    ]
+   ],
+   "bundle_size": 1044747
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-LobbyMusic"
+  ],
+  "files": {
+   "CustomAssetBundle-LobbyMusic": {
+    "size": 1055351,
+    "sha256": "97bc60328cfa8de1e74044ed768d4f9e9be997a77dc46633c25aaa8e2c4ea150",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 2,
+    "tree_class_ids": [
+     83,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 2,
+    "destroyed": 0,
+    "script_objects": 0,
+    "classes": {
+     "83": 1,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 2,
+     "no_struct": [],
+     "read_ok": 2,
+     "errors": {},
+     "first_error": null,
+     "digest": "3c7fc504419dca3d3301d27d92d4703a556845945a79a1cac0c7354f29734eb4"
+    }
+   }
+  }
+ },
+ "survey/Map_00_00.unity3d": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 188401,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     188337,
+     1518156
+    ]
+   ],
+   "bundle_size": 188401
+  },
+  "unitypack_load": [
+   "BuildPlayer-Map_00_00"
+  ],
+  "files": {
+   "BuildPlayer-Map_00_00": {
+    "size": 37361,
+    "sha256": "476d8b4885ca233685a37238a42d9da0fafadee8491262a3282424ba4c6139e2",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 21,
+    "tree_class_ids": [
+     -5,
+     -4,
+     -3,
+     -2,
+     -1,
+     1,
+     4,
+     7,
+     23,
+     29,
+     31,
+     33,
+     35,
+     43,
+     46,
+     63,
+     64,
+     104,
+     127,
+     154,
+     157
+    ],
+    "big_ids": 1,
+    "objects": 47,
+    "destroyed": 0,
+    "script_objects": 9,
+    "classes": {
+     "1": 10,
+     "4": 10,
+     "7": 1,
+     "23": 2,
+     "29": 1,
+     "31": 1,
+     "33": 2,
+     "35": 1,
+     "43": 2,
+     "46": 1,
+     "63": 1,
+     "64": 2,
+     "104": 1,
+     "114": 9,
+     "127": 1,
+     "154": 1,
+     "157": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "buildplayer-map_00_00.sharedassets",
+     "library/unity default resources"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 47,
+     "no_struct": [],
+     "read_ok": 47,
+     "errors": {},
+     "first_error": null,
+     "digest": "e342788dc5e7997cf6de4448d66883cc01a1d424e88b82e313738d8f34a751c8"
+    }
+   },
+   "BuildPlayer-Map_00_00.sharedAssets": {
+    "size": 1480710,
+    "sha256": "4e9f0c0e35235763b04d729c6848da8d72b05458f02e296946d86107c2e4a049",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 6,
+    "tree_class_ids": [
+     21,
+     28,
+     48,
+     115,
+     150,
+     156
+    ],
+    "big_ids": 1,
+    "objects": 18,
+    "destroyed": 0,
+    "script_objects": 0,
+    "classes": {
+     "21": 2,
+     "28": 8,
+     "48": 1,
+     "115": 5,
+     "150": 1,
+     "156": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "library/unity default resources"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 18,
+     "no_struct": [],
+     "read_ok": 18,
+     "errors": {},
+     "first_error": null,
+     "digest": "0087ab2b41b6ad22ca48c92bad4b57654ea570c227ac93818f0700c2b55bd6a2"
+    }
+   }
+  }
+ },
+ "survey/Map_04_02.unity3d": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.6.1f3",
+   "min_streamed_bytes": 11321669,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     11321605,
+     48653400
+    ]
+   ],
+   "bundle_size": 11321669
+  },
+  "unitypack_load": [
+   "BuildPlayer-Map_04_02"
+  ],
+  "files": {
+   "BuildPlayer-Map_04_02": {
+    "size": 2138599,
+    "sha256": "4b7f5d4678a8d9b1d34c2607bef90efe353ea99664a2ac885fae6a04db5d7e1b",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 34,
+    "tree_class_ids": [
+     -14,
+     -13,
+     -12,
+     -11,
+     -10,
+     -9,
+     -8,
+     -7,
+     -6,
+     -5,
+     -4,
+     -3,
+     -2,
+     -1,
+     1,
+     4,
+     7,
+     23,
+     29,
+     31,
+     33,
+     35,
+     43,
+     46,
+     54,
+     63,
+     64,
+     104,
+     111,
+     127,
+     135,
+     137,
+     154,
+     157
+    ],
+    "big_ids": 1,
+    "objects": 27539,
+    "destroyed": 0,
+    "script_objects": 435,
+    "classes": {
+     "1": 8705,
+     "4": 8705,
+     "7": 1,
+     "23": 3019,
+     "29": 1,
+     "31": 1,
+     "33": 4629,
+     "35": 1,
+     "43": 2,
+     "46": 1,
+     "54": 40,
+     "63": 1,
+     "64": 1220,
+     "104": 1,
+     "111": 611,
+     "114": 435,
+     "127": 1,
+     "135": 65,
+     "137": 98,
+     "154": 1,
+     "157": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "buildplayer-map_04_02.sharedassets",
+     "library/unity default resources"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 27539,
+     "no_struct": [],
+     "read_ok": 27539,
+     "errors": {},
+     "first_error": null,
+     "digest": "a210e8ba7775701cee674ec8e7b352e65ed79cdfb4eaab02bae75a66fe3ed035"
+    }
+   },
+   "BuildPlayer-Map_04_02.sharedAssets": {
+    "size": 46514717,
+    "sha256": "701b7e4727cd5a1cb7e27c8ea706c8592dfe546969845b1f07b6be3af2b7a6ec",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 17,
+    "tree_class_ids": [
+     -1,
+     1,
+     4,
+     12,
+     15,
+     21,
+     23,
+     26,
+     28,
+     33,
+     43,
+     48,
+     74,
+     111,
+     115,
+     150,
+     156
+    ],
+    "big_ids": 1,
+    "objects": 1487,
+    "destroyed": 0,
+    "script_objects": 9,
+    "classes": {
+     "1": 45,
+     "4": 45,
+     "12": 9,
+     "15": 9,
+     "21": 374,
+     "23": 19,
+     "26": 9,
+     "28": 322,
+     "33": 19,
+     "43": 545,
+     "48": 26,
+     "74": 37,
+     "111": 2,
+     "114": 9,
+     "115": 15,
+     "150": 1,
+     "156": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "library/unity default resources"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 1487,
+     "no_struct": [],
+     "read_ok": 1487,
+     "errors": {},
+     "first_error": null,
+     "digest": "d61e1c81d00eb46adad8936a0995698b5d41ef73ead0377ea7bc05a1f52966f9"
+    }
+   }
+  }
+ },
+ "survey/Map_18_14.unity3d": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.4b4",
+   "min_streamed_bytes": 32961,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     32897,
+     169068
+    ]
+   ],
+   "bundle_size": 32961
+  },
+  "unitypack_load": [
+   "BuildPlayer-Map_18_14"
+  ],
+  "files": {
+   "BuildPlayer-Map_18_14": {
+    "size": 168515,
+    "sha256": "d8e5349c3b6aee4053dfe432a681e7793a4f08a7754e3d43e0d2aba572d26745",
+    "kind": "serialized",
+    "format": 6,
+    "endian": "<",
+    "type_trees": 0,
+    "tree_class_ids": [],
+    "big_ids": null,
+    "objects": 47,
+    "destroyed": 0,
+    "script_objects": 9,
+    "classes": {
+     "1": 10,
+     "4": 10,
+     "7": 1,
+     "23": 2,
+     "29": 1,
+     "31": 1,
+     "33": 2,
+     "35": 1,
+     "43": 2,
+     "46": 1,
+     "63": 1,
+     "64": 2,
+     "104": 1,
+     "114": 9,
+     "127": 1,
+     "154": 1,
+     "157": 1
+    },
+    "untyped_classes": [
+     1,
+     4,
+     7,
+     23,
+     29,
+     31,
+     33,
+     35,
+     43,
+     46,
+     63,
+     64,
+     104,
+     114,
+     127,
+     154,
+     157
+    ],
+    "externals": [
+     "customassetbundle-13c673bf9ebb24a5b8384068a995cdf7",
+     "library/unity default resources",
+     "customassetbundle-c253c871192184c7ead141cbc64029ef"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 47,
+     "no_struct": [
+      7,
+      31,
+      35,
+      46,
+      63,
+      127
+     ],
+     "read_ok": 0,
+     "errors": {
+      "struct.error": 5,
+      "AttributeError": 6,
+      "ValueError": 36
+     },
+     "first_error": "struct.error: unpack requires a buffer of 4 bytes",
+     "digest": "56c086d107df79594069c3bb848249aedf62cce23aed42973437a20d1af68e31"
+    }
+   },
+   "BuildPlayer-Map_18_14.sharedAssets": {
+    "size": 471,
+    "sha256": "0a624ca1eb964e4b1e579914682f72ba30ff42c489983fe841f87bb989c6c5cf",
+    "kind": "serialized",
+    "format": 6,
+    "endian": "<",
+    "type_trees": 0,
+    "tree_class_ids": [],
+    "big_ids": null,
+    "objects": 1,
+    "destroyed": 0,
+    "script_objects": 0,
+    "classes": {
+     "150": 1
+    },
+    "untyped_classes": [
+     150
+    ],
+    "externals": [
+     "library/unity default resources",
+     "customassetbundle-13c673bf9ebb24a5b8384068a995cdf7",
+     "customassetbundle-c368b6e69def54d6aae912016d5f4942",
+     "customassetbundle-c253c871192184c7ead141cbc64029ef"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 1,
+     "no_struct": [],
+     "read_ok": 0,
+     "errors": {
+      "ValueError": 1
+     },
+     "first_error": "ValueError: Expected read_value(<PPtr<Object> data (size=12, index=8, is_array=0, flags='0x0')>) to read 12 bytes, but only read 8 bytes",
+     "digest": "5c35fa10ccfffe2e02947a7a945775e433ef955588e827840044e899a5ba13da"
+    }
+   }
+  }
+ },
+ "survey/NpcTexture.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 10876242,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     10876178,
+     29176308
+    ]
+   ],
+   "bundle_size": 10876242
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-NpcTexture"
+  ],
+  "files": {
+   "CustomAssetBundle-NpcTexture": {
+    "size": 29176263,
+    "sha256": "cb0c1be46a92520f0dd15f5db499c4f28723c3a1fbc778efab188099995c53f5",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 2,
+    "tree_class_ids": [
+     28,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 525,
+    "destroyed": 0,
+    "script_objects": 0,
+    "classes": {
+     "28": 524,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "customassetbundle-tutorial",
+     "customassetbundle-characterselection"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 525,
+     "no_struct": [],
+     "read_ok": 525,
+     "errors": {},
+     "first_error": null,
+     "digest": "e8cca9f8ab40f97377cd55b50e882add480538f71d41b8240f798e09455d6c6d"
+    }
+   }
+  }
+ },
+ "survey/TableData.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 698236,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     698172,
+     6500528
+    ]
+   ],
+   "bundle_size": 698236
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-TableData"
+  ],
+  "files": {
+   "CustomAssetBundle-TableData": {
+    "size": 6500486,
+    "sha256": "d98039bd5df4fb4972231232bc60797c52d081b56e8abb8dd70eb23d24928ffe",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 8,
+    "tree_class_ids": [
+     -6,
+     -5,
+     -4,
+     -3,
+     -2,
+     -1,
+     115,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 13,
+    "destroyed": 0,
+    "script_objects": 6,
+    "classes": {
+     "114": 6,
+     "115": 6,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 13,
+     "no_struct": [],
+     "read_ok": 13,
+     "errors": {},
+     "first_error": null,
+     "digest": "24f46f4981bbff1bc0e1757e6565c01f4ce05910d4a3876877c5c867600c01c5"
+    }
+   }
+  }
+ },
+ "survey/World_shared_part1.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 11137363,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     11137299,
+     36153196
+    ]
+   ],
+   "bundle_size": 11137363
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-World_shared_part1"
+  ],
+  "files": {
+   "CustomAssetBundle-World_shared_part1": {
+    "size": 36153144,
+    "sha256": "6bdac563532172c3250860fb36860408746205d9ada39baac0c37ad66ff5a4be",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 19,
+    "tree_class_ids": [
+     -3,
+     -2,
+     -1,
+     1,
+     4,
+     21,
+     23,
+     28,
+     33,
+     43,
+     48,
+     64,
+     74,
+     83,
+     111,
+     115,
+     135,
+     137,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 11248,
+    "destroyed": 0,
+    "script_objects": 46,
+    "classes": {
+     "1": 3831,
+     "4": 3831,
+     "21": 170,
+     "23": 122,
+     "28": 74,
+     "33": 656,
+     "43": 749,
+     "48": 2,
+     "64": 29,
+     "74": 790,
+     "83": 767,
+     "111": 78,
+     "114": 46,
+     "115": 2,
+     "135": 1,
+     "137": 99,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "library/unity default resources",
+     "customassetbundle-characterselection",
+     "customassetbundle-tutorial",
+     "customassetbundle-npctexture",
+     "customassetbundle-chartexture",
+     "customassetbundle-effects"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 11248,
+     "no_struct": [],
+     "read_ok": 11248,
+     "errors": {},
+     "first_error": null,
+     "digest": "c6736747e6e755cf23789200e0cb896d38222c83b57860f046dc79fb1bca09d1"
+    }
+   }
+  }
+ },
+ "survey/main.unity3d": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 7548638,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     7548574,
+     54133152
+    ]
+   ],
+   "bundle_size": 7548638
+  },
+  "unitypack_load": [
+   "Assembly - CSharp - first pass.dll"
+  ],
+  "files": {
+   "Assembly - CSharp - first pass.dll": {
+    "size": 407040,
+    "sha256": "66760259d80a555e4119ab2cc257bf595be89019bf6ed7f6d7e58c8f198f09c4",
+    "kind": "dll"
+   },
+   "Assembly - CSharp.dll": {
+    "size": 1814528,
+    "sha256": "5bffedea24024c8e17c3357a47f9eaa36965ce533237684e5b25aa9ba3b6d6e8",
+    "kind": "dll"
+   },
+   "Assembly - UnityScript - first pass.dll": {
+    "size": 10240,
+    "sha256": "6f446a80628e2c8c2d2ce7f041a8f10e44395a89430800bc4e10684a0335f69d",
+    "kind": "dll"
+   },
+   "Mono.Data.Tds.dll": {
+    "size": 73216,
+    "sha256": "88d54b583128c539e171ed79295e8b7d7c3feeb654a15d4d1ab07eb2e5616a8d",
+    "kind": "dll"
+   },
+   "Mono.Security.dll": {
+    "size": 287744,
+    "sha256": "995f3d33018a7888d5a0b6520f1b7f6f2ce084fc062a0fb76c5be428d6456baf",
+    "kind": "dll"
+   },
+   "System.Configuration.Install.dll": {
+    "size": 19456,
+    "sha256": "0a6da6cb0b2f7e213542ce8857af7674bce1b63deb6e624dc75cc6fc54497bbf",
+    "kind": "dll"
+   },
+   "System.Configuration.dll": {
+    "size": 117760,
+    "sha256": "6d01682332500af4bda03d5e8092adb1dd032123b8e8b4674e53eff6078e360a",
+    "kind": "dll"
+   },
+   "System.Data.dll": {
+    "size": 813568,
+    "sha256": "d0c7c43cea00dea9b049b3e285893b4fbfc80ad01a2ace5616062110cffdbc38",
+    "kind": "dll"
+   },
+   "System.Drawing.dll": {
+    "size": 450048,
+    "sha256": "3239c01a181b98a2802a0f12af0dab7b0bd804873abaddfe5d99713625caef2e",
+    "kind": "dll"
+   },
+   "System.EnterpriseServices.dll": {
+    "size": 46080,
+    "sha256": "8a9481b547d227ae405e32f6b7df7f0c586bd6faf1659cf46768df2514196167",
+    "kind": "dll"
+   },
+   "System.Security.dll": {
+    "size": 132608,
+    "sha256": "6aeb05bdd4f6b048329ae770488ea8b5c8439bfa80c1edc752420fa4c8a809df",
+    "kind": "dll"
+   },
+   "System.Transactions.dll": {
+    "size": 26624,
+    "sha256": "bf761ded68b5107f0a9d99dbc346a917cb5361c821a98b0cf125969d42a8403c",
+    "kind": "dll"
+   },
+   "System.Xml.dll": {
+    "size": 1250304,
+    "sha256": "52c099c899d86777db1ba2d06a98c52eae49630c25828ba352bf1c065bd8afea",
+    "kind": "dll"
+   },
+   "System.dll": {
+    "size": 1467392,
+    "sha256": "853c74b466600729289dddf571598624e665dbd57646e0daaa05dbb7a2092e17",
+    "kind": "dll"
+   },
+   "mainData": {
+    "size": 84604,
+    "sha256": "ac3a822ea1de00fa95f9d4b82edff96b4e79670fcdcf69f22f99f4074bab1179",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 41,
+    "tree_class_ids": [
+     -5,
+     -4,
+     -3,
+     -2,
+     -1,
+     1,
+     4,
+     5,
+     7,
+     11,
+     13,
+     20,
+     23,
+     29,
+     30,
+     31,
+     33,
+     35,
+     45,
+     46,
+     47,
+     52,
+     55,
+     63,
+     71,
+     78,
+     81,
+     92,
+     94,
+     98,
+     104,
+     108,
+     116,
+     124,
+     127,
+     129,
+     141,
+     147,
+     149,
+     155,
+     157
+    ],
+    "big_ids": 1,
+    "objects": 52,
+    "destroyed": 0,
+    "script_objects": 8,
+    "classes": {
+     "1": 5,
+     "4": 5,
+     "5": 1,
+     "7": 1,
+     "11": 1,
+     "13": 1,
+     "20": 1,
+     "23": 1,
+     "29": 1,
+     "30": 1,
+     "31": 1,
+     "33": 1,
+     "35": 1,
+     "45": 1,
+     "46": 1,
+     "47": 1,
+     "52": 1,
+     "55": 1,
+     "63": 1,
+     "71": 1,
+     "78": 1,
+     "81": 1,
+     "92": 1,
+     "94": 1,
+     "98": 1,
+     "104": 1,
+     "108": 1,
+     "114": 8,
+     "116": 1,
+     "124": 1,
+     "127": 1,
+     "129": 1,
+     "141": 1,
+     "147": 1,
+     "149": 1,
+     "155": 1,
+     "157": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "sharedassets0.assets",
+     "library/cache/96/963484209d11fd7f110076aa44295342",
+     "library/cache/5d/5d7f4c401ae8946bcb0d6ff68a9e7466",
+     "library/cache/d8/d84268709d11078d11005b9844295342",
+     "library/cache/67/67e32db1cd51440a3a1ab163c0652422",
+     "library/cache/cb/cbf0a732ad112a541100162a44295342",
+     "library/cache/e9/e9ba2083ad114a07d000fbfb8d76c639",
+     "library/cache/57/57b33a14b6d5347c5a85c36f6cb3b280",
+     "library/cache/f4/f4901f25d4e1542589348bbb89563d8e",
+     "library/cache/41/41c783569d11bd7f11006b1944295342",
+     "library/cache/9c/9ce107479d11178d11005b9844295342",
+     "library/cache/0e/0e447868506ba49f0a73235b8a8b647a",
+     "library/cache/6e/6ee87b78ba3c442beaddd98a7feab3f5",
+     "library/cache/9d/9dccc8e8f0da4494991c26ef59019551",
+     "library/cache/05/054a31a99d11e49d110086ba44295342",
+     "library/cache/be/befbb4b9c320b4b18a08ef7afb93b6c9",
+     "library/cache/48/48dca5b99d113b8d11006bab44295342",
+     "library/cache/ba/ba646e3ae62824daf993bea4976b8821",
+     "library/cache/1c/1cac2e0bcc34e4b3cbb4bd85982eba83",
+     "library/cache/67/67f8781cad112c75d0008dfa8d76c639",
+     "library/cache/b6/b6aa781cad112c75d0008dfa8d76c639",
+     "library/cache/64/641b781cad112c75d0008dfa8d76c639",
+     "library/cache/70/708b781cad112c75d0008dfa8d76c639",
+     "library/cache/25/257bc83cbeb544540bd0e558aa9b1383",
+     "library/cache/41/4116114fad112a07d000fbfb8d76c639",
+     "library/unity default resources"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 52,
+     "no_struct": [],
+     "read_ok": 52,
+     "errors": {},
+     "first_error": null,
+     "digest": "c4c4835fb8f49a98662593b3042fa6bac306252e6f0fc933a8614cc213de0baa"
+    }
+   },
+   "mysql.data.dll": {
+    "size": 315392,
+    "sha256": "8f24f4d0570ff4cb380bb52d3e99e401bc462e660f7363e135da79f4f80c1ca8",
+    "kind": "dll"
+   },
+   "sharedassets0.assets": {
+    "size": 46816035,
+    "sha256": "7dcf066b01e209bc4dd86a7683510956a103ac8ead49b3747feb26453c2afab7",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 130,
+    "tree_class_ids": [
+     -114,
+     -113,
+     -112,
+     -111,
+     -110,
+     -109,
+     -108,
+     -107,
+     -106,
+     -105,
+     -104,
+     -103,
+     -102,
+     -101,
+     -100,
+     -99,
+     -98,
+     -97,
+     -96,
+     -95,
+     -94,
+     -93,
+     -92,
+     -91,
+     -90,
+     -89,
+     -88,
+     -87,
+     -86,
+     -85,
+     -84,
+     -83,
+     -82,
+     -81,
+     -80,
+     -79,
+     -78,
+     -77,
+     -76,
+     -75,
+     -74,
+     -73,
+     -72,
+     -71,
+     -70,
+     -69,
+     -68,
+     -67,
+     -66,
+     -65,
+     -64,
+     -63,
+     -62,
+     -61,
+     -60,
+     -59,
+     -58,
+     -57,
+     -56,
+     -55,
+     -54,
+     -53,
+     -52,
+     -51,
+     -50,
+     -49,
+     -48,
+     -47,
+     -46,
+     -45,
+     -44,
+     -43,
+     -42,
+     -41,
+     -40,
+     -39,
+     -38,
+     -37,
+     -36,
+     -35,
+     -34,
+     -33,
+     -32,
+     -31,
+     -30,
+     -29,
+     -28,
+     -27,
+     -26,
+     -25,
+     -24,
+     -23,
+     -22,
+     -21,
+     -20,
+     -19,
+     -18,
+     -17,
+     -16,
+     -15,
+     -14,
+     -13,
+     -12,
+     -11,
+     -10,
+     -9,
+     -8,
+     -7,
+     -6,
+     -5,
+     -4,
+     -3,
+     -2,
+     -1,
+     1,
+     4,
+     20,
+     21,
+     23,
+     28,
+     33,
+     48,
+     49,
+     82,
+     84,
+     109,
+     115,
+     128,
+     143,
+     150
+    ],
+    "big_ids": 1,
+    "objects": 1711,
+    "destroyed": 0,
+    "script_objects": 213,
+    "classes": {
+     "1": 95,
+     "4": 95,
+     "20": 25,
+     "21": 33,
+     "23": 1,
+     "28": 745,
+     "33": 1,
+     "48": 190,
+     "49": 2,
+     "82": 7,
+     "84": 1,
+     "109": 2,
+     "114": 213,
+     "115": 269,
+     "128": 28,
+     "143": 3,
+     "150": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "library/unity default resources"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 1711,
+     "no_struct": [],
+     "read_ok": 1711,
+     "errors": {},
+     "first_error": null,
+     "digest": "a30ef4ccb295a9e3cbdb2184a21300dc104b0fd9c1381c4ab5b6677335e0bcec"
+    }
+   }
+  }
+ }
+}
