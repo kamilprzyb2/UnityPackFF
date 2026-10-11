@@ -6,3 +6,4 @@ __pycache__/
 *.pyc
 graph.dot
 .idea
+out/

@@ -30,6 +30,11 @@ dependencies = [
     "wand",
 ]
 
+[project.optional-dependencies]
+test = [
+    "pytest>=7",
+]
+
 [project.urls]
 Homepage = "https://github.com/HearthSim/UnityPack"
 Download = "https://github.com/HearthSim/UnityPack/tarball/master"
@@ -54,7 +59,16 @@ script-files = [
 include-package-data = false
 
 [tool.setuptools.packages]
-find = {namespaces = false}
+find = {namespaces = false, exclude = ["tests", "tests.*"]}
 
 [tool.setuptools.package-data]
 unitypack = ["classes.json", "strings.dat", "structs.dat"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-m 'not integration'"
+markers = [
+    "integration: downloads pinned client archives (run with -m integration, or --sweep for every archive)",
+    "bundles(*names): run an integration test on these archives instead of the curated set",
+    "ffbuildtool: calls the ffbuildtool CLI; skipped when it isn't installed",
+]
