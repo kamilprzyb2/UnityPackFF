@@ -77,6 +77,8 @@ class TextureFormat(IntEnum):
 		elif self == TextureFormat.Alpha8:
 			return "A"
 		elif self == TextureFormat.RGBA4444:
+			# R, G, B, A from the top bits of a little-endian word: Pillow's
+			# mode reads them backwards, so Texture2D.image reorders them
 			return "RGBA;4B"
 		elif self == TextureFormat.ARGB4444:
 			# A, R, G, B from the top bits of a little-endian word; Pillow
@@ -203,6 +205,9 @@ class Texture2D(Texture):
 		img = Image.frombytes(mode, size, data, codec, args)
 		if self.format == TextureFormat.ARGB4444:
 			b, g, r, a = img.split()
+			img = Image.merge("RGBA", (r, g, b, a))
+		elif self.format == TextureFormat.RGBA4444:
+			a, b, g, r = img.split()
 			img = Image.merge("RGBA", (r, g, b, a))
 		return img
 
