@@ -63,6 +63,11 @@ def test_decode_argb4444():
 	assert pixels(texture(TextureFormat.ARGB4444, 1, 1, struct.pack("<H", 0xF842))) == [(0x88, 0x44, 0x22, 0xFF)]
 
 
+# RGBA4444: a little-endian 16-bit word, 4 bits each of R, G, B, A from the top
+def test_decode_rgba4444():
+	assert pixels(texture(TextureFormat.RGBA4444, 1, 1, struct.pack("<H", 0xF842))) == [(0xFF, 0x88, 0x44, 0x22)]
+
+
 def test_rows_are_not_flipped():
 	# 1x2 RGB24: the first row in the data is the top row of the image
 	tex = texture(TextureFormat.RGB24, 1, 2, bytes([255, 0, 0, 0, 0, 255]))
