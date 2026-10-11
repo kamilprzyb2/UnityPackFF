@@ -10,6 +10,7 @@ Command-line tools that run the same operations as the integration tests, but wr
 | `meshes.py` | Exports every mesh of an archive as OBJ, plus the skin weights of skinned meshes | `integration/test_meshes.py` |
 | `clips.py` | Reads every AnimationClip of an archive and samples each curve at the clip's rate | `integration/test_clips.py` |
 | `terrain.py` | Dumps every terrain of an archive with `bin/dump_terrain.py` and compares Unity's level-of-detail data with what `TerrainData` works out | `integration/test_terrain.py` |
+| `mapdata.py` | Reads the attribute grid and colours of map tiles and the music zones of `main.unity3d`, and dumps them with `bin/dump_mapdata.py` | `integration/test_mapdata.py` |
 | `_common.py` | The options all the scripts share (not run directly) | |
 
 Run them from the repository root (`UnityPackFF/`) as modules of the `tests` package: `python3 -m tests.tools.<name>`, without `.py`.
@@ -142,3 +143,12 @@ Without `--bundle` or `--all` it takes `DongResources_04_02.resourceFile`, the o
 | `error_smaller` | smaller (0 on every terrain checked) |
 
 Writes `out/terrain/<build>/<archive>/<file>.png` and `.shifts.json` as `bin/dump_terrain.py` writes them (a 16-bit heightmap, north up, and the shifted vertices), and `out/terrain/<build>.json` with the statistics the integration test checks.
+
+## mapdata.py
+
+```sh
+python3 -m tests.tools.mapdata --build 104                  # Map_04_02 and main.unity3d
+python3 -m tests.tools.mapdata --build 1013 --bundle Map_07_08.unity3d
+```
+
+Without `--bundle` or `--all` it takes `Map_04_02.unity3d` and `main.unity3d`. Prints which kinds of map data each file has. Writes `out/mapdata/<build>/<file>.json` as `bin/dump_mapdata.py` writes them (the attribute grid as rows, z = 0 first, with a count per flag; fog, sky and light colours; music and ambient zones) and `out/mapdata/<build>.json` with the statistics the integration test checks.
