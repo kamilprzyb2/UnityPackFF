@@ -37,7 +37,7 @@ A known library bug is a test marked `xfail(strict=True)`: it is expected to fai
 | `unit/test_texture.py::test_decode_rgb565`, `test_decode_argb4444`; `unit/test_modding.py::test_rgb16_round_trip` | Red and blue swapped when decoding RGB565 and ARGB4444 (the importer writes them correctly) |
 | `unit/test_export.py::test_compressed_normals_are_unit_length` | Compressed normals: z = 1 − x² − y² without the square root, so every exported normal is wrong |
 
-Not covered yet: cross-archive pointers (`UnityEnvironment`), `bin/` scripts, `AudioClip` export.
+Not covered yet: `UnityEnvironment` beyond finding files (`discover`, `archive:` URLs), `bin/` scripts, `AudioClip` export.
 
 ## Builds
 
