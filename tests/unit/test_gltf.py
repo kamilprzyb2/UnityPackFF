@@ -394,3 +394,140 @@ def test_clip_without_channels_is_left_out():
 	w = GLTFWriter()
 	w.add_gameobject(rig(clips=[empty]), animations=False)
 	assert w.warnings == []
+
+
+# Render state from shader names, terrain, and whole scenes
+
+from unitypack.engine.terrain import TerrainData  # noqa: E402
+from unitypack.engine.text import Shader  # noqa: E402
+from unitypack.gltf import alpha_state, export_scene, shader_name  # noqa: E402
+
+
+@pytest.mark.parametrize("shader,transparent,state", [
+	("normal_blendSrcalphaInvsrcalpha", False, {}),  # most props: opaque textures
+	("normal_blendSrcalphaInvsrcalpha", True, {"alphaMode": "BLEND"}),
+	("normal_blendSrcalphaInvsrcalphaTest_cullOff", False, {"alphaMode": "MASK", "alphaCutoff": 0.3, "doubleSided": True}),
+	("normal_blendOneOne_zwriteOff", False, {"alphaMode": "BLEND"}),
+	("normal_blendSrcalphaOne_zwriteOff", False, {"alphaMode": "BLEND"}),
+	("normal_blendSrcalphaInvsrcalpha_zwriteOff", False, {"alphaMode": "BLEND"}),
+	("Transparent/Diffuse", False, {"alphaMode": "BLEND"}),
+	("Transparent/Cutout/Diffuse", False, {"alphaMode": "MASK", "alphaCutoff": 0.3}),
+	("Diffuse", True, {}),
+	(None, True, {}),
+])
+def test_alpha_state(shader, transparent, state):
+	assert alpha_state(shader, {"_Cutoff": 0.3}, transparent) == state
+
+
+def test_shader_name():
+	assert shader_name(Shader(fdict(m_Name="Diffuse", m_Script=""))) == "Diffuse"
+	# these builds leave m_Name empty; the source names the shader
+	assert shader_name(Shader(fdict(m_Name="", m_Script='Shader "normal_blendOneOne" {\n SubShader {}\n}'))) == "normal_blendOneOne"
+	assert shader_name(Shader(fdict(m_Name="", m_Script=""))) is None
+	assert shader_name(None) is None
+
+
+def shaded_material(shader_source, tex):
+	m = material(tex=tex)
+	m._obj["m_Shader"] = Pointer(Shader(fdict(m_Name="", m_Script=shader_source)), 77)
+	return m
+
+
+def test_material_render_state():
+	half_transparent = Pointer(texture(pixels=((255, 0, 0, 255), (0, 0, 255, 128))), 5)
+	g = GLB(export_mesh(mesh(**QUAD, indices=[0, 1, 2]), [shaded_material('Shader "normal_blendSrcalphaInvsrcalpha" {}', half_transparent)]))
+	mat = g["materials"][0]
+	assert mat["alphaMode"] == "BLEND"
+	assert mat["extras"]["shader"] == "normal_blendSrcalphaInvsrcalpha"
+
+
+def test_additive_material_gets_brightness_as_alpha():
+	# black and dim red: drawn additively they add little light; as BLEND, their brightness is their opacity
+	tex = Pointer(texture(pixels=((0, 0, 0, 255), (128, 64, 0, 255))), 5)
+	g = GLB(export_mesh(mesh(**QUAD, indices=[0, 1, 2]), [shaded_material('Shader "normal_blendOneOne_zwriteOff" {}', tex)]))
+	mat = g["materials"][0]
+	assert mat["alphaMode"] == "BLEND"
+	image = g["textures"][mat["pbrMetallicRoughness"]["baseColorTexture"]["index"]]["source"]
+	img = Image.open(io.BytesIO(g.image(image))).convert("RGBA")
+	# upright: the second stored row on top
+	assert [img.getpixel((0, y)) for y in range(2)] == [(128, 64, 0, 128), (0, 0, 0, 0)]
+
+
+def terrain_data(splats=True):
+	size = 33
+	heights = [x * 10 for x in range(size) for z in range(size)]  # rising along x
+	red = texture("red", pixels=((255, 0, 0, 255),) * 2)
+	control = Texture2D(fdict(m_Name="control", m_Width=1, m_Height=1, m_TextureFormat=int(TextureFormat.RGBA32),
+		m_TextureSettings=fdict(m_WrapMode=1), **{"image data": bytes((255, 0, 0, 0))}))
+	return TerrainData(fdict(
+		m_Name="ground",
+		m_SplatDatabase=fdict(
+			m_Splats=[fdict(texture=Pointer(red, 40), tileSize=fdict(x=16.0, y=16.0), tileOffset=fdict(x=0.0, y=0.0))] if splats else [],
+			m_AlphaTextures=[Pointer(control, 41)] if splats else [], m_AlphamapResolution=1, m_BaseMapResolution=8),
+		m_DetailDatabase=fdict(),
+		m_Heightmap=fdict(m_Heights=heights, m_Shifts=[fdict(x=5, y=5, flags=2)], m_PrecomputedError=[0.0] * 5,
+			m_MinMaxPatchHeights=[0.0] * 10, m_DefaultPhysicMaterial=None, m_Width=size, m_Height=size, m_Levels=1,
+			m_Scale=vec(4.0, 600.0, 4.0)),
+		m_Lightmap=Pointer(texture("lightmap"), 42),
+	))
+
+
+def test_terrain():
+	w = GLTFWriter()
+	w.add_root(w.add_node("t", mesh=w.add_terrain(terrain_data())))
+	g = GLB(w.glb())
+	[p] = g["meshes"][0]["primitives"]
+	positions = g.accessor(p["attributes"]["POSITION"])
+	assert len(positions) == 33 * 33
+	# mirrored; the shifted vertex (5, 5) moved +x, so -4 in glTF
+	assert positions[5 * 33 + 5] == approx([(-24, 50 / 32766 * 600, 20)])[0]
+	assert g.accessor(p["attributes"]["TEXCOORD_0"])[0] == approx([(0, 1)])[0]
+	# normals face up, leaning against the slope (terrain rises along Unity's x, so along -x in glTF)
+	for n in g.accessor(p["attributes"]["NORMAL"])[:5]:
+		assert n[1] > 0.9 and n[0] > 0
+	mat = g["materials"][p["material"]]
+	base = mat["pbrMetallicRoughness"]["baseColorTexture"]["index"]
+	img = Image.open(io.BytesIO(g.image(g["textures"][base]["source"]))).convert("RGB")
+	assert img.size == (8, 8) and img.getpixel((3, 3)) == (255, 0, 0)
+	extras = mat["extras"]["terrain"]
+	assert extras["splats"][0]["tile_size"] == [16.0, 16.0]
+	[control] = extras["controls"]
+	assert g["samplers"][g["textures"][control]["sampler"]]["wrapS"] == 33071  # the control map, clamped
+	assert extras["lightmap"] is not None
+
+
+def test_terrain_without_splats():
+	w = GLTFWriter()
+	w.add_root(w.add_node("t", mesh=w.add_terrain(terrain_data(splats=False))))
+	g = GLB(w.glb())
+	assert "baseColorTexture" not in g["materials"][0]["pbrMetallicRoughness"]
+
+
+class FakeObject:
+	def __init__(self, path_id, type_id, obj):
+		self.path_id, self.type_id, self.obj = path_id, type_id, obj
+
+	def read(self):
+		return self.obj
+
+
+def test_scene():
+	tree = gameobject_tree()
+	hidden = GameObject(fdict(m_Name="hidden", m_IsActive=False, m_Component=[]))
+	hidden_tr = Transform(fdict(m_GameObject=Pointer(hidden, 501), m_LocalPosition=vec(0, 0, 0), m_LocalRotation=fdict(x=0, y=0, z=0, w=1),
+		m_LocalScale=vec(1, 1, 1), m_Children=[], m_Father=Pointer(None, 0)))
+	hidden._obj["m_Component"] = [(4, Pointer(hidden_tr, 500))]
+	root_tr = tree.component[0][1].target
+	root_tr._obj["m_Father"] = Pointer(None, 0)
+	root_tr._obj["m_GameObject"] = Pointer(tree, 601)
+	child_tr = root_tr._obj["m_Children"][0].target
+	child_tr._obj["m_Father"] = Pointer(root_tr, 600)
+	asset = type("Asset", (), {"objects": {
+		600: FakeObject(600, 4, root_tr), 500: FakeObject(500, 4, hidden_tr), 601: FakeObject(601, 1, tree),
+		602: FakeObject(602, 4, child_tr),
+	}})()
+	g = GLB(export_scene(asset))
+	# one root (the hidden one is left out), with its child
+	assert [g["nodes"][n]["name"] for n in g["scenes"][0]["nodes"]] == ["root"]
+	w = GLTFWriter()
+	assert len(w.add_scene(asset, inactive=True)) == 2

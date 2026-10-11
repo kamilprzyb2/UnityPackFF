@@ -63,7 +63,7 @@
      256
     ]
    ],
-   "sha256": "b3ae97b2f3fc7fa7",
+   "sha256": "6339f871180247b3",
    "warnings": 0
   },
   "map/dtetc/dt_mtdb_ef_signboard_01.nif": {
@@ -79,11 +79,19 @@
      128
     ],
     [
+     256,
+     128
+    ],
+    [
+     128,
+     128
+    ],
+    [
      128,
      128
     ]
    ],
-   "sha256": "b7ac3b7c530b8358",
+   "sha256": "398049f9ccb21e7e",
    "warnings": 0
   },
   "map/ep/suburbs_jumppad_02.nif": {
@@ -103,7 +111,7 @@
      256
     ]
    ],
-   "sha256": "8578e8e1d7c8f4c9",
+   "sha256": "0fae1bff0d2e23d9",
    "warnings": 0
   },
   "map/ep/wilds_move_01.nif": {
@@ -141,9 +149,17 @@
     [
      128,
      128
+    ],
+    [
+     128,
+     128
+    ],
+    [
+     128,
+     128
     ]
    ],
-   "sha256": "ba0981eae423fb0b",
+   "sha256": "f30ab62b80ccafd0",
    "warnings": 2
   },
   "map/etc/dt_mtsm_fence_ef02_5.nif": {
@@ -161,9 +177,17 @@
     [
      128,
      128
+    ],
+    [
+     128,
+     128
+    ],
+    [
+     128,
+     128
     ]
    ],
-   "sha256": "1b5957486c174914",
+   "sha256": "99b3390de42145b8",
    "warnings": 2
   },
   "map/etc/indun_roof_black.nif": {
@@ -283,7 +307,7 @@
      256
     ]
    ],
-   "sha256": "b84d631d66b19876",
+   "sha256": "a79d272a0aac4e8f",
    "warnings": 0
   },
   "map/etc/wd_etc_stone07_02.nif": {
@@ -315,7 +339,7 @@
      256
     ]
    ],
-   "sha256": "2daf3d10ef967f4f",
+   "sha256": "6fa0264a022c02f4",
    "warnings": 0
   },
   "map/etc/wd_etc_stone07_04.nif": {
@@ -331,7 +355,7 @@
      256
     ]
    ],
-   "sha256": "7647addcb0910583",
+   "sha256": "acdc1e071dee5355",
    "warnings": 0
   },
   "map/fuseslair/wd_dlfl_stone01.nif": {
@@ -379,7 +403,7 @@
      256
     ]
    ],
-   "sha256": "ebb50964203ad5b8",
+   "sha256": "ecd385322c5d4b40",
    "warnings": 0
   },
   "map/leakeylake/wd_bwll_cplant_02.nif": {
@@ -395,7 +419,7 @@
      256
     ]
    ],
-   "sha256": "559807dec14a8892",
+   "sha256": "7462249137bffaf5",
    "warnings": 0
   },
   "map/leakeylake/wd_bwll_cplant_02_1.nif": {
@@ -411,7 +435,7 @@
      256
     ]
    ],
-   "sha256": "4d018675b40b96a1",
+   "sha256": "5d6e17529b1b3184",
    "warnings": 0
   },
   "map/leakeylake/wd_bwll_cplant_06.nif": {
@@ -427,7 +451,7 @@
      128
     ]
    ],
-   "sha256": "53e218334b5b5eae",
+   "sha256": "afc4459b2f5bdf2b",
    "warnings": 0
   },
   "map/questitem/quest_item_computer_consoles.nif": {
@@ -447,7 +471,7 @@
      256
     ]
    ],
-   "sha256": "dbcd7ac9c72d1c67",
+   "sha256": "45340947cd1ab781",
    "warnings": 0
   },
   "map/questitem/quest_item_crates_01.nif": {
@@ -463,7 +487,7 @@
      256
     ]
    ],
-   "sha256": "1d429bb85ecf68dd",
+   "sha256": "40b7e9dee10b8649",
    "warnings": 0
   },
   "map/questitem/quest_timemachin.nif": {
@@ -474,6 +498,10 @@
    "skins": 0,
    "animations": 0,
    "images": [
+    [
+     128,
+     128
+    ],
     [
      128,
      128
@@ -491,6 +519,10 @@
      64
     ],
     [
+     64,
+     64
+    ],
+    [
      256,
      256
     ],
@@ -501,9 +533,13 @@
     [
      64,
      128
+    ],
+    [
+     64,
+     128
     ]
    ],
-   "sha256": "f88b75a2f6fc8fcd",
+   "sha256": "a92a5ace2d6ba3f0",
    "warnings": 5
   },
   "map/questitem/timemachine_01.nif": {
@@ -519,6 +555,10 @@
      128
     ],
     [
+     256,
+     128
+    ],
+    [
      512,
      256
     ],
@@ -529,6 +569,22 @@
     [
      256,
      256
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     128,
+     128
+    ],
+    [
+     128,
+     128
     ],
     [
      128,
@@ -559,7 +615,7 @@
      256
     ]
    ],
-   "sha256": "81da59dbd33879dc",
+   "sha256": "ee86a5341ca23ffd",
    "warnings": 2
   },
   "map/twistedforest/wd_jutf_plant 03.nif": {
@@ -595,7 +651,7 @@
      64
     ]
    ],
-   "sha256": "a9bbb4678af8ed39",
+   "sha256": "820516006e8dfacf",
    "warnings": 0
   },
   "map/twistedforest/wd_jutf_plant 05.nif": {
@@ -627,7 +683,7 @@
      128
     ]
    ],
-   "sha256": "ca9529a7f7fffde8",
+   "sha256": "045bb3d169fb35ac",
    "warnings": 0
   },
   "map/twistedforest/wd_jutf_plant 08.nif": {
@@ -647,7 +703,7 @@
      64
     ]
    ],
-   "sha256": "1a742edca6013dfb",
+   "sha256": "fcb05cfa65a24807",
    "warnings": 1
   },
   "mob/fusion_billy.kfm": {
@@ -663,7 +719,7 @@
      256
     ]
    ],
-   "sha256": "62fea5d62bc47e1a",
+   "sha256": "32a9f58262d42f9f",
    "warnings": 4
   },
   "mob/fusion_blooexpression.kfm": {
@@ -674,7 +730,7 @@
    "skins": 2,
    "animations": 16,
    "images": [],
-   "sha256": "9f72daa034ea16ad",
+   "sha256": "c0bad86a44b58e71",
    "warnings": 4
   },
   "mob/fusion_bubbles.kfm": {
@@ -690,7 +746,7 @@
      256
     ]
    ],
-   "sha256": "d5e189435cf16131",
+   "sha256": "43339866aabbe4ba",
    "warnings": 4
   },
   "mob/fusion_cheese.kfm": {
@@ -706,7 +762,7 @@
      256
     ]
    ],
-   "sha256": "39c0a275afecbf42",
+   "sha256": "b97df16afc4878b5",
    "warnings": 3
   },
   "mob/fusion_coco.kfm": {
@@ -722,7 +778,7 @@
      256
     ]
    ],
-   "sha256": "1ed72951ae34886c",
+   "sha256": "0bf51c663f4796f1",
    "warnings": 4
   },
   "mob/fusion_computress.kfm": {
@@ -738,7 +794,7 @@
      256
     ]
    ],
-   "sha256": "1ef8d315b82fefe7",
+   "sha256": "a2742377bfdcdb1b",
    "warnings": 5
   },
   "mob/fusion_coopturns.kfm": {
@@ -754,7 +810,7 @@
      256
     ]
    ],
-   "sha256": "28a043aa16db3573",
+   "sha256": "dd13240bcc468c53",
    "warnings": 4
   },
   "mob/fusion_courage.kfm": {
@@ -774,7 +830,7 @@
      256
     ]
    ],
-   "sha256": "3109ed449fa04c9a",
+   "sha256": "64ef48467d4b7cbe",
    "warnings": 4
   },
   "mob/fusion_deedee.kfm": {
@@ -790,7 +846,7 @@
      256
     ]
    ],
-   "sha256": "b6b2106879cd16d1",
+   "sha256": "e52d50464534cd85",
    "warnings": 4
   },
   "mob/fusion_dexter.kfm": {
@@ -810,7 +866,7 @@
      64
     ]
    ],
-   "sha256": "a88a71c413fbe350",
+   "sha256": "0f7a55f20279886b",
    "warnings": 5
   },
   "mob/fusion_ed.kfm": {
@@ -826,7 +882,7 @@
      256
     ]
    ],
-   "sha256": "310bef09e8f570e6",
+   "sha256": "3b1b0538bf0e3822",
    "warnings": 4
   },
   "mob/fusion_edd.kfm": {
@@ -842,7 +898,7 @@
      256
     ]
    ],
-   "sha256": "c7fc71142b0bda81",
+   "sha256": "ce616b6631e57447",
    "warnings": 4
   },
   "mob/fusion_eddy.kfm": {
@@ -858,7 +914,7 @@
      256
     ]
    ],
-   "sha256": "36727f57d159d977",
+   "sha256": "7b2a690b704bf8ef",
    "warnings": 4
   },
   "mob/fusion_grandpamax.kfm": {
@@ -878,7 +934,7 @@
      256
     ]
    ],
-   "sha256": "8c95cc8d3781ce52",
+   "sha256": "458ff9241d71c2c1",
    "warnings": 4
   },
   "mob/fusion_grim.kfm": {
@@ -898,7 +954,7 @@
      256
     ]
    ],
-   "sha256": "8f1c76e2831840fe",
+   "sha256": "7c9815a77f4b67cd",
    "warnings": 4
   },
   "mob/fusion_gwen.kfm": {
@@ -914,7 +970,7 @@
      256
     ]
    ],
-   "sha256": "5a038a30eeee9d9b",
+   "sha256": "699d931317d70bb1",
    "warnings": 4
   },
   "mob/fusion_hex.kfm": {
@@ -934,7 +990,7 @@
      256
     ]
    ],
-   "sha256": "07b0a182eb5528ac",
+   "sha256": "6c510fac9a2e1202",
    "warnings": 4
   },
   "mob/fusion_him.kfm": {
@@ -950,7 +1006,7 @@
      256
     ]
    ],
-   "sha256": "bd2500573e3bb3b6",
+   "sha256": "0a99375aadcdb5bf",
    "warnings": 4
   },
   "mob/fusion_mac.kfm": {
@@ -966,7 +1022,7 @@
      256
     ]
    ],
-   "sha256": "247c786df3216809",
+   "sha256": "14bd3a3d9be2c774",
    "warnings": 4
   },
   "mob/fusion_mandark.kfm": {
@@ -982,7 +1038,7 @@
      256
     ]
    ],
-   "sha256": "09b88a8bf7e23d87",
+   "sha256": "064b1968bb344b86",
    "warnings": 4
   },
   "mob/fusion_mandy.kfm": {
@@ -998,7 +1054,7 @@
      256
     ]
    ],
-   "sha256": "1a620493048baa04",
+   "sha256": "0d88f344dd242a79",
    "warnings": 4
   },
   "mob/fusion_mayor.kfm": {
@@ -1014,7 +1070,7 @@
      256
     ]
    ],
-   "sha256": "f1ba9eecaeaf9b4d",
+   "sha256": "c4a5c79fe03d6731",
    "warnings": 5
   },
   "mob/fusion_numbuhfive.kfm": {
@@ -1034,7 +1090,7 @@
      256
     ]
    ],
-   "sha256": "d81e54abafd6bb3a",
+   "sha256": "daca015b53b3e7de",
    "warnings": 4
   },
   "mob/fusion_numbuhfour.kfm": {
@@ -1050,7 +1106,7 @@
      256
     ]
    ],
-   "sha256": "8309a2404bec56d9",
+   "sha256": "2ef9ef58b43b6d97",
    "warnings": 4
   },
   "mob/fusion_numbuhone.kfm": {
@@ -1070,7 +1126,7 @@
      256
     ]
    ],
-   "sha256": "0c369f0587652940",
+   "sha256": "baf481c6c5cc6212",
    "warnings": 3
   },
   "mob/fusion_numbuhthree.kfm": {
@@ -1086,7 +1142,7 @@
      256
     ]
    ],
-   "sha256": "3a6e20aefd94366c",
+   "sha256": "ed10019b374019fb",
    "warnings": 4
   },
   "mob/fusion_professorutonium.kfm": {
@@ -1106,7 +1162,7 @@
      256
     ]
    ],
-   "sha256": "2925c0ac8f505ea3",
+   "sha256": "8877aab84a334f73",
    "warnings": 4
   },
   "mob/fusion_samuraijack.kfm": {
@@ -1122,7 +1178,7 @@
      256
     ]
    ],
-   "sha256": "c6cc73262ea488f7",
+   "sha256": "c68488cff32a608c",
    "warnings": 4
   },
   "mob/fusion_scotsman.kfm": {
@@ -1138,7 +1194,7 @@
      256
     ]
    ],
-   "sha256": "f49155bccb487b68",
+   "sha256": "6e9061da9e012814",
    "warnings": 4
   },
   "mob/fusion_vilgax.kfm": {
@@ -1154,7 +1210,7 @@
      256
     ]
    ],
-   "sha256": "1a0c3bb80686695e",
+   "sha256": "4b27ea816d2e2ab7",
    "warnings": 4
   },
   "mob/fusion_wilt.kfm": {
@@ -1174,7 +1230,7 @@
      256
     ]
    ],
-   "sha256": "4c09f40eadf65a5e",
+   "sha256": "60fd665329998053",
    "warnings": 4
   },
   "mob/mob_flyingmonkey.kfm": {
@@ -1190,7 +1246,7 @@
      256
     ]
    ],
-   "sha256": "1d9675549a6c2035",
+   "sha256": "7c7254b5415e265d",
    "warnings": 1
   },
   "mob/mob_fusionextremesaurus.kfm": {
@@ -1206,7 +1262,7 @@
      256
     ]
    ],
-   "sha256": "a716ead8ad44b45b",
+   "sha256": "5901f6d07c7d6bad",
    "warnings": 1
   },
   "mob/mob_gasspawn.kfm": {
@@ -1222,7 +1278,7 @@
      256
     ]
    ],
-   "sha256": "c2bd0f6254098fb4",
+   "sha256": "7071f7b2cdf15c45",
    "warnings": 3
   },
   "mob/mob_griffonroar.kfm": {
@@ -1238,7 +1294,7 @@
      256
     ]
    ],
-   "sha256": "bc34b585c40e83fc",
+   "sha256": "677956f942447307",
    "warnings": 1
   },
   "mob/mob_motorgorilla.kfm": {
@@ -1249,7 +1305,7 @@
    "skins": 1,
    "animations": 19,
    "images": [],
-   "sha256": "63d4df7374712bff",
+   "sha256": "84944bf000f3f52e",
    "warnings": 1
   },
   "mob/mob_pirate.kfm": {
@@ -1265,7 +1321,7 @@
      256
     ]
    ],
-   "sha256": "4eb6de922d51c78f",
+   "sha256": "e2b96e7ff3ffe3c8",
    "warnings": 1
   },
   "mob/mob_swampycannibalfrog.kfm": {
@@ -1281,7 +1337,7 @@
      256
     ]
    ],
-   "sha256": "7c0a995a8a24ad3a",
+   "sha256": "1ac69d54678471d6",
    "warnings": 4
   },
   "mob/mob_telegraphpole.kfm": {
@@ -1297,7 +1353,7 @@
      256
     ]
    ],
-   "sha256": "e72fcb2536bbdae5",
+   "sha256": "c50157cd9dc7025a",
    "warnings": 1
   },
   "mob/mob_themepark.kfm": {
@@ -1313,7 +1369,7 @@
      256
     ]
    ],
-   "sha256": "633ef7c414630c3d",
+   "sha256": "016fee79e822b2c0",
    "warnings": 1
   },
   "mob/mob_threeeyes.kfm": {
@@ -1329,7 +1385,7 @@
      256
     ]
    ],
-   "sha256": "50d6d57f1c10fa7d",
+   "sha256": "45a37a8bcfe69e9f",
    "warnings": 1
   },
   "mob/mob_turtleworm.kfm": {
@@ -1345,7 +1401,7 @@
      256
     ]
    ],
-   "sha256": "9b9a03b6570e2397",
+   "sha256": "f954f80c4f86d493",
    "warnings": 1
   },
   "mob/mob_ventilatordino.kfm": {
@@ -1361,7 +1417,7 @@
      256
     ]
    ],
-   "sha256": "eec5ab7e6589650d",
+   "sha256": "2a261c158b3b2e45",
    "warnings": 1
   },
   "mob/npc_billy.kfm": {
@@ -1372,7 +1428,7 @@
    "skins": 1,
    "animations": 11,
    "images": [],
-   "sha256": "0f78b6dcea1ac19e",
+   "sha256": "189f668c4d481524",
    "warnings": 2
   },
   "mob/npc_blossom.kfm": {
@@ -1388,7 +1444,7 @@
      256
     ]
    ],
-   "sha256": "ba851d6f3b3d4b8e",
+   "sha256": "10dc4af97bfc01f0",
    "warnings": 1
   },
   "mob/npc_grim.kfm": {
@@ -1404,7 +1460,7 @@
      256
     ]
    ],
-   "sha256": "6af5496d2510b4e4",
+   "sha256": "faa0629f9d757763",
    "warnings": 0
   },
   "prefabs/eps/epelements/epe[217].prefab": {
@@ -1432,7 +1488,7 @@
      256
     ]
    ],
-   "sha256": "47d9b1a979a80606",
+   "sha256": "8d065d497c1e178e",
    "warnings": 1
   }
  }
