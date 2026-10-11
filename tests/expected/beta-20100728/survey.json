@@ -74,7 +74,19 @@
     "layout_ok": true,
     "object_align": 8,
     "unitypackff": {
-     "open": "ValueError: Duplicate asset object: <GameObject 1> (path_id=154824314944763)"
+     "open": "ok",
+     "objects": 258388,
+     "no_struct": [],
+     "read_ok": 258388,
+     "errors": {},
+     "first_error": null,
+     "digest": "fb35fe7ba50c484d385e7118fe389b2999996374b554e1ff0bafe419628ebb8f",
+     "pointers": {
+      "local": 761273,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -174,7 +186,13 @@
      "read_ok": 2046,
      "errors": {},
      "first_error": null,
-     "digest": "6bf8a96581285a7dbd7a21190c38c9ed52bad157d5dc63cec83f94f3fa947e00"
+     "digest": "ecfae86f01dd549334dbaebf6416a1d64dad830ea7a94368536c94831449767f",
+     "pointers": {
+      "local": 7309,
+      "external": 13338,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -231,7 +249,13 @@
      "read_ok": 86,
      "errors": {},
      "first_error": null,
-     "digest": "107ae73a370349f6f845a3943ad00160170f67cc565d6aceab4a338ea1479262"
+     "digest": "2def0127031782393ead2dfcf93da3c97417520c8c1535ae13f79089a77228b3",
+     "pointers": {
+      "local": 170,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -311,7 +335,13 @@
      "read_ok": 679,
      "errors": {},
      "first_error": null,
-     "digest": "002200b00c539804772d0ddd5bd04c74b5c3d3a835525eabc01a9c0b33c6cc1d"
+     "digest": "f80070c3956f807d88976f5a5cc678e645deb28302313c9ea970af6a12723a4f",
+     "pointers": {
+      "local": 1852,
+      "external": 70,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -370,7 +400,13 @@
      "read_ok": 3017,
      "errors": {},
      "first_error": null,
-     "digest": "653952e553f05cdb41f2a4561d0893cd71b549dd803bc157986ad35f8a1e5b49"
+     "digest": "42797efbfffe1c62d9dee8f61109c50ae76dbfb77d9bf8796c066609e95ee9cf",
+     "pointers": {
+      "local": 6032,
+      "external": 2,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -427,7 +463,13 @@
      "read_ok": 2,
      "errors": {},
      "first_error": null,
-     "digest": "3c7fc504419dca3d3301d27d92d4703a556845945a79a1cac0c7354f29734eb4"
+     "digest": "809765f77b90e5ad2820b58beed9770516d76565bc5ca32b89238dd2280decb8",
+     "pointers": {
+      "local": 2,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -522,7 +564,13 @@
      "read_ok": 47,
      "errors": {},
      "first_error": null,
-     "digest": "e342788dc5e7997cf6de4448d66883cc01a1d424e88b82e313738d8f34a751c8"
+     "digest": "e342788dc5e7997cf6de4448d66883cc01a1d424e88b82e313738d8f34a751c8",
+     "pointers": {
+      "local": 74,
+      "external": 13,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    },
    "BuildPlayer-Map_00_00.sharedAssets": {
@@ -565,7 +613,13 @@
      "read_ok": 18,
      "errors": {},
      "first_error": null,
-     "digest": "0087ab2b41b6ad22ca48c92bad4b57654ea570c227ac93818f0700c2b55bd6a2"
+     "digest": "0087ab2b41b6ad22ca48c92bad4b57654ea570c227ac93818f0700c2b55bd6a2",
+     "pointers": {
+      "local": 11,
+      "external": 1,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -677,7 +731,13 @@
      "read_ok": 27539,
      "errors": {},
      "first_error": null,
-     "digest": "a210e8ba7775701cee674ec8e7b352e65ed79cdfb4eaab02bae75a66fe3ed035"
+     "digest": "a210e8ba7775701cee674ec8e7b352e65ed79cdfb4eaab02bae75a66fe3ed035",
+     "pointers": {
+      "local": 56796,
+      "external": 10755,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    },
    "BuildPlayer-Map_04_02.sharedAssets": {
@@ -742,7 +802,13 @@
      "read_ok": 1487,
      "errors": {},
      "first_error": null,
-     "digest": "d61e1c81d00eb46adad8936a0995698b5d41ef73ead0377ea7bc05a1f52966f9"
+     "digest": "d61e1c81d00eb46adad8936a0995698b5d41ef73ead0377ea7bc05a1f52966f9",
+     "pointers": {
+      "local": 1274,
+      "external": 1,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -845,7 +911,13 @@
       "ValueError": 36
      },
      "first_error": "struct.error: unpack requires a buffer of 4 bytes",
-     "digest": "56c086d107df79594069c3bb848249aedf62cce23aed42973437a20d1af68e31"
+     "digest": "56c086d107df79594069c3bb848249aedf62cce23aed42973437a20d1af68e31",
+     "pointers": {
+      "local": 0,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    },
    "BuildPlayer-Map_18_14.sharedAssets": {
@@ -883,7 +955,13 @@
       "ValueError": 1
      },
      "first_error": "ValueError: Expected read_value(<PPtr<Object> data (size=12, index=8, is_array=0, flags='0x0')>) to read 12 bytes, but only read 8 bytes",
-     "digest": "5c35fa10ccfffe2e02947a7a945775e433ef955588e827840044e899a5ba13da"
+     "digest": "5c35fa10ccfffe2e02947a7a945775e433ef955588e827840044e899a5ba13da",
+     "pointers": {
+      "local": 0,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -943,7 +1021,13 @@
      "read_ok": 525,
      "errors": {},
      "first_error": null,
-     "digest": "e8cca9f8ab40f97377cd55b50e882add480538f71d41b8240f798e09455d6c6d"
+     "digest": "dce966e1bfd30d58ebb1aed6532b2727833162c094774fdf90cc26b2a284c127",
+     "pointers": {
+      "local": 1048,
+      "external": 68,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -1007,7 +1091,13 @@
      "read_ok": 13,
      "errors": {},
      "first_error": null,
-     "digest": "24f46f4981bbff1bc0e1757e6565c01f4ce05910d4a3876877c5c867600c01c5"
+     "digest": "0c098a59772e2a5ea23a8a7ff6e0d82c21f93375be58c864d237c67216311416",
+     "pointers": {
+      "local": 24,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -1103,7 +1193,13 @@
      "read_ok": 11248,
      "errors": {},
      "first_error": null,
-     "digest": "c6736747e6e755cf23789200e0cb896d38222c83b57860f046dc79fb1bca09d1"
+     "digest": "1b014d74cfe30453af501db8b90072d659812aca425924abe6fd45c91c60f044",
+     "pointers": {
+      "local": 34987,
+      "external": 2608,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -1347,7 +1443,13 @@
      "read_ok": 52,
      "errors": {},
      "first_error": null,
-     "digest": "c4c4835fb8f49a98662593b3042fa6bac306252e6f0fc933a8614cc213de0baa"
+     "digest": "c4c4835fb8f49a98662593b3042fa6bac306252e6f0fc933a8614cc213de0baa",
+     "pointers": {
+      "local": 46,
+      "external": 1125,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    },
    "mysql.data.dll": {
@@ -1530,7 +1632,13 @@
      "read_ok": 1711,
      "errors": {},
      "first_error": null,
-     "digest": "a30ef4ccb295a9e3cbdb2184a21300dc104b0fd9c1381c4ab5b6677335e0bcec"
+     "digest": "a30ef4ccb295a9e3cbdb2184a21300dc104b0fd9c1381c4ab5b6677335e0bcec",
+     "pointers": {
+      "local": 3208,
+      "external": 718,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }

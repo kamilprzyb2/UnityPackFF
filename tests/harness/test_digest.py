@@ -21,6 +21,13 @@ def test_canon_shapes():
 	]}
 
 
+def test_canon_collects_pointers():
+	p, q = ptr(0, 7), ptr(1, 2)
+	found = []
+	canon({"a": [p, {"b": q}], "c": 3}, found)
+	assert found == [p, q]
+
+
 def test_engine_objects_digest_like_their_fields():
 	d = FFOrderedDict()
 	d["m_Name"] = "x"

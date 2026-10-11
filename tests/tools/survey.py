@@ -74,15 +74,30 @@ def survey_unitypackff(path, read_objects=True):
 			ret["objects"] = len(asset.objects)
 			ret["no_struct"] = sorted({o.class_id for o in asset.objects.values() if asset.types.get(o.type_id) is None})
 			if read_objects:
-				digest, count, errors = asset_digest(asset)
+				pointers = []
+				digest, count, errors = asset_digest(asset, pointers)
 				ret["read_ok"] = count - len(errors)
 				ret["errors"] = dict(collections.Counter(e.split(":")[0] for e in errors.values()))
 				ret["first_error"] = next(iter(errors.values()), None)
 				ret["digest"] = digest
+				ret["pointers"] = pointer_stats(asset, pointers)
 	finally:
 		logging.disable(logging.NOTSET)
 		ret["_seconds"] = round(time.time() - t, 2)
 	return ret
+
+
+def pointer_stats(asset, pointers):
+	"How many pointers are local or external, and how many point nowhere (null pointers read as None)."
+	ret = collections.Counter()
+	for p in pointers:
+		if p.file_id == 0:
+			ret["local" if p.path_id in asset.objects else "local_missing"] += 1
+		elif 0 < p.file_id < len(asset.asset_refs):
+			ret["external"] += 1
+		else:
+			ret["bad_file_index"] += 1
+	return {k: ret[k] for k in ("local", "external", "local_missing", "bad_file_index")}
 
 
 def archive_meta(build, bundle):
