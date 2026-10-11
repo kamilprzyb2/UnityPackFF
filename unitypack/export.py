@@ -185,8 +185,11 @@ class CompressedMeshData:
 		self.extract_mesh()
 
 	def read_bits(self, pbv):
-		if pbv['m_NumItems'] == 0 or pbv['m_BitSize'] == 0:
+		if pbv['m_NumItems'] == 0:
 			return []
+		if pbv['m_BitSize'] == 0:
+			# no bits to store: every item is 0
+			return [0] * pbv['m_NumItems']
 
 		reader = BitReader(pbv['m_Data'], pbv['m_BitSize'])
 
@@ -197,8 +200,10 @@ class CompressedMeshData:
 		return ret
 
 	def read_floats(self, pbv):
-		if pbv['m_NumItems'] == 0 or pbv['m_BitSize'] == 0:
+		if pbv['m_NumItems'] == 0:
 			return []
+		if pbv['m_BitSize'] == 0:
+			return [float(pbv['m_Start'])] * pbv['m_NumItems']
 
 		items = self.read_bits(pbv)
 		maxvalue = (1 << pbv['m_BitSize']) - 1
