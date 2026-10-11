@@ -19,12 +19,15 @@ class UnityEnvironment:
 		return "%s(base_path=%r)" % (self.__class__.__name__, self.base_path)
 
 	def load(self, file):
+		name = getattr(file, "name", "")
 		for bundle in self.bundles.values():
-			if os.path.abspath(file.name) == os.path.abspath(bundle.path):
+			if name and os.path.abspath(name) == os.path.abspath(bundle.path):
 				return bundle
 		ret = AssetBundle(self)
 		ret.load(file)
-		self.bundles[ret.name.lower()] = ret
+		# unnamed (in-memory) archives get a key of their own each
+		key = ret.name.lower() or "<unnamed %d>" % len(self.bundles)
+		self.bundles[key] = ret
 		for asset in ret.assets:
 			self.assets[asset.name.lower()] = asset
 		return ret

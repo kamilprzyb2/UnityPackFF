@@ -32,7 +32,7 @@ class AssetBundle:
 
 	def load(self, file):
 		buf = BinaryReader(file, endian=">")
-		self.path = file.name
+		self.path = getattr(file, "name", "")  # in-memory files have none
 
 		self.signature = buf.read_string()
 

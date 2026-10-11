@@ -9,6 +9,7 @@ import pytest
 
 import unitypack
 from tests import synth
+from unitypack.environment import UnityEnvironment
 
 
 def load(files, name="X.resourceFile"):
@@ -29,6 +30,16 @@ def test_header_fields():
 	bundle = load([("CustomAssetBundle-x", synth.sample_file())])
 	assert bundle.unity_version == "fusion-2.x.x"  # what UnityPackFF calls the player version
 	assert bundle.generator_version == "2.5.4b5"
+
+
+def test_unnamed_archives():
+	# BytesIO has no .name; two of them in one environment are still two bundles
+	env = UnityEnvironment()
+	a = env.load(io.BytesIO(synth.unityweb([("CustomAssetBundle-a", synth.sample_file())])))
+	b = env.load(io.BytesIO(synth.unityweb([("CustomAssetBundle-b", synth.bundle_file())])))
+	assert [x.name for x in a.assets + b.assets] == ["CustomAssetBundle-a", "CustomAssetBundle-b"]
+	assert list(env.bundles.values()) == [a, b]
+	assert b.assets[0].objects[2].read().script == "first"
 
 
 def test_not_an_archive():

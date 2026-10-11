@@ -4,10 +4,13 @@ Reading serialized files: unitypack/asset.py (Asset.load), object.py
 on made-up files from tests/synth.py.
 """
 
+import io
+
 import pytest
 
 from tests import synth
 from tests.unit.support import open_asset
+from unitypack.asset import Asset
 
 
 @pytest.fixture(params=[6, 7], ids=["format6", "format7"])
@@ -53,6 +56,12 @@ def test_contents_is_memoized(asset):
 	obj = asset.objects[1]
 	assert obj.contents is obj.contents
 	assert obj.read() is obj.contents  # read() returns the memoized object once there is one
+
+
+def test_unnamed_file():
+	asset = Asset.from_file(io.BytesIO(synth.sample_file()))
+	assert asset.name == ""
+	assert asset.objects[1].read().script == "world"
 
 
 def test_no_type_trees_fall_back_to_structs_dat():
