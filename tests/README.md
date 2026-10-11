@@ -14,7 +14,7 @@ pytest -m integration --record           # rewrite tests/expected/<build>.json f
 
 | Path | What |
 | --- | --- |
-| `unit/` | **UnityPackFF itself**, on made-up data. One file per area: `test_utils.py` (binary I/O), `test_asset_read.py` / `test_asset_save.py` (serialized files), `test_assetbundle.py` (archives), `test_texture.py`, `test_export.py` (OBJ, skin weights), `test_animation.py` (clips and curves), `test_terrain.py` (heightmaps), `test_gltf.py` (glTF export), `test_modding.py` (imports), `test_environment.py` (pointers into other files), `test_scripts.py` (`bin/` scripts). No network, no client files |
+| `unit/` | **UnityPackFF itself**, on made-up data. One file per area: `test_utils.py` (binary I/O), `test_asset_read.py` / `test_asset_save.py` (serialized files), `test_assetbundle.py` (archives), `test_texture.py`, `test_export.py` (OBJ, skin weights), `test_animation.py` (clips and curves), `test_terrain.py` (heightmaps), `test_gltf.py` (glTF export), `test_mapdata.py` (per-map script data), `test_modding.py` (imports), `test_environment.py` (pointers into other files), `test_scripts.py` (`bin/` scripts). No network, no client files |
 | `harness/` | Tests of our own helpers below (`bundles.py`, `serialized.py`, `digest.py`), so they can be trusted as a yardstick |
 | `demo/` | Command-line scripts behind the integration tests, with their own [README](demo/README.md) |
 | `integration/` | UnityPackFF on real archives: one case per operation and archive, parametrized over the builds |
@@ -34,7 +34,7 @@ A known library bug is a test marked `xfail(strict=True)`: it is expected to fai
 
 There are none at the moment.
 
-Not covered yet: `UnityEnvironment` beyond finding files (`discover`, `archive:` URLs), `bin/` scripts other than `index_bundles.py`, `dumpxdt.py` (`integration/test_scripts.py`), `dump_terrain.py` and `replace_terrain.py`, `AudioClip` export.
+Not covered yet: `UnityEnvironment` beyond finding files (`discover`, `archive:` URLs), `bin/` scripts other than `index_bundles.py`, `dumpxdt.py` (`integration/test_scripts.py`), `dump_terrain.py`, `replace_terrain.py`, `dump_mapdata.py` and `export_gltf.py`, `AudioClip` export.
 
 ## Builds
 

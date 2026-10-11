@@ -5589,6 +5589,100 @@
    "warnings": 1
   }
  },
+ "mapdata/Map_00_00.unity3d": {
+  "BuildPlayer-Map_00_00": {
+   "attributes": {
+    "size": 129,
+    "counts": {
+     "1": 0,
+     "2": 0,
+     "4": 0,
+     "8": 0,
+     "16": 0,
+     "32": 0,
+     "64": 0,
+     "128": 0
+    },
+    "sha256": "4cca5cd8fbb1f327"
+   },
+   "colors": {
+    "fog_depth": 1.0,
+    "fog": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "sky": [
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "light": [
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ]
+   }
+  }
+ },
+ "mapdata/Map_04_02.unity3d": {
+  "BuildPlayer-Map_04_02": {
+   "attributes": {
+    "size": 129,
+    "counts": {
+     "1": 1334,
+     "2": 288,
+     "4": 4689,
+     "8": 491,
+     "16": 0,
+     "32": 4455,
+     "64": 942,
+     "128": 17
+    },
+    "sha256": "359b48289ee47a4b"
+   },
+   "colors": {
+    "fog_depth": 0.7699999809265137,
+    "fog": [
+     0.3843137323856354,
+     0.6901960968971252,
+     1.0,
+     1.0
+    ],
+    "sky": [
+     0.0,
+     0.0,
+     0.8588235378265381,
+     1.0
+    ],
+    "light": [
+     0.7568627595901489,
+     1.0,
+     1.0,
+     1.0
+    ]
+   }
+  }
+ },
+ "mapdata/main.unity3d": {
+  "sharedassets0.assets": {
+   "music": {
+    "zones": 125,
+    "silent": 28,
+    "instance": 56,
+    "sha256": "cc68d5405666f610"
+   },
+   "ambient": {
+    "zones": 126,
+    "silent": 10,
+    "instance": 56,
+    "sha256": "7f95aadd2cb725f7"
+   }
+  }
+ },
  "meshes/FutureNano.resourceFile": {
   "CustomAssetBundle-FutureNano": {
    "7450368489833": {

@@ -11,6 +11,7 @@ Command-line tools that run the same operations as the integration tests, but wr
 | `clips.py` | Reads every AnimationClip of an archive and samples each curve at the clip's rate | `integration/test_clips.py` |
 | `terrain.py` | Dumps every terrain of an archive with `bin/dump_terrain.py` and compares Unity's level-of-detail data with what `TerrainData` works out | `integration/test_terrain.py` |
 | `gltf.py` | Exports every prefab of an archive, or a map tile's whole scene, as glTF (`.glb`) and runs the Khronos validator on them when it's installed | `integration/test_gltf.py` |
+| `mapdata.py` | Reads the attribute grid and colours of map tiles and the music zones of `main.unity3d`, and dumps them with `bin/dump_mapdata.py` | `integration/test_mapdata.py` |
 | `_common.py` | The options all the scripts share (not run directly) | |
 
 Run them from the repository root (`UnityPackFF/`).
@@ -166,3 +167,12 @@ export UNITYPACKFF_GLTF_VALIDATOR=~/gltf-validator
 ```
 
 `integration/test_gltf.py` then also requires every exported file to pass it with no errors and no warnings.
+
+## mapdata.py
+
+```sh
+python3 tests/demo/mapdata.py --build 104                  # Map_04_02 and main.unity3d
+python3 tests/demo/mapdata.py --build 1013 --bundle Map_07_08.unity3d
+```
+
+Without `--bundle` or `--all` it takes `Map_04_02.unity3d` and `main.unity3d`. Prints which kinds of map data each file has. Writes `out/mapdata/<build>/<file>.json` as `bin/dump_mapdata.py` writes them (the attribute grid as rows, z = 0 first, with a count per flag; fog, sky and light colours; music and ambient zones) and `out/mapdata/<build>.json` with the statistics the integration test checks.
