@@ -100,12 +100,19 @@ def test_dxt5_without_alpha(tmp_path):
 	assert same_pixels(decoded_upright(tex), img)
 
 
-@pytest.mark.xfail(strict=True, reason="import writes RGB565 with red in the top bits; Texture2D.image reads red from the bottom")
 def test_rgb16_round_trip(tmp_path):
 	img = halves(RED, GREEN)
 	tex = empty_texture()
 	import_texture(tex, png(tmp_path, img), fmt="rgb16")
 	assert tex.format == TextureFormat.RGB565
+	assert same_pixels(decoded_upright(tex), img)
+
+
+def test_rgba16_round_trip(tmp_path):
+	img = halves(RED, GREEN)
+	tex = empty_texture()
+	import_texture(tex, png(tmp_path, img), fmt="rgba16")
+	assert tex.format == TextureFormat.ARGB4444
 	assert same_pixels(decoded_upright(tex), img)
 
 
