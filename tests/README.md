@@ -33,7 +33,6 @@ A known library bug is a test marked `xfail(strict=True)`: it is expected to fai
 
 | Test | Bug |
 | --- | --- |
-| `integration/test_survey.py::test_survey` (2 archives) | Format 7: 64-bit object IDs truncated to 32 bits collide |
 | `unit/test_asset_save.py::test_save_is_byte_identical` | `Asset.save()` starts objects on 4 bytes, Unity on 8 |
 
 Not covered yet: cross-archive pointers (`UnityEnvironment`), `bin/` scripts, `AudioClip` export.

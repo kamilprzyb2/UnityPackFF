@@ -67,14 +67,6 @@ class ObjectInfo:
 			return TypeMetadata.default(self.asset).type_trees[self.class_id]
 		return self.asset.types[self.type_id]
 
-	@property
-	def epath_id(self):
-		"effective path_id"
-		if self.asset.long_object_ids:
-			return self.path_id & 0xffffffff
-		else:
-			return self.path_id
-
 	def load(self, buf):
 		self.path_id = self.read_id(buf)
 		self.data_offset = buf.read_uint() + self.asset.data_offset
@@ -382,36 +374,36 @@ class ObjectPointer:
 	def asset(self):
 		from .asset import AssetRef
 
-		if self.source_asset.format == 7:
-			for ref in self.source_asset.asset_refs:
-				asset = ref.resolve() if isinstance(ref, AssetRef) else ref
-
-				if self.path_id in asset.objects.keys():
-					return asset
-
-			raise KeyError('path_id {} not found in asset_refs'.format(self.path_id))
-		else:
-			ret = self.source_asset.asset_refs[self.file_id]
-			if isinstance(ret, AssetRef):
-				ret = ret.resolve()
-			return ret
+		ret = self.source_asset.asset_refs[self.file_id]
+		if isinstance(ret, AssetRef):
+			ret = ret.resolve()
+		return ret
 
 	@property
 	def object(self):
 		return self.asset.objects[self.path_id]
 
+	# Format 7 object IDs have 48 bits, but m_PathID only 32: the top 16
+	# bits of the ID are kept in the top half of m_FileID, whose low half
+	# is the file index.
+
 	def load(self, buf):
-		self.file_id = buf.read_int()
 		if self.source_asset.format == 7:
-			self.path_id = buf.read_uint()
+			file_field = buf.read_uint()
+			self.file_id = file_field & 0xffff
+			self.path_id = (file_field >> 16) << 32 | buf.read_uint()
 		else:
+			self.file_id = buf.read_int()
 			self.path_id = self.source_asset.read_id(buf)
 
 	def save(self, buf):
-		buf.write_int(self.file_id)
 		if self.source_asset.format == 7:
-			buf.write_uint(self.path_id)
+			if not 0 <= self.path_id < 1 << 48 or not 0 <= self.file_id <= 0xffff:
+				raise ValueError("%r does not fit in a format 7 pointer" % (self))
+			buf.write_uint((self.path_id >> 32) << 16 | self.file_id)
+			buf.write_uint(self.path_id & 0xffffffff)
 		else:
+			buf.write_int(self.file_id)
 			buf.write_int(self.path_id)
 
 	def resolve(self):

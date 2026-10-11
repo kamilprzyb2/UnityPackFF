@@ -173,7 +173,7 @@ def text_asset(name, script, path=""):
 def thing(count, scale, enabled, name, other, values):
 	data = struct.pack("<if?", count, scale, enabled) + b"\0" * 3
 	data += pack_string(name)
-	data += struct.pack("<ii", *other)
+	data += struct.pack("<iI", *other)
 	return data + struct.pack("<I", len(values)) + b"".join(struct.pack("<H", v) for v in values)
 
 
@@ -201,6 +201,30 @@ def sample_file(format=6, align=8):
 		],
 		externals=["library/unity default resources"],
 		format=format,
+		align=align,
+	)
+
+
+# Format-7 resource files number objects with 48-bit IDs. A pointer has only
+# 32 bits for the ID, so the top 16 bits go in the top half of m_FileID:
+# m_FileID = high 16 bits of the ID << 16 | file index.
+BIG_A, BIG_B = 0x1234_8000_0001, 0x5678_8000_0001  # same low 32 bits
+
+
+def big_pointer(file_index, path_id):
+	return ((path_id >> 32) << 16 | file_index, path_id & 0xFFFFFFFF)
+
+
+def big_id_file(align=8):
+	"Format 7: two TextAssets whose IDs share the low 32 bits, and a Thing (ID 1) pointing at the second."
+	return serialized_file(
+		{49: TEXT_ASSET, 1000: THING},
+		[
+			(1, 1000, 1000, thing(0, 0.0, False, "", big_pointer(0, BIG_B), [])),
+			(BIG_A, 49, 49, text_asset("a", "first")),
+			(BIG_B, 49, 49, text_asset("b", "second")),
+		],
+		format=7,
 		align=align,
 	)
 

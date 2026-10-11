@@ -448,7 +448,13 @@
      "read_ok": 2475,
      "errors": {},
      "first_error": null,
-     "digest": "91b4aa33585ed17b4da280cb27d216854ca6607d3dd3106094e71668545e5f09"
+     "digest": "aff9d9b0bdda33268e90d527032992d440f731756d11e05bd0c7e9e3bf05e8b9",
+     "pointers": {
+      "local": 7034,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -522,7 +528,13 @@
      "read_ok": 1713,
      "errors": {},
      "first_error": null,
-     "digest": "72ae5f4978062dbb4ef874963dfcfffecb1a2293978435619bf46c5cdd42659b"
+     "digest": "1ed7dbef5dd85f07702057cdb5644201bb392b2ed9adde748cbdaad440b2af36",
+     "pointers": {
+      "local": 4864,
+      "external": 44,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -590,7 +602,13 @@
      "read_ok": 25,
      "errors": {},
      "first_error": null,
-     "digest": "a01a985e0cf5ca20831aa3efe922c427c8c3c30d84899a2c28e34de3d21d02a2"
+     "digest": "dba1cfba8d4f36b9db35b04396fa288cc9decdd644c88752858942dc86ca918d",
+     "pointers": {
+      "local": 48,
+      "external": 484,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -694,7 +712,13 @@
      "read_ok": 5179,
      "errors": {},
      "first_error": null,
-     "digest": "68636dcb87e2dd4ba0f3e8b4473a789d91f261eb28e8c558aaf3e064272bc4fd"
+     "digest": "cb2d73774b4b8796d22ca7f34117a71b79af64b77d5c734a9bccc976548221ff",
+     "pointers": {
+      "local": 19125,
+      "external": 6069,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -751,7 +775,13 @@
      "read_ok": 102,
      "errors": {},
      "first_error": null,
-     "digest": "ca37fc2643a18ac562655daa26589b4c33c6987da0f7d156ec965a9cfe842dce"
+     "digest": "8c3e47d4c40f601e5644a532c07b04b0bbd2e08d8e500fb8ec0c3c71f0313bb2",
+     "pointers": {
+      "local": 202,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -808,7 +838,13 @@
      "read_ok": 3467,
      "errors": {},
      "first_error": null,
-     "digest": "4d8810af4c4a82c754e5904f090f0edada65659365d90b47ebc5e2d40655f356"
+     "digest": "51dc1b0f2c516e24d4b57948d889c94a2ba8fb8f37f4e3b10659171461d726ff",
+     "pointers": {
+      "local": 6932,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -865,7 +901,13 @@
      "read_ok": 2,
      "errors": {},
      "first_error": null,
-     "digest": "949dfb042b09507787556d6348ed09117f305b2cb55401cb2d305b84ef2e1279"
+     "digest": "6109252bc4c7bb25bfb5eab8a12fd84a1cbeaaaa4741712547cac5a1ca66a37b",
+     "pointers": {
+      "local": 2,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -924,7 +966,13 @@
      "read_ok": 3,
      "errors": {},
      "first_error": null,
-     "digest": "0b943433bd061c329e08686eda72be7572e36f06cd1ea8b75ac209104efa338d"
+     "digest": "0b943433bd061c329e08686eda72be7572e36f06cd1ea8b75ac209104efa338d",
+     "pointers": {
+      "local": 9,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -1020,7 +1068,13 @@
      "read_ok": 47,
      "errors": {},
      "first_error": null,
-     "digest": "ebc77d999634a56492c4d6ab4e6305eaea2f9e9a3b759097941d9795970be204"
+     "digest": "977d772c92dabf9d2f68519f97c5696b4c3c70a34eb732a26ebc57b91ae02938",
+     "pointers": {
+      "local": 74,
+      "external": 13,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    },
    "BuildPlayer-Map_00_00.sharedAssets": {
@@ -1055,7 +1109,13 @@
      "read_ok": 1,
      "errors": {},
      "first_error": null,
-     "digest": "1362599c21b9c55057bec550f94573aba92206d7a360b2ba69aa03e418874f57"
+     "digest": "fe5a5ee3d543c80abb43275ef6cc8f38ea395043a89bedc08d9b359bf8debcee",
+     "pointers": {
+      "local": 0,
+      "external": 18,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -1169,7 +1229,13 @@
      "read_ok": 27539,
      "errors": {},
      "first_error": null,
-     "digest": "7f1596119613a6213ae92fc409025ee15185556cc6cb6ee935586eae24b19ee0"
+     "digest": "207da4054c68e78d66ad98c581a21c993a5259da01e3f723446f547f10014215",
+     "pointers": {
+      "local": 56796,
+      "external": 10755,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    },
    "BuildPlayer-Map_04_02.sharedAssets": {
@@ -1205,7 +1271,13 @@
      "read_ok": 1,
      "errors": {},
      "first_error": null,
-     "digest": "228dc3f5f43a12a079165c497917519cffc88801a43c3c0046402fded64d0be3"
+     "digest": "2064771f7292b0e4cbf627e4dc445f8815d3c9190243085da29145981cc963d7",
+     "pointers": {
+      "local": 0,
+      "external": 1487,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -1283,7 +1355,13 @@
      "read_ok": 235,
      "errors": {},
      "first_error": null,
-     "digest": "9384f707fc8913221c6bee86f107a0e98d44a8a26f2dca46b5062debe4a8bbb1"
+     "digest": "89bd9b8354ca10581c085aa8bda2e33e1629762dfbd42927c50b28d84466a8a6",
+     "pointers": {
+      "local": 644,
+      "external": 8,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -1347,7 +1425,13 @@
      "read_ok": 13,
      "errors": {},
      "first_error": null,
-     "digest": "ac7d7e3aa15ce074b569d495940338c183723a8c0dd02b826eeeb512ec927657"
+     "digest": "998243a93b2d9eed8363986630c61ac3cd90dc8636ec367621cb0cf88073fbbc",
+     "pointers": {
+      "local": 24,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -1404,7 +1488,13 @@
      "read_ok": 11,
      "errors": {},
      "first_error": null,
-     "digest": "782b08c4e57029142e2594499fef2268344d59ad37ba516e0a9f5f422d3668e6"
+     "digest": "10416329e2d02ab63de735a53a646c44c122cb6e854d0b5250da949d36459e68",
+     "pointers": {
+      "local": 20,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -1648,7 +1738,13 @@
      "read_ok": 52,
      "errors": {},
      "first_error": null,
-     "digest": "98e9f4f26307837b119d5b980227d6204153c750f02293640f39329f5c27d3ad"
+     "digest": "98e9f4f26307837b119d5b980227d6204153c750f02293640f39329f5c27d3ad",
+     "pointers": {
+      "local": 46,
+      "external": 1129,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    },
    "mysql.data.dll": {
@@ -1835,7 +1931,13 @@
      "read_ok": 1739,
      "errors": {},
      "first_error": null,
-     "digest": "573cdda515de8c6ccaaf31083aeb39fe73ebfc2f92390c608036eef583d99ff8"
+     "digest": "573cdda515de8c6ccaaf31083aeb39fe73ebfc2f92390c608036eef583d99ff8",
+     "pointers": {
+      "local": 3265,
+      "external": 716,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }

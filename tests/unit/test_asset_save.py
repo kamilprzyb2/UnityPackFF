@@ -72,6 +72,18 @@ def test_save_is_byte_identical():
 	assert save(open_asset(data)) == data
 
 
+def test_save_format7_48bit_ids():
+	# pointers write the top 16 bits of the ID back into m_FileID
+	assert save(open_asset(synth.big_id_file())) == synth.big_id_file(align=4)
+
+
+def test_format7_pointer_must_fit():
+	asset = open_asset(synth.big_id_file())
+	asset.objects[1].contents["m_Other"].path_id = 1 << 48
+	with pytest.raises(ValueError):
+		save(asset)
+
+
 def test_add_object():
 	asset = open_asset(synth.sample_file(6))
 	obj = asset.add_object(49)

@@ -439,7 +439,13 @@
      "read_ok": 256370,
      "errors": {},
      "first_error": null,
-     "digest": "021da1f543ebf7a27ebf2b128d7c1df0c38d3e8c0f0b99466713075769f95dc7"
+     "digest": "021da1f543ebf7a27ebf2b128d7c1df0c38d3e8c0f0b99466713075769f95dc7",
+     "pointers": {
+      "local": 747913,
+      "external": 7750,
+      "local_missing": 0,
+      "bad_file_index": 2
+     }
     }
    }
   }
@@ -536,7 +542,13 @@
      "read_ok": 3155,
      "errors": {},
      "first_error": null,
-     "digest": "37ff63b147bacde157a680312e395a86ab8046cf3f97fec97a4841203ada5203"
+     "digest": "37ff63b147bacde157a680312e395a86ab8046cf3f97fec97a4841203ada5203",
+     "pointers": {
+      "local": 9805,
+      "external": 6859,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -593,7 +605,13 @@
      "read_ok": 75,
      "errors": {},
      "first_error": null,
-     "digest": "6090f3425b8cca42992756a175f9cae34365e0f92b939ec56c522791f503c2dd"
+     "digest": "6090f3425b8cca42992756a175f9cae34365e0f92b939ec56c522791f503c2dd",
+     "pointers": {
+      "local": 148,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -673,7 +691,13 @@
      "read_ok": 679,
      "errors": {},
      "first_error": null,
-     "digest": "c545c9fabf558e3c4b8161f7c7661817a1de1132ac186aa97f035bb8e9cfd166"
+     "digest": "c545c9fabf558e3c4b8161f7c7661817a1de1132ac186aa97f035bb8e9cfd166",
+     "pointers": {
+      "local": 1852,
+      "external": 67,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -732,7 +756,13 @@
      "read_ok": 3542,
      "errors": {},
      "first_error": null,
-     "digest": "de189f20251b419f9dcb89da1aa34d96798f4f914eabe8ad95dc5e07d37966fc"
+     "digest": "de189f20251b419f9dcb89da1aa34d96798f4f914eabe8ad95dc5e07d37966fc",
+     "pointers": {
+      "local": 6621,
+      "external": 2,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -789,7 +819,13 @@
      "read_ok": 2,
      "errors": {},
      "first_error": null,
-     "digest": "d99935be67daf150e54d418f437aff855cbb70c7b21f5a2dbceab645a6732702"
+     "digest": "d99935be67daf150e54d418f437aff855cbb70c7b21f5a2dbceab645a6732702",
+     "pointers": {
+      "local": 2,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -884,7 +920,13 @@
      "read_ok": 47,
      "errors": {},
      "first_error": null,
-     "digest": "4b1f9acb95818ff01823fec1eae790ca3935ba72411f4725110cbc0907ac4c01"
+     "digest": "4b1f9acb95818ff01823fec1eae790ca3935ba72411f4725110cbc0907ac4c01",
+     "pointers": {
+      "local": 74,
+      "external": 13,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    },
    "BuildPlayer-Map_00_00.sharedAssets": {
@@ -918,7 +960,13 @@
      "read_ok": 1,
      "errors": {},
      "first_error": null,
-     "digest": "b6931444600666960164ca7a8c13aa6180d17df137b5cc1ca7f3625532c750d9"
+     "digest": "b6931444600666960164ca7a8c13aa6180d17df137b5cc1ca7f3625532c750d9",
+     "pointers": {
+      "local": 0,
+      "external": 18,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -1033,7 +1081,13 @@
      "read_ok": 27474,
      "errors": {},
      "first_error": null,
-     "digest": "c36dd09d941b35f572b3042db023cd23e768abe1bfe9b3e651de5ddad5451017"
+     "digest": "c36dd09d941b35f572b3042db023cd23e768abe1bfe9b3e651de5ddad5451017",
+     "pointers": {
+      "local": 56665,
+      "external": 10729,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    },
    "BuildPlayer-Map_04_02.sharedAssets": {
@@ -1071,7 +1125,13 @@
      "read_ok": 1,
      "errors": {},
      "first_error": null,
-     "digest": "6d4634e8c78f0377dcd5e14cdec8ea75dbc24e07cb604dfa93560f40ffb851ee"
+     "digest": "6d4634e8c78f0377dcd5e14cdec8ea75dbc24e07cb604dfa93560f40ffb851ee",
+     "pointers": {
+      "local": 0,
+      "external": 1456,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -1131,7 +1191,13 @@
      "read_ok": 599,
      "errors": {},
      "first_error": null,
-     "digest": "ec7af94e2bd03c3818a3bc0780c0c2388a600d0ef3c514b7d244ca10217ad56e"
+     "digest": "ec7af94e2bd03c3818a3bc0780c0c2388a600d0ef3c514b7d244ca10217ad56e",
+     "pointers": {
+      "local": 1161,
+      "external": 28,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -1216,7 +1282,13 @@
      "read_ok": 2412,
      "errors": {},
      "first_error": null,
-     "digest": "38add947b392d1a8ddb70be9d290b45450a14d6ec84acda0f6ce167ab68b55e9"
+     "digest": "38add947b392d1a8ddb70be9d290b45450a14d6ec84acda0f6ce167ab68b55e9",
+     "pointers": {
+      "local": 8304,
+      "external": 57,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -1278,7 +1350,13 @@
      "read_ok": 9,
      "errors": {},
      "first_error": null,
-     "digest": "69d63d5b495d69f2bc769f4bdf5236b4a657887760e85202d7099400d1a3819a"
+     "digest": "69d63d5b495d69f2bc769f4bdf5236b4a657887760e85202d7099400d1a3819a",
+     "pointers": {
+      "local": 16,
+      "external": 0,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -1380,7 +1458,13 @@
      "read_ok": 2875,
      "errors": {},
      "first_error": null,
-     "digest": "b6e5a291cd3bc845c052e7b265a6cf63c945e1e166a55b65dbdb40871903bb47"
+     "digest": "b6e5a291cd3bc845c052e7b265a6cf63c945e1e166a55b65dbdb40871903bb47",
+     "pointers": {
+      "local": 8900,
+      "external": 2426,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }
@@ -1557,7 +1641,13 @@
      "read_ok": 52,
      "errors": {},
      "first_error": null,
-     "digest": "2eaa38093f10ac3f4d311cbd852ae2767fe37f90978763c264dd00dba6583cec"
+     "digest": "2eaa38093f10ac3f4d311cbd852ae2767fe37f90978763c264dd00dba6583cec",
+     "pointers": {
+      "local": 46,
+      "external": 1122,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    },
    "sharedassets0.assets": {
@@ -1735,7 +1825,13 @@
      "read_ok": 1640,
      "errors": {},
      "first_error": null,
-     "digest": "4b86d6e5348d8dfa05fa809869da4551733754482e6f771eda4152309c08c9ad"
+     "digest": "4b86d6e5348d8dfa05fa809869da4551733754482e6f771eda4152309c08c9ad",
+     "pointers": {
+      "local": 3089,
+      "external": 630,
+      "local_missing": 0,
+      "bad_file_index": 0
+     }
     }
    }
   }

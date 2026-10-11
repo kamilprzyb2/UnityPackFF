@@ -1,7 +1,8 @@
 """
 Every serialized file of an archive: the independent parser reads its
 metadata to the last byte, and what UnityPackFF reads from it (object counts,
-classes, a digest of every object) matches the recorded values.
+classes, a digest of every object, how many pointers resolve) matches the
+recorded values.
 """
 
 import pytest
@@ -11,9 +12,7 @@ from survey import strip_timing, survey_archive
 pytestmark = pytest.mark.integration
 
 # Known library bugs, by the error they cause; strict, so fixing one flags the marker for removal
-KNOWN = {
-	"Duplicate asset object": "format 7: 64-bit object IDs are truncated to 32 bits, and in a few files two of them collide",
-}
+KNOWN = {}
 
 
 def test_survey(build, bundle, unpacked, expected, request):
