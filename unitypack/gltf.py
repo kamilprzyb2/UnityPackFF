@@ -14,11 +14,19 @@ archive, say) are skipped, with a note in GLTFWriter.warnings.
 A GameObject exports with its skinned meshes (a skin per
 SkinnedMeshRenderer, using the mesh's stored bind poses, or the prefab's
 own pose where it has none) and the clips of its Animation components,
-resampled at each clip's rate and interpolated linearly.
+resampled at each clip's rate and interpolated linearly. A scene file
+exports whole (add_scene()), terrain included: its surface with the
+shifts applied and its splat textures blended into one base map.
+
+Material render state (alphaMode, doubleSided) comes from the shader's
+name, see alpha_state(). Clips that only animate material properties
+(texture scrolling, colour pulses) have no glTF equivalent and are left
+out; a clip's material curves are listed in its animation's extras.
 """
 
 import json
 import math
+import re
 import struct
 from io import BytesIO
 
@@ -43,6 +51,7 @@ TRANSFORM = 4
 MESH_RENDERER = 23
 MESH_FILTER = 33
 ANIMATION = 111
+TERRAIN_COLLIDER = 154
 SKINNED_MESH_RENDERER = 137
 
 
@@ -63,6 +72,54 @@ def mirror_matrix(m):
 def _fields(obj):
 	"An object's fields, whether it has an engine class or reads as a plain dict"
 	return obj._obj if hasattr(obj, "_obj") else obj
+
+
+def shader_name(shader):
+	"A Shader's name: m_Name, or the name its source declares (Shader \"...\") when that is empty"
+	if shader is None:
+		return None
+	name = shader.name
+	if not name:
+		match = re.match(r'\s*Shader\s+"([^"]+)"', _fields(shader).get("m_Script", "") or "")
+		name = match.group(1) if match else ""
+	return name or None
+
+
+def alpha_state(shader, floats, transparent_texture):
+	"""
+	glTF's alphaMode, alphaCutoff and doubleSided for a shader name.
+	FusionFall's own shaders spell their render state out in their names
+	(normal_blendSrcalphaInvsrcalphaTest_cullOff, ...); Unity's built-in
+	ones say Transparent or Cutout. Alpha testing becomes MASK; blending
+	without depth writes, additive blending (which glTF can't express, but
+	which is closer to BLEND than to OPAQUE) and Transparent become BLEND;
+	plain alpha blending becomes BLEND only if the texture has transparent
+	pixels, since most props use it with opaque textures.
+	"""
+	lo = (shader or "").lower()
+	ret = {}
+	if "test" in lo or "cutout" in lo:
+		ret["alphaMode"] = "MASK"
+		ret["alphaCutoff"] = float(floats.get("_Cutoff", 0.5))
+	elif any(k in lo for k in ("zwriteoff", "blendone", "blendsrcalphaone", "transparent")):
+		ret["alphaMode"] = "BLEND"
+	elif "blend" in lo and transparent_texture:
+		ret["alphaMode"] = "BLEND"
+	if "culloff" in lo:
+		ret["doubleSided"] = True
+	return ret
+
+
+def is_additive(shader):
+	"Whether a shader adds its colour to what's behind it (blendOneOne, blendSrcalphaOne)"
+	lo = (shader or "").lower()
+	return "blendone" in lo or "blendsrcalphaone" in lo
+
+
+def _with_alpha(rgb, alpha):
+	from PIL import Image
+
+	return Image.merge("RGBA", (*rgb.split(), alpha))
 
 
 def _vec(v, keys="xyz"):
@@ -139,8 +196,6 @@ class GLTFWriter:
 		return self._cached("texture", texture, self._make_texture)
 
 	def _make_texture(self, texture):
-		from PIL import ImageOps
-
 		try:
 			image = texture.image
 		except NotImplementedError as e:
@@ -148,11 +203,36 @@ class GLTFWriter:
 			return None
 		if image is None:
 			return None
-		png = BytesIO()
-		ImageOps.flip(image).save(png, format="png")  # Texture2D images are stored bottom-up
-		image_index = self._add("images", {"name": texture.name, "mimeType": "image/png", "bufferView": self.buffer_view(png.getvalue())})
+		clamp = texture._obj.get("m_TextureSettings", {}).get("m_WrapMode") == 1
+		index = self.add_image(image, texture.name, clamp)
+		self._cache[("transparent", index)] = "A" in image.getbands() and image.getchannel("A").getextrema()[0] < 255
+		self._cache[("source", index)] = (image, texture.name, clamp)
+		return index
 
-		wrap = CLAMP_TO_EDGE if texture._obj.get("m_TextureSettings", {}).get("m_WrapMode") == 1 else REPEAT
+	def _brightness_alpha(self, index):
+		"""
+		A copy of a texture whose alpha is its brightness (the largest of R,
+		G and B): drawn with BLEND, it looks like the additive blending glTF
+		has no mode for.
+		"""
+		from PIL import ImageChops
+
+		if ("brightness", index) not in self._cache:
+			image, name, clamp = self._cache[("source", index)]
+			rgb = image.convert("RGB")
+			r, g, b = rgb.split()
+			alpha = ImageChops.lighter(ImageChops.lighter(r, g), b)
+			self._cache[("brightness", index)] = self.add_image(_with_alpha(rgb, alpha), name + " (additive)", clamp)
+		return self._cache[("brightness", index)]
+
+	def add_image(self, image, name, clamp=False):
+		"A PIL image in Unity's orientation (bottom row first, as Texture2D.image gives it) as a texture"
+		from PIL import ImageOps
+
+		png = BytesIO()
+		ImageOps.flip(image).save(png, format="png")
+		image_index = self._add("images", {"name": name, "mimeType": "image/png", "bufferView": self.buffer_view(png.getvalue())})
+		wrap = CLAMP_TO_EDGE if clamp else REPEAT
 		if ("sampler", wrap) not in self._cache:
 			self._cache[("sampler", wrap)] = self._add("samplers", {
 				"magFilter": LINEAR, "minFilter": LINEAR_MIPMAP_LINEAR, "wrapS": wrap, "wrapT": wrap})
@@ -176,24 +256,29 @@ class GLTFWriter:
 		color = _color(colors["_Color"]) if "_Color" in colors else [1.0, 1.0, 1.0, 1.0]
 		pbr = {"baseColorFactor": [min(max(c, 0.0), 1.0) for c in color], "metallicFactor": 0.0, "roughnessFactor": 1.0}
 		main = texenvs.get("_MainTex")
-		if main:
-			texture = self.add_texture(main["m_Texture"])
-			if texture is not None:
-				pbr["baseColorTexture"] = {"index": texture}
+		texture = self.add_texture(main["m_Texture"]) if main else None
+		if texture is not None:
+			pbr["baseColorTexture"] = {"index": texture}
 
 		shader = self.resolve(material.shader)
+		gltf_material = {"name": material.name, "pbrMetallicRoughness": pbr}
+		name = shader_name(shader)
+		gltf_material.update(alpha_state(name, floats, self._cache.get(("transparent", texture), False)))
+		if texture is not None and is_additive(name):
+			pbr["baseColorTexture"] = {"index": self._brightness_alpha(texture)}
 		textures = {}
 		for name, env in texenvs.items():
 			tex = self.resolve(env["m_Texture"]) if env["m_Texture"] else None
 			textures[name] = {"texture": tex.name if tex is not None else None,
 				"scale": _vec(env["m_Scale"], "xy"), "offset": _vec(env["m_Offset"], "xy")}
 		extras = {
-			"shader": shader.name if shader is not None else None,
+			"shader": shader_name(shader),
 			"colors": {k: _color(v) for k, v in colors.items()},
 			"floats": {k: float(v) for k, v in floats.items()},
 			"textures": textures,
 		}
-		return self._add("materials", {"name": material.name, "pbrMetallicRoughness": pbr, "extras": extras})
+		gltf_material["extras"] = extras
+		return self._add("materials", gltf_material)
 
 	def _untextured(self, index):
 		"The material without its texture, for a mesh without texture coordinates"
@@ -255,6 +340,85 @@ class GLTFWriter:
 			return None
 		return self._add("meshes", {"name": mesh.name, "primitives": primitives})
 
+	def add_mesh_pointer(self, pointer, materials=()):
+		"add_mesh() for the Mesh a pointer points to, once per mesh and materials"
+		key = ("mesh", pointer.source_asset.name, pointer.file_id, pointer.path_id,
+			tuple((m.file_id, m.path_id) if m else None for m in materials))
+		if key not in self._cache:
+			mesh = self.resolve(pointer)
+			self._cache[key] = self.add_mesh(mesh, materials) if mesh is not None else None
+		return self._cache[key]
+
+	def add_terrain(self, terrain, base_map_resolution=None):
+		"""
+		A TerrainData's surface, shifts applied (see TerrainData.mesh()),
+		with its splat textures blended into one base colour texture (at
+		base_map_resolution, or the terrain's own m_BaseMapResolution). The
+		material's extras keep what a terrain shader needs: the splat and
+		control map textures, each splat's tiling, and the lightmap.
+		"""
+		from .engine.terrain import blend_splats
+
+		positions, uvs, triangles = terrain.mesh()
+		n = len(positions)
+		mirrored = [mirror_position(p) for p in positions]
+		indices = []
+		for j in range(0, len(triangles), 3):
+			a, b, c = triangles[j:j + 3]
+			indices += [a, c, b]
+		normals = [[0.0, 0.0, 0.0] for _ in range(n)]
+		for j in range(0, len(indices), 3):
+			a, b, c = (mirrored[i] for i in indices[j:j + 3])
+			e1 = [b[k] - a[k] for k in range(3)]
+			e2 = [c[k] - a[k] for k in range(3)]
+			face = [e1[1] * e2[2] - e1[2] * e2[1], e1[2] * e2[0] - e1[0] * e2[2], e1[0] * e2[1] - e1[1] * e2[0]]
+			for i in indices[j:j + 3]:
+				for k in range(3):
+					normals[i][k] += face[k]
+		for v in normals:
+			length = math.sqrt(sum(c * c for c in v))
+			v[:] = [c / length for c in v] if length else [0.0, 1.0, 0.0]
+
+		attrs = {
+			"POSITION": self.accessor([c for p in mirrored for c in p], "VEC3", target=ARRAY_BUFFER, minmax=True),
+			"NORMAL": self.accessor([c for v in normals for c in v], "VEC3", target=ARRAY_BUFFER),
+			"TEXCOORD_0": self.accessor([c for u, v in uvs for c in (u, 1 - v)], "VEC2", target=ARRAY_BUFFER),
+		}
+		ctype = UNSIGNED_SHORT if n < 65535 else UNSIGNED_INT
+		primitive = {"attributes": attrs, "indices": self.accessor(indices, "SCALAR", ctype, ELEMENT_ARRAY_BUFFER)}
+
+		splat_db = _fields(terrain.splat_database)
+		size = (terrain.scale[0] * (terrain.width - 1), terrain.scale[2] * (terrain.height - 1))
+		splats, splat_info = [], []
+		for splat in splat_db["m_Splats"]:
+			tex = self.resolve(splat["texture"])
+			image = None
+			if tex is not None:
+				try:
+					image = tex.image
+				except NotImplementedError as e:
+					self.warnings.append("%r: %s" % (tex, e))
+			tile = _vec(splat["tileSize"], "xy")
+			offset = _vec(splat["tileOffset"], "xy") if "tileOffset" in splat else [0.0, 0.0]
+			if image is not None:
+				splats.append((image, tile, offset))
+			splat_info.append({"texture": self.add_texture(splat["texture"]) if tex is not None else None, "tile_size": tile, "tile_offset": offset})
+		controls = []
+		control_textures = []
+		for ptr in splat_db["m_AlphaTextures"]:
+			tex = self.resolve(ptr)
+			controls.append(tex.image if tex is not None else None)
+			control_textures.append(self.add_texture(ptr) if tex is not None else None)
+		material = {"name": terrain.name or "terrain", "pbrMetallicRoughness": {"metallicFactor": 0.0, "roughnessFactor": 1.0}}
+		if splats and controls and None not in controls and len(splats) == len(splat_db["m_Splats"]):
+			resolution = base_map_resolution or splat_db.get("m_BaseMapResolution") or 512
+			base = blend_splats(splats, controls, size, resolution)
+			material["pbrMetallicRoughness"]["baseColorTexture"] = {"index": self.add_image(base, (terrain.name or "terrain") + " base map", clamp=True)}
+		lightmap = self.add_texture(terrain.lightmap) if terrain.lightmap else None
+		material["extras"] = {"terrain": {"splats": splat_info, "controls": control_textures, "lightmap": lightmap}}
+		primitive["material"] = self._add("materials", material)
+		return self._add("meshes", {"name": terrain.name or "terrain", "primitives": [primitive]})
+
 	def add_node(self, name=None, mesh=None, translation=None, rotation=None, scale=None, children=None, **extra):
 		"A node; translation and rotation in Unity's coordinates (mirrored here)"
 		node = {}
@@ -276,7 +440,26 @@ class GLTFWriter:
 	def add_root(self, node):
 		self.json["scenes"][0]["nodes"].append(node)
 
-	def add_gameobject(self, gameobject, skins=True, animations=True, sample_rate=None):
+	def add_scene(self, asset, skins=True, animations=True, sample_rate=None, inactive=False):
+		"""
+		Every root GameObject of a scene file (BuildPlayer-...): props,
+		terrain, skinned and animated objects. Inactive GameObjects are left
+		out unless inactive is true. Returns the root nodes.
+		"""
+		roots = []
+		for obj in sorted(asset.objects.values(), key=lambda o: o.path_id):
+			if obj.type_id != TRANSFORM:
+				continue
+			transform = obj.read()
+			if transform.parent:
+				continue
+			gameobject = self.resolve(transform.game_object)
+			if gameobject is None or not (inactive or gameobject._obj.get("m_IsActive", True)):
+				continue
+			roots.append(self.add_gameobject(gameobject, skins, animations, sample_rate, inactive))
+		return roots
+
+	def add_gameobject(self, gameobject, skins=True, animations=True, sample_rate=None, inactive=True):
 		"""
 		A GameObject and everything under it: one node per Transform, with
 		the meshes of MeshFilter + MeshRenderer and SkinnedMeshRenderer
@@ -284,7 +467,7 @@ class GLTFWriter:
 		components (sampled at each clip's rate, or sample_rate). Returns the
 		root node; it and the skinned mesh nodes are added to the scene.
 		"""
-		export = GameObjectExport(self, gameobject, skins, animations, sample_rate)
+		export = GameObjectExport(self, gameobject, skins, animations, sample_rate, inactive)
 		self.add_root(export.root)
 		for node in export.extra_roots:
 			self.add_root(node)
@@ -368,8 +551,9 @@ class GameObjectExport:
 	clips of its Animation components.
 	"""
 
-	def __init__(self, writer, gameobject, skins=True, animations=True, sample_rate=None):
+	def __init__(self, writer, gameobject, skins=True, animations=True, sample_rate=None, inactive=True):
 		self.writer = writer
+		self.inactive = inactive
 		self.nodes = {}  # Transform path ID -> node index
 		self.paths = {}  # path from the root ("" for the root) -> node index
 		self.local = {}  # node index -> local matrix, in Unity's coordinates
@@ -405,9 +589,13 @@ class GameObjectExport:
 		for cid, ptr in comps:
 			if cid == MESH_FILTER and renderer is not None:
 				filt = w.resolve(ptr)
-				m = w.resolve(_fields(filt)["m_Mesh"]) if filt is not None else None
-				if m is not None:
-					mesh = w.add_mesh(m, _fields(renderer)["m_Materials"])
+				if filt is not None and _fields(filt)["m_Mesh"]:
+					mesh = w.add_mesh_pointer(_fields(filt)["m_Mesh"], _fields(renderer)["m_Materials"])
+			elif cid == TERRAIN_COLLIDER:
+				collider = w.resolve(ptr)
+				terrain = w.resolve(_fields(collider)["m_TerrainData"]) if collider is not None else None
+				if terrain is not None:
+					mesh = w.add_terrain(terrain)
 			elif cid == SKINNED_MESH_RENDERER:
 				skinned = w.resolve(ptr)
 			elif cid == ANIMATION:
@@ -419,7 +607,7 @@ class GameObjectExport:
 		for child_ptr in _fields(transform)["m_Children"]:
 			child = w.resolve(child_ptr)
 			child_go = w.resolve(_fields(child)["m_GameObject"]) if child is not None else None
-			if child_go is not None:
+			if child_go is not None and (self.inactive or child_go._obj.get("m_IsActive", True)):
 				children.append(self.visit(child_go, "%s/%s" % (path, child_go.name) if path else child_go.name))
 
 		t, q, sc = _vec(transform.position), _vec(transform.rotation, "xyzw"), _vec(transform.scale)
@@ -585,6 +773,13 @@ def export_mesh(mesh, materials=()):
 	"One Mesh as a .glb file"
 	w = GLTFWriter()
 	w.add_root(w.add_node(mesh.name, mesh=w.add_mesh(mesh, materials)))
+	return w.glb()
+
+
+def export_scene(asset):
+	"Every active GameObject of a scene file as a .glb file"
+	w = GLTFWriter()
+	w.add_scene(asset)
 	return w.glb()
 
 

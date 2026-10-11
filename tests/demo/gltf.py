@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Every prefab (GameObject in an AssetBundle's container) of an archive,
-exported with unitypack.gltf, and checked with the Khronos glTF validator
-when it is installed.
+Every prefab (GameObject in an AssetBundle's container) of an archive, or
+the whole scene of a Map_XX_YY archive, exported with unitypack.gltf, and
+checked with the Khronos glTF validator when it is installed.
 
   python3 tests/demo/gltf.py --build 104 --bundle FutureNano.resourceFile --out out/
 
 Pointers into other files resolve against the build's curated archives
-only (unpacked as needed), so that what resolves doesn't depend on what
-else is in the cache.
+only (unpacked as needed), plus, for a scene, the archives it points into,
+so that what resolves doesn't depend on what else is in the cache.
 
 Writes out/gltf/<build>/<archive>/<container path>.glb and
 out/gltf/<build>.json with the statistics the integration test checks.
@@ -69,13 +69,48 @@ class CuratedEnvironment:
 	"A folder of links to the build's curated archives, unpacked, for UnityEnvironment(base_path=...)"
 
 	def __init__(self, build):
+		self.build = build
 		self.dir = tempfile.mkdtemp(prefix="unitypackff-env-")
+		self.linked = set()
 		for name in build.curated:
-			try:
-				src = build.unpack(name)
-			except BundleUnavailable:
-				continue
-			os.symlink(src, os.path.join(self.dir, name))
+			self.link(name)
+
+	def add_references(self, bundle, depth=2):
+		"""
+		Also link the archives that bundle's files point into, and theirs,
+		depth levels deep (a scene points at its DongResources, which points
+		at the World_shared part with some terrain textures)
+		"""
+		from unitypack.asset import Asset
+
+		archive_of = {f.lower(): name for name, info in self.build.manifest["bundles"].items()
+			for f in (info.get("uncompressed_info") or {})}
+		todo = [bundle]
+		for _ in range(depth + 1):
+			found = []
+			for name in todo:
+				self.link(name)
+				for path in self.build.inner_files(name):
+					if not serialized.looks_serialized(path.read_bytes()):
+						continue
+					with open(path, "rb") as f:
+						asset = Asset.from_file(f)
+						asset.objects  # loads the list of referenced files
+						for ref in asset.asset_refs[1:]:
+							other = archive_of.get(os.path.basename(ref.file_path).lower())
+							if other and other not in self.linked:
+								found.append(other)
+			todo = found
+
+	def link(self, name):
+		if name in self.linked:
+			return
+		self.linked.add(name)
+		try:
+			src = self.build.unpack(name)
+		except BundleUnavailable:
+			return
+		os.symlink(src, os.path.join(self.dir, name))
 
 	def close(self):
 		shutil.rmtree(self.dir, ignore_errors=True)
@@ -152,6 +187,32 @@ def export_prefabs(build, bundle, env_dir, out=None):
 	return ret
 
 
+def export_scenes(build, bundle, env_dir, out=None):
+	"""
+	{scene file: summary} for the scene of a Map_XX_YY archive, exported
+	whole (props, terrain, skinned and animated objects), as export_prefabs()
+	"""
+	from unitypack.environment import UnityEnvironment
+	from unitypack.gltf import GLTFWriter
+
+	out = Path(out or tempfile.mkdtemp(prefix="unitypackff-gltf-"))
+	out.mkdir(parents=True, exist_ok=True)
+	env = UnityEnvironment(base_path=env_dir)
+	ret = {}
+	for path in build.inner_files(bundle):
+		if not serialized.looks_serialized(path.read_bytes()) or path.name.endswith(".sharedAssets"):
+			continue
+		asset = env.get_asset_by_filename(path.name)
+		w = GLTFWriter()
+		w.add_scene(asset)
+		data = w.glb()
+		f = out / (path.name + ".glb")
+		f.write_bytes(data)
+		terrains = sum(1 for m in w.json.get("materials", []) if "terrain" in m.get("extras", {}))
+		ret[path.name] = dict(summary(data), terrains=terrains, warnings=len(w.warnings), _file=str(f))
+	return ret
+
+
 def main():
 	args = parser(__doc__).parse_args()
 	check = have_validator()
@@ -160,7 +221,11 @@ def main():
 		results = {}
 		try:
 			for b in bundles(args, build):
-				r = export_prefabs(build, b, env.dir, args.out / "gltf" / build.name / b)
+				if b.startswith("Map_"):
+					env.add_references(b)
+					r = export_scenes(build, b, env.dir, args.out / "gltf" / build.name / b)
+				else:
+					r = export_prefabs(build, b, env.dir, args.out / "gltf" / build.name / b)
 				issues = validate([p["_file"] for p in r.values()]) if check else {}
 				for p in r.values():
 					if check:

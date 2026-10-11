@@ -173,3 +173,91 @@ class TerrainData(Object):
 
 		self.heightmap["m_MinMaxPatchHeights"] = minmax
 		self.heightmap["m_PrecomputedError"] = error
+
+	def mesh(self):
+		"""
+		The terrain's surface with its shifts applied: (positions, uvs,
+		triangles) in Unity's coordinates, relative to the terrain. Vertex
+		z * width + x is heightmap vertex (x, z).
+
+		A shifted vertex moves one cell along its flags and keeps its
+		height. Its texture coordinates follow the moved position (the
+		terrain's textures are projected from above), as do everyone's:
+		(x, z) / the terrain's size. Each cell is two triangles split along
+		(x, z)-(x + 1, z + 1); the four cells around a shifted vertex are
+		marked, and marked cells with x + z even are split along the other
+		diagonal, so that the step comes out as a clean wall.
+		"""
+		w = self.width
+		sx, sy, sz = self.scale
+		size_x, size_z = sx * (w - 1), sz * (self.height - 1)
+		heights = self.heightmap["m_Heights"]
+
+		moves = {}
+		other_diagonal = set()
+		for x, z, flags in self.shifts:
+			if not (0 <= x < w and 0 <= z < self.height):
+				continue
+			moves[(x, z)] = flags
+			for cx, cz in ((x, z), (x - 1, z), (x, z - 1), (x - 1, z - 1)):
+				if cx >= 0 and cz >= 0 and (cx + cz) % 2 == 0:
+					other_diagonal.add((cx, cz))
+
+		positions = []
+		uvs = []
+		for z in range(self.height):
+			for x in range(w):
+				px, pz = x * sx, z * sz
+				flags = moves.get((x, z), 0)
+				if flags & SHIFT_MINUS_X:
+					px -= sx
+				if flags & SHIFT_PLUS_X:
+					px += sx
+				if flags & SHIFT_MINUS_Z:
+					pz -= sz
+				if flags & SHIFT_PLUS_Z:
+					pz += sz
+				positions.append((px, heights[x * self.height + z] / MAX_HEIGHT * sy, pz))
+				uvs.append((px / size_x, pz / size_z))
+
+		triangles = []
+		for z in range(self.height - 1):
+			for x in range(w - 1):
+				a = z * w + x
+				b, c, d = a + 1, a + w, a + w + 1
+				if (x, z) in other_diagonal:
+					triangles += [a, c, b, b, c, d]
+				else:
+					triangles += [a, c, d, a, d, b]
+		return positions, uvs, triangles
+
+
+def blend_splats(splats, controls, size, resolution):
+	"""
+	The terrain's textures blended into one image of resolution x resolution
+	pixels covering the whole terrain, as Unity's distant-terrain base map:
+	splats is [(image, (tile width, tile height), (offset x, offset y))],
+	each image tiled over the terrain every tile size (in world units);
+	controls are the control maps, whose channels R, G, B, A weigh four
+	splats each, in order. size is the terrain's (width, length). Images are
+	PIL images in Unity's orientation (the first row at z = 0), and so is the
+	result.
+	"""
+	from PIL import Image, ImageChops
+
+	out = Image.new("RGB", (resolution, resolution))
+	for i, (image, tile, offset) in enumerate(splats):
+		if i // 4 >= len(controls):
+			break
+		weight = controls[i // 4].convert("RGBA").getchannel("RGBA"[i % 4]).resize((resolution, resolution), Image.BILINEAR)
+		tw = max(1, round(tile[0] / size[0] * resolution))
+		th = max(1, round(tile[1] / size[1] * resolution))
+		tile_image = image.convert("RGB").resize((tw, th), Image.BILINEAR)
+		ox = round(offset[0] / size[0] * resolution) % tw
+		oy = round(offset[1] / size[1] * resolution) % th
+		tiled = Image.new("RGB", (resolution, resolution))
+		for y in range(-oy, resolution, th):
+			for x in range(-ox, resolution, tw):
+				tiled.paste(tile_image, (x, y))
+		out = ImageChops.add(out, ImageChops.multiply(tiled, Image.merge("RGB", (weight, weight, weight))))
+	return out

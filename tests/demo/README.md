@@ -10,7 +10,7 @@ Command-line tools that run the same operations as the integration tests, but wr
 | `meshes.py` | Exports every mesh of an archive as OBJ, plus the skin weights of skinned meshes | `integration/test_meshes.py` |
 | `clips.py` | Reads every AnimationClip of an archive and samples each curve at the clip's rate | `integration/test_clips.py` |
 | `terrain.py` | Dumps every terrain of an archive with `bin/dump_terrain.py` and compares Unity's level-of-detail data with what `TerrainData` works out | `integration/test_terrain.py` |
-| `gltf.py` | Exports every prefab of an archive as glTF (`.glb`) and runs the Khronos validator on them when it's installed | `integration/test_gltf.py` |
+| `gltf.py` | Exports every prefab of an archive, or a map tile's whole scene, as glTF (`.glb`) and runs the Khronos validator on them when it's installed | `integration/test_gltf.py` |
 | `_common.py` | The options all the scripts share (not run directly) | |
 
 Run them from the repository root (`UnityPackFF/`).
@@ -149,7 +149,10 @@ Writes `out/terrain/<build>/<archive>/<file>.png` and `.shifts.json` as `bin/dum
 ```sh
 python3 tests/demo/gltf.py --build 104 --bundle FutureNano.resourceFile
 python3 tests/demo/gltf.py --build all --bundle World_shared_part1.resourceFile
+python3 tests/demo/gltf.py --build 1013 --bundle Map_04_02.unity3d    # a whole scene
 ```
+
+For a `Map_XX_YY.unity3d` archive it exports the scene instead: every active GameObject, the terrain (shifts applied, splats blended into a base map) and skinned, animated props; the archives the scene points into (its DongResources, World_shared parts, ...) are unpacked and resolved too.
 
 Exports every prefab (a GameObject listed in the archive's AssetBundle container) with `unitypack.gltf`: its Transform tree, meshes and materials (textures embedded), skins and animation clips. Pointers into other archives (most textures) resolve against the build's curated archives only, unpacked as needed, so the result doesn't depend on what else is in the cache.
 
