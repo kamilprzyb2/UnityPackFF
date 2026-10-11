@@ -221,3 +221,176 @@ def test_gameobject():
 	assert child["rotation"] == pytest.approx([0, -math.sqrt(0.5), 0, math.sqrt(0.5)])
 	assert g["meshes"][child["mesh"]]["name"] == "quad"
 	assert g["materials"][g["meshes"][child["mesh"]]["primitives"][0]["material"]]["name"] == "mat"
+
+
+# Skins and clips: a "rig" GameObject with a SkinnedMeshRenderer and an
+# Animation, and one child bone one unit along x. The mesh's three vertices
+# are weighted to the rig and the bone.
+
+from tests.unit.test_animation import key, serialized_curve  # noqa: E402
+from tests.unit.test_export import skinned_mesh  # noqa: E402
+from unitypack.engine.animation import AnimationClip  # noqa: E402
+
+
+def rig(bind_poses=None, clips=(), bones=None):
+	ids = iter(range(300, 400))
+
+	def node(name, pos):
+		go = GameObject(fdict(m_Name=name, m_Component=[]))
+		tr = Pointer(Transform(fdict(m_GameObject=None, m_LocalPosition=vec(*pos), m_LocalRotation=fdict(x=0, y=0, z=0, w=1),
+			m_LocalScale=vec(1, 1, 1), m_Children=[], m_Father=None)), next(ids))
+		tr.target._obj["m_GameObject"] = Pointer(go, next(ids))
+		go._obj["m_Component"] = [(4, tr)]
+		return go, tr
+
+	root, root_tr = node("rig", (0, 0, 0))
+	bone, bone_tr = node("bone", (1, 0, 0))
+	root_tr.target._obj["m_Children"] = [bone_tr]
+
+	# vertex 0: rig only; 1: bone only; 2: half each, the bone listed twice
+	m = skinned_mesh([31, 31, 10, 10, 11], [0, 1, 0, 1, 1])
+	if bind_poses is not None:
+		m._obj["m_BindPose"] = bind_poses
+	smr = fdict(m_GameObject=None, m_Mesh=Pointer(m, next(ids)), m_Materials=[],
+		m_Bones=bones if bones is not None else [root_tr, bone_tr])
+	animation = fdict(m_GameObject=None, m_Animations=[Pointer(c, next(ids)) for c in clips])
+	root._obj["m_Component"] += [(137, Pointer(smr, next(ids))), (111, Pointer(animation, next(ids)))]
+	return root
+
+
+def clip(name="move", position_curves=(), rotation_curves=(), float_curves=(), events=(), rate=2.0):
+	return AnimationClip(fdict(
+		m_Name=name, m_UseCompression=False, m_RotationCurves=list(rotation_curves), m_CompressedRotationCurves=[],
+		m_PositionCurves=list(position_curves), m_ScaleCurves=[], m_FloatCurves=list(float_curves),
+		m_SampleRate=rate, m_Events=list(events),
+	))
+
+
+def curve_on(path, *keys):
+	return fdict(curve=serialized_curve(list(keys)), path=path)
+
+
+def matrix_fields(m):
+	return fdict(**{"e%d%d" % (r, c): m[r * 4 + c] for r in range(4) for c in range(4)})
+
+
+def test_skin():
+	g = GLB(export_gameobject(rig()))
+	roots = g["scenes"][0]["nodes"]
+	assert len(roots) == 2
+	rig_node, skinned = g["nodes"][roots[0]], g["nodes"][roots[1]]
+	assert "mesh" not in rig_node  # the skinned mesh is on a node of its own, at the top
+	assert skinned["name"] == "rig (skinned)"
+	skin = g["skins"][skinned["skin"]]
+	assert [g["nodes"][j]["name"] for j in skin["joints"]] == ["rig", "bone"]
+
+	a = g["meshes"][skinned["mesh"]]["primitives"][0]["attributes"]
+	# vertex 2: the bone's two weights merged (21/31) and first, then the rig's
+	assert g.accessor(a["JOINTS_0"]) == [(0, 0, 0, 0), (1, 0, 0, 0), (1, 0, 0, 0)]
+	assert g.accessor(a["WEIGHTS_0"]) == approx([(1, 0, 0, 0), (1, 0, 0, 0), (21 / 31, 10 / 31, 0, 0)])
+
+
+def test_inverse_bind_matrices_from_the_pose():
+	# no bind poses stored: the prefab's pose is the bind pose
+	g = GLB(export_gameobject(rig()))
+	skin = g["skins"][0]
+	ibm = g.accessor(skin["inverseBindMatrices"])
+	assert ibm[0] == approx([(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)])[0]
+	# column-major; the bone is at -1 along glTF's x, so its inverse moves by +1
+	assert ibm[1] == approx([(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1)])[0]
+
+
+def test_inverse_bind_matrices_stored():
+	identity = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+	moved = [1, 0, 0, -5, 0, 1, 0, 0, 0, 0, 1, 2, 0, 0, 0, 1]  # row-major, translation (-5, 0, 2)
+	g = GLB(export_gameobject(rig(bind_poses=[matrix_fields(identity), matrix_fields(moved)])))
+	ibm = g.accessor(g["skins"][0]["inverseBindMatrices"])
+	# mirrored along x, column-major: translation (5, 0, 2) in the last column
+	assert ibm[1] == approx([(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 5, 0, 2, 1)])[0]
+
+
+def test_bones_outside_the_gameobject():
+	stranger = Pointer(Transform(fdict(m_GameObject=None, m_LocalPosition=vec(0, 0, 0), m_LocalRotation=fdict(x=0, y=0, z=0, w=1),
+		m_LocalScale=vec(1, 1, 1), m_Children=[], m_Father=None)), 999)
+	w = GLTFWriter()
+	w.add_gameobject(rig(bones=[stranger, stranger]))
+	assert "skins" not in w.json
+	assert w.json["nodes"][-1]["name"] == "rig" and "mesh" in w.json["nodes"][-1]
+	assert "not under the exported GameObject" in w.warnings[0]
+
+
+def test_without_skins():
+	w = GLTFWriter()
+	w.add_gameobject(rig(), skins=False)
+	assert "skins" not in w.json
+	assert len(w.json["scenes"][0]["nodes"]) == 1
+
+
+def test_clip():
+	move = clip(position_curves=[curve_on("bone", key(0.0, vec(1, 0, 0), vec(1, 0, 0)), key(1.0, vec(2, 0, 0), vec(1, 0, 0)))])
+	g = GLB(export_gameobject(rig(clips=[move])))
+	[anim] = g["animations"]
+	assert anim["name"] == "move"
+	[ch] = anim["channels"]
+	assert g["nodes"][ch["target"]["node"]]["name"] == "bone"
+	assert ch["target"]["path"] == "translation"
+	s = anim["samplers"][ch["sampler"]]
+	assert s["interpolation"] == "LINEAR"
+	# 2 frames a second over 1 second, mirrored along x
+	assert g.accessor(s["input"]) == [0, 0.5, 1]
+	assert g.accessor(s["output"]) == approx([(-1, 0, 0), (-1.5, 0, 0), (-2, 0, 0)])
+
+
+def test_clip_constant_curve_has_one_sample():
+	still = clip(position_curves=[
+		curve_on("bone", key(0.0, vec(1, 0, 0), vec(0, 0, 0)), key(1.0, vec(1, 0, 0), vec(0, 0, 0))),
+		curve_on("", key(0.0, vec(0, 0, 0), vec(0, 0, 0)), key(1.0, vec(0, 3, 0), vec(0, 3, 0))),
+	])
+	g = GLB(export_gameobject(rig(clips=[still])))
+	anim = g["animations"][0]
+	counts = {g["nodes"][c["target"]["node"]]["name"]: len(g.accessor(anim["samplers"][c["sampler"]]["output"])) for c in anim["channels"]}
+	assert counts == {"bone": 1, "rig": 3}  # "" is the GameObject with the Animation
+
+
+def test_clip_rotations():
+	# a half turn about y: samples are normalized, mirrored, and keep one sign
+	turn = clip(rotation_curves=[curve_on("bone",
+		key(0.0, fdict(x=0, y=0, z=0, w=2), fdict(x=0, y=0, z=0, w=0)),  # not normalized
+		key(1.0, fdict(x=0, y=-1, z=0, w=0), fdict(x=0, y=0, z=0, w=0)))])
+	g = GLB(export_gameobject(rig(clips=[turn])))
+	anim = g["animations"][0]
+	out = g.accessor(anim["samplers"][anim["channels"][0]["sampler"]]["output"])
+	assert out[0] == approx([(0, 0, 0, 1)])[0]
+	# halfway, flat slopes: (0, -0.5, 0, 1), normalized; mirrored, y flips sign
+	n = math.sqrt(1.25)
+	assert out[1] == approx([(0, 0.5 / n, 0, 1 / n)])[0]
+	assert out[2] == approx([(0, 1, 0, 0)])[0]
+	for q in out:
+		assert sum(c * c for c in q) == pytest.approx(1, abs=1e-6)
+	for a, b in zip(out, out[1:]):
+		assert sum(x * y for x, y in zip(a, b)) >= 0
+
+
+def test_clip_extras_and_missing_paths():
+	c = clip(
+		position_curves=[curve_on("gone", key(0.0, vec(0, 0, 0), vec(0, 0, 0)), key(1.0, vec(1, 0, 0), vec(0, 0, 0))),
+			curve_on("bone", key(0.0, vec(1, 0, 0), vec(0, 0, 0)), key(1.0, vec(2, 0, 0), vec(0, 0, 0)))],
+		float_curves=[fdict(curve=serialized_curve([key(0.0, 0.0, 0.0)]), attribute="_Color.r", path="", classID=21, script=None)],
+		events=[fdict(time=0.75, functionName="end", data="", messageOptions=1)],
+	)
+	w = GLTFWriter()
+	w.add_gameobject(rig(clips=[c]))
+	anim = w.json["animations"][0]
+	assert anim["extras"] == {"float_curves": [":_Color.r"], "events": [{"time": 0.75, "function": "end"}]}
+	assert len(anim["channels"]) == 1
+	assert "no node for 1 curve paths, such as 'gone'" in w.warnings[0]
+
+
+def test_clip_without_channels_is_left_out():
+	empty = clip(position_curves=[curve_on("gone", key(0.0, vec(0, 0, 0), vec(0, 0, 0)))])
+	w = GLTFWriter()
+	w.add_gameobject(rig(clips=[empty]))
+	assert "animations" not in w.json
+	w = GLTFWriter()
+	w.add_gameobject(rig(clips=[empty]), animations=False)
+	assert w.warnings == []

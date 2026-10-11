@@ -1180,55 +1180,65 @@
  },
  "gltf/CharacterSelection_wear_face.resourceFile": {
   "wear/f_face_001_type01.nif": {
-   "nodes": 156,
+   "nodes": 158,
    "meshes": 2,
    "primitives": 2,
    "materials": 2,
+   "skins": 2,
+   "animations": 0,
    "images": [],
-   "sha256": "7c11606b1486e64e",
+   "sha256": "86612ef5e10256e0",
    "warnings": 3
   },
   "wear/f_face_001_type02.nif": {
-   "nodes": 156,
+   "nodes": 158,
    "meshes": 2,
    "primitives": 2,
    "materials": 2,
+   "skins": 2,
+   "animations": 0,
    "images": [],
-   "sha256": "b2162198e1a0bd83",
+   "sha256": "f1326ae36f702be9",
    "warnings": 3
   },
   "wear/m_face_001_type01.nif": {
-   "nodes": 128,
+   "nodes": 130,
    "meshes": 2,
    "primitives": 2,
    "materials": 2,
+   "skins": 2,
+   "animations": 0,
    "images": [],
-   "sha256": "881d05dadcc69c52",
+   "sha256": "01364f526a9543f0",
    "warnings": 3
   },
   "wear/m_face_001_type02.nif": {
-   "nodes": 128,
+   "nodes": 130,
    "meshes": 2,
    "primitives": 2,
    "materials": 2,
+   "skins": 2,
+   "animations": 0,
    "images": [],
-   "sha256": "9785dea30817483a",
+   "sha256": "da9e2851b6628ce7",
    "warnings": 3
   }
  },
  "gltf/Nano_001.resourceFile": {
   "nano/nano_buttercup.kfm": {
-   "nodes": 58,
+   "nodes": 60,
    "meshes": 2,
    "primitives": 2,
    "materials": 2,
+   "skins": 2,
+   "animations": 32,
    "images": [
     [
      256,
      256
     ]
    ],
-   "sha256": "8b36a455955a46d7",
+   "sha256": "4d36d603dd76d3ca",
    "warnings": 1
   }
  },
