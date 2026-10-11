@@ -1,4 +1,5 @@
 import logging
+import os
 from collections import OrderedDict
 from io import BytesIO
 from . import engine as UnityEngine
@@ -55,6 +56,15 @@ class ObjectInfo:
 				typename = str(self.type_id)
 			self.asset.typenames[self.type_id] = typename
 		return self.asset.typenames[self.type_id]
+
+	@property
+	def uses_structs_dat(self):
+		"True when the file has no type tree for this object, so its layout comes from structs.dat"
+		trees = self.asset.tree.type_trees
+		if self.type_id < 0:
+			# scripts fall back to their class's tree, as in type_tree
+			return self.type_id not in trees and self.class_id not in trees
+		return self.type_id not in trees
 
 	@property
 	def type_tree(self):
@@ -120,7 +130,25 @@ class ObjectInfo:
 		buf = self.asset._buf
 		buf.seek(self.asset._buf_ofs + self.data_offset)
 		object_buf = buf.read(self.size)
-		return self.read_value(self.type_tree, BinaryReader(BytesIO(object_buf)))
+
+		type_tree = self.type_tree
+		name = os.path.basename(self.asset.name)
+		if type_tree is None:
+			raise ValueError("No type tree for class %r in %r, and none in structs.dat" % (self.class_id, name))
+		if not self.uses_structs_dat:
+			return self.read_value(type_tree, BinaryReader(BytesIO(object_buf)))
+
+		# structs.dat holds layouts from a later Unity version, which
+		# fit only some classes of older files: check the whole object
+		# was read, so a layout that doesn't fit can't pass silently
+		reader = BinaryReader(BytesIO(object_buf))
+		try:
+			result = self.read_value(type_tree, reader)
+		except Exception as e:
+			raise ValueError("No type tree for class %r in %r, and the layout from structs.dat doesn't fit: %s" % (self.class_id, name, e)) from e
+		if len(object_buf) - reader.tell() >= 4:
+			raise ValueError("No type tree for class %r in %r, and the layout from structs.dat doesn't fit: read %d of %d bytes" % (self.class_id, name, reader.tell(), len(object_buf)))
+		return result
 
 	def read_value(self, type, buf):
 		align = False
