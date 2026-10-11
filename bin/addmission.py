@@ -4,12 +4,12 @@ from unitypack.asset import Asset
 from unitypack.object import FFOrderedDict
 
 TABLEDATA_PATH = 'CustomAssetBundle-1dca92eecee4742d985b799d8226666d'
-XDTINDEX = 7
+XDTPATH = 'xdtdatas.asset'
 
 f = open(TABLEDATA_PATH, 'rb')
 tabledata = Asset.from_file(f)
 
-xdtdata = tabledata.objects[XDTINDEX].contents
+xdtdata = tabledata.get_object_by_path(XDTPATH).contents
 missionTable = xdtdata['m_pMissionTable']
 questItemTable = xdtdata['m_pQuestItemTable']
 
