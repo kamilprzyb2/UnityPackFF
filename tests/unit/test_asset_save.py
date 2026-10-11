@@ -23,17 +23,12 @@ def digests(asset):
 
 def test_save_reads_back_the_same(fmt):
 	before = open_asset(synth.sample_file(fmt))
-	expected = digests(before)  # before saving: see test_source_still_reads_after_save
+	expected = digests(before)
 	after = open_asset(save(before))
 	assert digests(after) == expected
 	assert after.format == fmt  # only set once the file is loaded, which .objects does lazily
 
 
-SAVE_MOVES_OFFSETS = ("Asset.save() overwrites each object's offset and size with its place in the new file, "
-	"but the asset still reads the old bytes")
-
-
-@pytest.mark.xfail(strict=True, reason=SAVE_MOVES_OFFSETS)
 def test_source_still_reads_after_save():
 	asset = open_asset(synth.sample_file(6))
 	expected = digests(asset)
@@ -42,7 +37,6 @@ def test_source_still_reads_after_save():
 	assert digests(asset) == expected
 
 
-@pytest.mark.xfail(strict=True, reason=SAVE_MOVES_OFFSETS)
 def test_save_twice():
 	asset = open_asset(synth.sample_file(6))
 	assert save(asset) == save(asset)
