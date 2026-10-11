@@ -262,3 +262,12 @@ def test_uncompressed_skin():
 			"boneIndex[0]": 1, "boneIndex[1]": 3, "boneIndex[2]": 0, "boneIndex[3]": 7}),
 	]
 	assert skin(m) == [[(2, 1.0)], [(1, 0.5), (3, 0.25), (7, 0.25)]]
+
+
+def test_compressed_mesh_without_uvs():
+	# a count of texture coordinates, 0 bits and an infinite start: none
+	m = compressed_mesh()
+	m._obj["m_CompressedMesh"]["m_UV"] = packed([0] * 6, 0, math.inf, -math.inf)
+	obj = parse_obj(OBJMesh(m).export())
+	assert obj["vt"] == []
+	assert len(obj["v"]) == 3
