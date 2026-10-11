@@ -46,10 +46,10 @@ class Asset:
 	@classmethod
 	def from_file(cls, file, environment=None):
 		ret = cls()
-		ret.name = file.name
+		ret.name = getattr(file, "name", "")  # in-memory files have none
 		ret._buf_ofs = file.tell()
 		ret._buf = BinaryReader(file)
-		base_path = os.path.abspath(os.path.dirname(file.name))
+		base_path = os.path.abspath(os.path.dirname(ret.name))
 		if environment is None:
 			from .environment import UnityEnvironment
 			environment = UnityEnvironment(base_path=base_path)

@@ -6,7 +6,6 @@ from unitypack.asset import Asset
 
 
 def open_asset(data, name="CustomAssetBundle-test"):
-	"Asset.from_file() needs a file object with a .name, so wrap the bytes in one."
 	f = io.BytesIO(data)
 	f.name = name
 	return Asset.from_file(f)
