@@ -98,7 +98,16 @@ f = open('tabledata_2eresourceFile/CustomAssetBundle-1dca92eecee4742d985b799d822
 tabledata = Asset.from_file(f)
 ```
 
-UnityPack also has a `unitypack.load()` function that operates directly on the enclosing `.unity3d` bundle, but that method does not currently set the correct version in the asset bundle, and is therefore unusable.
+UnityPack also has a `unitypack.load()` function that opens the enclosing `.unity3d` archive directly, without extracting it first.
+Every file in the archive becomes an `Asset` in the bundle's `assets` list (a map tile has two: the scene and its `.sharedAssets`):
+
+```python
+import unitypack
+with open('TableData.resourceFile', 'rb') as f:
+    tabledata = unitypack.load(f).assets[0]
+```
+
+The library can't write archives, so to modify one, save the asset with `Asset.save()` and pack it with a separate tool.
 
 After you've opened up the `tabledata` asset bundle, you can access its asset objects through its `tabledata.objects` member.
 Note that `objects` is a dict with integer keys, not a list. The first member is usually 1 in these.
