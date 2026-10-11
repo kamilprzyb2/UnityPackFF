@@ -191,9 +191,10 @@ class Asset:
 		buf.seek(16, os.SEEK_CUR)
 
 		# write object data
+		layout = []
 		for obj in self.objects.values(): # will load() if necessary
 			buf.align()
-			obj.save_data(buf)
+			layout.append(obj.save_data(buf))
 
 		# start of metadata
 		metadata_offset = buf.tell()
@@ -208,8 +209,8 @@ class Asset:
 
 		# write object metadata
 		buf.write_uint(len(self.objects))
-		for obj in self.objects.values():
-			obj.save_metadata(buf)
+		for obj, (offset, size) in zip(self.objects.values(), layout):
+			obj.save_metadata(buf, offset, size)
 
 		buf.write_uint(len(self.asset_refs) - 1)
 		for ref in self.asset_refs[1:]: # skip self
@@ -218,16 +219,17 @@ class Asset:
 		# null terminator for empty unk_string at the end
 		buf.write_byte(0)
 
-		# recalculate sizes
-		self.file_size = buf.tell()
-		self.metadata_size = self.file_size - metadata_offset
+		# sizes of the new file; self.file_size and self.metadata_size
+		# still describe the source
+		file_size = buf.tell()
+		metadata_size = file_size - metadata_offset
 
 		# go back to the start, write the header
 		buf.seek(0)
 		buf.endian = ">"
 
-		buf.write_uint(self.metadata_size)
-		buf.write_uint(self.file_size)
+		buf.write_uint(metadata_size)
+		buf.write_uint(file_size)
 		buf.write_uint(self.format)
 		buf.write_uint(self.data_offset) # appears to always be 0
 
