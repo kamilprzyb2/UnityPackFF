@@ -1,6 +1,6 @@
 """
 OBJ export: unitypack/export.py (OBJMesh, MeshData, CompressedMeshData,
-handle_strip_topology) on meshes built in memory, the way ObjectInfo.read()
+strip_to_triangles) on meshes built in memory, the way ObjectInfo.read()
 returns them.
 
 Conventions the exporter applies, checked below: x is negated (Unity is
@@ -110,11 +110,11 @@ def packed(items, bits, start=None, range_=None):
 	return d
 
 
-def compressed_mesh(normal_items, signs):
+def compressed_mesh(normal_items=(0,) * 6, signs=(1,) * 3, triangles=(0, 1, 2), submeshes=None):
 	return Mesh(fdict(
 		m_Name="c",
 		m_MeshCompression=2,
-		m_SubMeshes=[submesh(0, 3)],
+		m_SubMeshes=submeshes or [submesh(0, len(triangles))],
 		m_CompressedMesh=fdict(
 			# 8 bits over [-1, 1]: items 0, 255 and 51 are -1, 1 and -0.6
 			m_Vertices=packed([0, 0, 0, 255, 255, 255, 51, 51, 51], 8, -1.0, 2.0),
@@ -123,13 +123,26 @@ def compressed_mesh(normal_items, signs):
 			# 4 bits over [0, 1]: items 0, 9 and 15 are 0, 0.6 and 1; two per vertex (x, y)
 			m_Normals=packed(normal_items, 4, 0.0, 1.0),
 			m_NormalSigns=packed(signs, 1),  # 1: z positive, 0: z negative
-			m_Triangles=packed([0, 1, 2], 2),
+			m_Triangles=packed(list(triangles), 2),
 		),
 	))
 
 
 def approx(rows):
 	return [tuple(pytest.approx(x, abs=1e-6) for x in r) for r in rows]
+
+
+def test_compressed_triangle_strip():
+	# only the strip's own triangles: (0 1 2), then (1 2 0) flipped to (0 2 1)
+	obj = parse_obj(OBJMesh(compressed_mesh(triangles=[0, 1, 2, 0], submeshes=[submesh(0, 4, strip=True)])).export())
+	assert obj["f"] == [(3, 2, 1), (2, 3, 1)]
+
+
+def test_compressed_submeshes():
+	# one index list for all submeshes; firstByte counts 2 bytes per index
+	obj = parse_obj(OBJMesh(compressed_mesh(triangles=[0, 1, 2, 2, 1, 0], submeshes=[submesh(0, 3), submesh(6, 3)])).export())
+	assert obj["usemtl"] == ["c_0", "c_1"]
+	assert obj["f"] == [(3, 2, 1), (1, 2, 3)]
 
 
 def test_compressed_positions_uvs_triangles():
