@@ -169,8 +169,8 @@ def test_mesh_without_triangles():
 
 def test_node_transform_is_mirrored():
 	w = GLTFWriter()
-	n = w.add_node("n", translation=[1, 2, 3], rotation=[0.1, 0.2, 0.3, 0.9], scale=[2, 2, 2])
-	assert w.json["nodes"][n] == {"name": "n", "translation": [-1, 2, 3], "rotation": [0.1, -0.2, -0.3, 0.9], "scale": [2, 2, 2]}
+	n = w.add_node("n", translation=[1, 2, 3], rotation=[0.5, 0.5, 0.5, 0.5], scale=[2, 2, 2])
+	assert w.json["nodes"][n] == {"name": "n", "translation": [-1, 2, 3], "rotation": [0.5, -0.5, -0.5, 0.5], "scale": [2, 2, 2]}
 	# identity transforms are left out
 	assert w.json["nodes"][w.add_node("i", translation=[0, 0, 0], rotation=[0, 0, 0, 1], scale=[1, 1, 1])] == {"name": "i"}
 
@@ -531,3 +531,32 @@ def test_scene():
 	assert [g["nodes"][n]["name"] for n in g["scenes"][0]["nodes"]] == ["root"]
 	w = GLTFWriter()
 	assert len(w.add_scene(asset, inactive=True)) == 2
+
+
+def test_normals_are_made_unit_length():
+	m = mesh(QUAD["vertices"], [(0, 0, 2), (1, 1, 1), (0, 0, 0), (0, 0, 1)], QUAD["uvs"], [0, 1, 2])
+	g = GLB(export_mesh(m))
+	s = math.sqrt(1 / 3)
+	assert g.accessor(g["meshes"][0]["primitives"][0]["attributes"]["NORMAL"]) == approx([(0, 0, 1), (-s, s, s), (0, 1, 0), (0, 0, 1)])
+
+
+def test_texture_that_is_not_an_image():
+	from unitypack.engine.movie import MovieTexture
+
+	movie = Pointer(MovieTexture(fdict(m_Name="tv")), 5)
+	w = GLTFWriter()
+	w.add_root(w.add_node("m", mesh=w.add_mesh(mesh(**QUAD, indices=[0, 1, 2]), [material(tex=movie)])))
+	g = GLB(w.glb())
+	assert "baseColorTexture" not in g["materials"][0]["pbrMetallicRoughness"]
+	assert "not an image texture" in w.warnings[0]
+
+
+def test_node_rotations_are_unit_length():
+	w = GLTFWriter()
+	zero = w.add_node("zero", rotation=[0, 0, 0, 0])  # some files store this: no rotation
+	long = w.add_node("long", rotation=[0, 0, 0, 2])
+	half = w.add_node("half", rotation=[0, 1, 0, 1])
+	nodes = w.json["nodes"]
+	assert nodes[zero] == {"name": "zero"}
+	assert nodes[long] == {"name": "long"}
+	assert nodes[half]["rotation"] == pytest.approx([0, -math.sqrt(0.5), 0, math.sqrt(0.5)])

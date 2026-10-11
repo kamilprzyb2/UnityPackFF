@@ -227,3 +227,16 @@ def test_blend_splats_tiles_each_splat():
 	control = Image.new("RGBA", (1, 1), (255, 0, 0, 0))
 	out = blend_splats([(splat, (32, 32), (0, 0))], [control], (128, 128), 8)
 	assert [out.getpixel((x, 0))[0] for x in range(8)] == [0, 255] * 4
+
+
+def test_terrain_without_shifts_field():
+	# terrains saved by newer Unity versions (some of Retrobution's) have no m_Shifts
+	_, t = terrain(flat_with({(17, 3): 5000}), [(5, 5, 2)])
+	del t.heightmap["m_Shifts"]
+	assert t.shifts == []
+	positions, _, _ = t.mesh()
+	assert positions[5 * SIZE + 5][0] == 20.0
+	t.set_heights(flat_with({(17, 3): 6000}))  # recomputes as without shifts
+	assert t.heightmap["m_PrecomputedError"][4] == pytest.approx(5000 / MAX_HEIGHT * 600)
+	with pytest.raises(ValueError, match="without m_Shifts"):
+		t.set_shifts([(1, 1, 1)])
