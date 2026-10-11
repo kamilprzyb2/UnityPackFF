@@ -1,3 +1,4 @@
+import math
 from io import BytesIO
 from .utils import BinaryReader, BitReader
 
@@ -242,7 +243,15 @@ class CompressedMeshData:
 		for i in range(len(signs)):
 			x = items[i * 2] * _range + normals['m_Start']
 			y = items[i * 2 + 1] * _range + normals['m_Start']
-			z = ((1 - x**2 - y**2) * signs[i])
+			zsqr = 1 - x**2 - y**2
+			if zsqr >= 0:
+				z = math.sqrt(zsqr) * signs[i]
+			else:
+				# quantized (x, y) a little outside the unit circle
+				z = 0
+				length = math.sqrt(x**2 + y**2)
+				x /= length
+				y /= length
 
 			floats[i * 3] = x
 			floats[i * 3 + 1] = y

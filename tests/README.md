@@ -31,9 +31,7 @@ pytest -m integration --record           # rewrite tests/expected/<build>/ from 
 
 A known library bug is a test marked `xfail(strict=True)`: it is expected to fail, and the run fails if it passes, so fixing a bug forces removing its marker.
 
-| Test | Bug |
-| --- | --- |
-| `unit/test_export.py::test_compressed_normals_are_unit_length` | Compressed normals: z = 1 − x² − y² without the square root, so every exported normal is wrong |
+There are none at the moment.
 
 Not covered yet: `UnityEnvironment` beyond finding files (`discover`, `archive:` URLs), `bin/` scripts other than `dumpxdt.py` (`integration/test_scripts.py`), `AudioClip` export.
 
