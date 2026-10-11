@@ -1,0 +1,1279 @@
+{
+ "FutureNano.resourceFile": {
+  "nano/nano_eddy.kfm": {
+   "nodes": 58,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "639d7ae818ad45ca",
+   "warnings": 2
+  },
+  "nano/nano_eduardo.kfm": {
+   "nodes": 55,
+   "meshes": 4,
+   "primitives": 4,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "08c74e46622bd744",
+   "warnings": 2
+  },
+  "nano/nano_numbuhtwo.kfm": {
+   "nodes": 58,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "dc9deec804db7a97",
+   "warnings": 2
+  }
+ },
+ "World_shared_part1.resourceFile": {
+  "map/catacombs/wd_wlcc_torch_01.nif": {
+   "nodes": 3,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "b3ae97b2f3fc7fa7",
+   "warnings": 0
+  },
+  "map/dtetc/dt_mtdb_ef_signboard_01.nif": {
+   "nodes": 4,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     128
+    ],
+    [
+     128,
+     128
+    ]
+   ],
+   "sha256": "5826d1fb7c062318",
+   "warnings": 0
+  },
+  "map/ep/suburbs_jumppad_02.nif": {
+   "nodes": 5,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "8578e8e1d7c8f4c9",
+   "warnings": 0
+  },
+  "map/ep/wilds_move_01.nif": {
+   "nodes": 5,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "a3ad00ae4fd59247",
+   "warnings": 1
+  },
+  "map/etc/dt_mtsm_fence_ef02.nif": {
+   "nodes": 6,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 3,
+   "images": [
+    [
+     128,
+     128
+    ],
+    [
+     128,
+     128
+    ]
+   ],
+   "sha256": "927be18d980c7815",
+   "warnings": 2
+  },
+  "map/etc/dt_mtsm_fence_ef02_5.nif": {
+   "nodes": 6,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 3,
+   "images": [
+    [
+     128,
+     128
+    ],
+    [
+     128,
+     128
+    ]
+   ],
+   "sha256": "c0aa1e3e8cde2ff5",
+   "warnings": 2
+  },
+  "map/etc/indun_roof_black.nif": {
+   "nodes": 2,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     32,
+     32
+    ]
+   ],
+   "sha256": "3266a447d00e71fd",
+   "warnings": 1
+  },
+  "map/etc/indun_wall_12.nif": {
+   "nodes": 6,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     128
+    ],
+    [
+     512,
+     512
+    ]
+   ],
+   "sha256": "fafa0495a09e104c",
+   "warnings": 1
+  },
+  "map/etc/indun_wall_24.nif": {
+   "nodes": 6,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     128
+    ],
+    [
+     512,
+     512
+    ]
+   ],
+   "sha256": "35561e6d39862217",
+   "warnings": 1
+  },
+  "map/etc/indun_wall_48.nif": {
+   "nodes": 6,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     128
+    ],
+    [
+     512,
+     512
+    ]
+   ],
+   "sha256": "96de4db1876e837d",
+   "warnings": 1
+  },
+  "map/etc/wd_etc_stone06_03.nif": {
+   "nodes": 3,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "e2ccabb1cea2f94b",
+   "warnings": 1
+  },
+  "map/etc/wd_etc_stone07_01.nif": {
+   "nodes": 3,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "b84d631d66b19876",
+   "warnings": 0
+  },
+  "map/etc/wd_etc_stone07_02.nif": {
+   "nodes": 3,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "786a35ea7760d5d2",
+   "warnings": 1
+  },
+  "map/etc/wd_etc_stone07_03.nif": {
+   "nodes": 3,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "2daf3d10ef967f4f",
+   "warnings": 0
+  },
+  "map/etc/wd_etc_stone07_04.nif": {
+   "nodes": 3,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "7647addcb0910583",
+   "warnings": 0
+  },
+  "map/fuseslair/wd_dlfl_stone01.nif": {
+   "nodes": 3,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     512
+    ]
+   ],
+   "sha256": "64af813161e83687",
+   "warnings": 1
+  },
+  "map/fuseslair/wd_dlfl_stone02.nif": {
+   "nodes": 3,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     128,
+     256
+    ]
+   ],
+   "sha256": "fa7245b2ac8350d8",
+   "warnings": 1
+  },
+  "map/leakeylake/wd_bwll_cplant_01.nif": {
+   "nodes": 3,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     64,
+     256
+    ]
+   ],
+   "sha256": "ebb50964203ad5b8",
+   "warnings": 0
+  },
+  "map/leakeylake/wd_bwll_cplant_02.nif": {
+   "nodes": 3,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     64,
+     256
+    ]
+   ],
+   "sha256": "559807dec14a8892",
+   "warnings": 0
+  },
+  "map/leakeylake/wd_bwll_cplant_02_1.nif": {
+   "nodes": 3,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     64,
+     256
+    ]
+   ],
+   "sha256": "4d018675b40b96a1",
+   "warnings": 0
+  },
+  "map/leakeylake/wd_bwll_cplant_06.nif": {
+   "nodes": 2,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     128,
+     128
+    ]
+   ],
+   "sha256": "53e218334b5b5eae",
+   "warnings": 0
+  },
+  "map/questitem/quest_item_computer_consoles.nif": {
+   "nodes": 5,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "dbcd7ac9c72d1c67",
+   "warnings": 0
+  },
+  "map/questitem/quest_item_crates_01.nif": {
+   "nodes": 3,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "1d429bb85ecf68dd",
+   "warnings": 0
+  },
+  "map/questitem/quest_timemachin.nif": {
+   "nodes": 13,
+   "meshes": 10,
+   "primitives": 10,
+   "materials": 9,
+   "images": [
+    [
+     128,
+     128
+    ],
+    [
+     32,
+     32
+    ],
+    [
+     32,
+     64
+    ],
+    [
+     64,
+     64
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     64,
+     128
+    ],
+    [
+     64,
+     128
+    ]
+   ],
+   "sha256": "f88b75a2f6fc8fcd",
+   "warnings": 5
+  },
+  "map/questitem/timemachine_01.nif": {
+   "nodes": 29,
+   "meshes": 22,
+   "primitives": 22,
+   "materials": 19,
+   "images": [
+    [
+     256,
+     128
+    ],
+    [
+     512,
+     256
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     128,
+     128
+    ],
+    [
+     128,
+     128
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     512,
+     512
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     512,
+     512
+    ],
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "d3b94c6dfdec6811",
+   "warnings": 2
+  },
+  "map/twistedforest/wd_jutf_plant 03.nif": {
+   "nodes": 3,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     128,
+     128
+    ]
+   ],
+   "sha256": "e9a415c910525149",
+   "warnings": 1
+  },
+  "map/twistedforest/wd_jutf_plant 04.nif": {
+   "nodes": 5,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "images": [
+    [
+     128,
+     128
+    ],
+    [
+     32,
+     64
+    ]
+   ],
+   "sha256": "a9bbb4678af8ed39",
+   "warnings": 0
+  },
+  "map/twistedforest/wd_jutf_plant 05.nif": {
+   "nodes": 4,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     128,
+     128
+    ]
+   ],
+   "sha256": "aabd6ee6e0d30acf",
+   "warnings": 1
+  },
+  "map/twistedforest/wd_jutf_plant 07.nif": {
+   "nodes": 3,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     128,
+     128
+    ]
+   ],
+   "sha256": "ca9529a7f7fffde8",
+   "warnings": 0
+  },
+  "map/twistedforest/wd_jutf_plant 08.nif": {
+   "nodes": 5,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "images": [
+    [
+     128,
+     128
+    ],
+    [
+     32,
+     64
+    ]
+   ],
+   "sha256": "1a742edca6013dfb",
+   "warnings": 1
+  },
+  "mob/fusion_billy.kfm": {
+   "nodes": 76,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "6d0ae8aa9dbfc795",
+   "warnings": 4
+  },
+  "mob/fusion_blooexpression.kfm": {
+   "nodes": 55,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 2,
+   "images": [],
+   "sha256": "b6327a9d9a7f0e53",
+   "warnings": 4
+  },
+  "mob/fusion_bubbles.kfm": {
+   "nodes": 100,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "0546da8bcd0ec738",
+   "warnings": 4
+  },
+  "mob/fusion_cheese.kfm": {
+   "nodes": 68,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "179dd8f5380c2de9",
+   "warnings": 3
+  },
+  "mob/fusion_coco.kfm": {
+   "nodes": 94,
+   "meshes": 4,
+   "primitives": 4,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "271810d66a5fed45",
+   "warnings": 4
+  },
+  "mob/fusion_computress.kfm": {
+   "nodes": 121,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "ba9d2014d3f3b6ab",
+   "warnings": 5
+  },
+  "mob/fusion_coopturns.kfm": {
+   "nodes": 79,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "671fd6ad95b29392",
+   "warnings": 4
+  },
+  "mob/fusion_courage.kfm": {
+   "nodes": 75,
+   "meshes": 5,
+   "primitives": 5,
+   "materials": 4,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "fa86263e2185bd89",
+   "warnings": 4
+  },
+  "mob/fusion_deedee.kfm": {
+   "nodes": 82,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "06c8450920b4bf6b",
+   "warnings": 4
+  },
+  "mob/fusion_dexter.kfm": {
+   "nodes": 80,
+   "meshes": 5,
+   "primitives": 5,
+   "materials": 4,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     64,
+     64
+    ]
+   ],
+   "sha256": "2f079a7fa8326729",
+   "warnings": 5
+  },
+  "mob/fusion_ed.kfm": {
+   "nodes": 90,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "79c3d5ed24b82bef",
+   "warnings": 4
+  },
+  "mob/fusion_edd.kfm": {
+   "nodes": 79,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "d74ef06f35ae7eab",
+   "warnings": 4
+  },
+  "mob/fusion_eddy.kfm": {
+   "nodes": 81,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "02c0cca52823edbc",
+   "warnings": 4
+  },
+  "mob/fusion_grandpamax.kfm": {
+   "nodes": 74,
+   "meshes": 4,
+   "primitives": 4,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "61fc35da2989dd8a",
+   "warnings": 4
+  },
+  "mob/fusion_grim.kfm": {
+   "nodes": 101,
+   "meshes": 4,
+   "primitives": 4,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "bf13d3e708a04516",
+   "warnings": 4
+  },
+  "mob/fusion_gwen.kfm": {
+   "nodes": 80,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "f015c6d10f99a8ea",
+   "warnings": 4
+  },
+  "mob/fusion_hex.kfm": {
+   "nodes": 82,
+   "meshes": 4,
+   "primitives": 4,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "4ca6417288ad1b71",
+   "warnings": 4
+  },
+  "mob/fusion_him.kfm": {
+   "nodes": 64,
+   "meshes": 4,
+   "primitives": 4,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "b9ea01eb5920d341",
+   "warnings": 4
+  },
+  "mob/fusion_mac.kfm": {
+   "nodes": 62,
+   "meshes": 4,
+   "primitives": 4,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "2ed04fad8c9682e6",
+   "warnings": 4
+  },
+  "mob/fusion_mandark.kfm": {
+   "nodes": 116,
+   "meshes": 4,
+   "primitives": 4,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "989cf960ff6259c9",
+   "warnings": 4
+  },
+  "mob/fusion_mandy.kfm": {
+   "nodes": 88,
+   "meshes": 4,
+   "primitives": 4,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "3ea1c3352ed250d7",
+   "warnings": 4
+  },
+  "mob/fusion_mayor.kfm": {
+   "nodes": 64,
+   "meshes": 4,
+   "primitives": 4,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "5dda2d5659a90da4",
+   "warnings": 5
+  },
+  "mob/fusion_numbuhfive.kfm": {
+   "nodes": 91,
+   "meshes": 5,
+   "primitives": 5,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     512,
+     512
+    ]
+   ],
+   "sha256": "6bbf8e55f0087491",
+   "warnings": 4
+  },
+  "mob/fusion_numbuhfour.kfm": {
+   "nodes": 69,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "a3757672c1fe3bdb",
+   "warnings": 4
+  },
+  "mob/fusion_numbuhone.kfm": {
+   "nodes": 101,
+   "meshes": 8,
+   "primitives": 8,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "e5c556d96b6ff040",
+   "warnings": 3
+  },
+  "mob/fusion_numbuhthree.kfm": {
+   "nodes": 63,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "7d6b0af20f148f7b",
+   "warnings": 4
+  },
+  "mob/fusion_professorutonium.kfm": {
+   "nodes": 93,
+   "meshes": 4,
+   "primitives": 4,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "4de8a8881757b345",
+   "warnings": 4
+  },
+  "mob/fusion_samuraijack.kfm": {
+   "nodes": 89,
+   "meshes": 5,
+   "primitives": 5,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "884694d7d881928a",
+   "warnings": 4
+  },
+  "mob/fusion_scotsman.kfm": {
+   "nodes": 60,
+   "meshes": 4,
+   "primitives": 4,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "ae372866cad465e6",
+   "warnings": 4
+  },
+  "mob/fusion_vilgax.kfm": {
+   "nodes": 98,
+   "meshes": 6,
+   "primitives": 6,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "52d7ee35f8471679",
+   "warnings": 4
+  },
+  "mob/fusion_wilt.kfm": {
+   "nodes": 75,
+   "meshes": 4,
+   "primitives": 4,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "0f97cb78f35cd0e6",
+   "warnings": 4
+  },
+  "mob/mob_flyingmonkey.kfm": {
+   "nodes": 102,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "a456a4194d613565",
+   "warnings": 1
+  },
+  "mob/mob_fusionextremesaurus.kfm": {
+   "nodes": 101,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "f483b6d6c76b162f",
+   "warnings": 1
+  },
+  "mob/mob_gasspawn.kfm": {
+   "nodes": 36,
+   "meshes": 3,
+   "primitives": 3,
+   "materials": 3,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "ae6c5910f904621b",
+   "warnings": 3
+  },
+  "mob/mob_griffonroar.kfm": {
+   "nodes": 68,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "095aaf345e723869",
+   "warnings": 1
+  },
+  "mob/mob_motorgorilla.kfm": {
+   "nodes": 58,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [],
+   "sha256": "5553b7f1dd29711b",
+   "warnings": 1
+  },
+  "mob/mob_pirate.kfm": {
+   "nodes": 47,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "6f056b00b7236db6",
+   "warnings": 1
+  },
+  "mob/mob_swampycannibalfrog.kfm": {
+   "nodes": 110,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "6e67e83693a0eb34",
+   "warnings": 4
+  },
+  "mob/mob_telegraphpole.kfm": {
+   "nodes": 42,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "020f7f96d04c0975",
+   "warnings": 1
+  },
+  "mob/mob_themepark.kfm": {
+   "nodes": 41,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "3549a96b7f15cb32",
+   "warnings": 1
+  },
+  "mob/mob_threeeyes.kfm": {
+   "nodes": 113,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "c58bb88202395123",
+   "warnings": 1
+  },
+  "mob/mob_turtleworm.kfm": {
+   "nodes": 66,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "00ca157066e52552",
+   "warnings": 1
+  },
+  "mob/mob_ventilatordino.kfm": {
+   "nodes": 65,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "54e960fa8c870221",
+   "warnings": 1
+  },
+  "mob/npc_billy.kfm": {
+   "nodes": 63,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [],
+   "sha256": "936333b4bc5dd22c",
+   "warnings": 2
+  },
+  "mob/npc_blossom.kfm": {
+   "nodes": 107,
+   "meshes": 1,
+   "primitives": 1,
+   "materials": 1,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "04c16889cf9c7b26",
+   "warnings": 1
+  },
+  "mob/npc_grim.kfm": {
+   "nodes": 100,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "images": [
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "a524f71e62812c16",
+   "warnings": 0
+  },
+  "prefabs/eps/epelements/epe[217].prefab": {
+   "nodes": 11,
+   "meshes": 4,
+   "primitives": 4,
+   "materials": 4,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     256
+    ]
+   ],
+   "sha256": "47d9b1a979a80606",
+   "warnings": 1
+  }
+ }
+}

@@ -24,6 +24,7 @@ pytest -m integration --record           # rewrite tests/expected/<build>/ from 
 | `serialized.py` | An independent parser for Unity 2.5 serialized files (formats 5 to 7). The survey's instrument: it reads files UnityPackFF can't open yet and checks each file is understood to its last byte. Unit tests don't use it; it can go once UnityPackFF opens every file and checks that itself |
 | `synth.py` | Builders for made-up type trees, serialized files and archives (plain `struct.pack`) |
 | `digest.py` | Stable digests of what unitypack reads |
+| `glb.py` | A reader for binary glTF files, written from the specification, for checking what `unitypack.gltf` writes |
 
 `synth.py` shares no code with unitypack: unit tests feed the library hand-written bytes and compare its output with hand-written bytes, so the library's reader and writer can't agree on a bug and still pass.
 
