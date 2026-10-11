@@ -2,20 +2,8 @@
 Smoke tests for the bin/ scripts, run as a user runs them, on made-up files.
 """
 
-import os
-import subprocess
-import sys
-from pathlib import Path
-
 from tests import synth
-
-ROOT = Path(__file__).resolve().parents[2]
-
-
-def run(script, *args):
-	env = dict(os.environ, PYTHONPATH=str(ROOT))  # this checkout's unitypack
-	return subprocess.run([sys.executable, str(ROOT / "bin" / script), *map(str, args)],
-		capture_output=True, text=True, check=True, env=env).stdout
+from tests.unit.support import run_script as run
 
 
 def test_index_bundles(tmp_path):

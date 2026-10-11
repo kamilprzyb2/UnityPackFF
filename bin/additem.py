@@ -13,6 +13,7 @@ from unitypack.modding import import_texture
 TABLEDATA_PATH = 'CustomAssetBundle-1dca92eecee4742d985b799d8226666d'
 CHARTEX_PATH = 'CustomAssetBundle-aa120043d3c634fe9adfb5cbe08e6970'
 ICONS_PATH = 'CustomAssetBundle-784fa24bcf2da4f5eabe9547958616eb'
+XDTPATH = 'xdtdatas.asset'
 
 # template items
 TEMPL_ITEMID = 152 # changing this is one way to change the base model
@@ -30,7 +31,7 @@ ITEM_TYPE = 'Shirts' # one of Shirts, Pants, Shoes, Hat, Glass, Back, Weapon, Ve
 ITEM_DEFENSE = 50
 
 def findnexticon(tabledata, typ):
-	xdtdata = tabledata.objects[7].contents
+	xdtdata = tabledata.get_object_by_path(XDTPATH).contents
 	categories = ['Shirts', 'Pants', 'Shoes', 'Hat', 'Glass', 'Back', 'Weapon', 'Vehicle']
 
 	ret = 1
@@ -47,7 +48,7 @@ def fromtempl(table, src, dst):
 		table[dst][k] = v
 
 def mod_tabledata(tabledata):
-	itemtable = tabledata.objects[7].contents['m_p' + ITEM_TYPE + 'ItemTable']
+	itemtable = tabledata.get_object_by_path(XDTPATH).contents['m_p' + ITEM_TYPE + 'ItemTable']
 	itemid = len(itemtable['m_pItemData'])
 
 	assert len(itemtable['m_pItemData']) == len(itemtable['m_pItemStringData'])
