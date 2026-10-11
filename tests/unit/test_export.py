@@ -139,14 +139,19 @@ def test_compressed_positions_uvs_triangles():
 	assert obj["f"] == [(3, 2, 1)]
 
 
-@pytest.mark.xfail(strict=True, reason="CompressedMeshData.read_normals computes z = 1 - x² - y² without the square root")
 def test_compressed_normals_are_unit_length():
 	obj = parse_obj(OBJMesh(compressed_mesh([9, 0, 0, 9, 0, 0], [1, 0, 1])).export())
 	assert obj["vn"] == approx([(-0.6, 0, 0.8), (-0.0, 0.6, -0.8), (-0.0, 0, 1)])
 
 
 def test_compressed_normal_signs():
-	# only the sign of z is checked here; its size is the bug above
 	vn = parse_obj(OBJMesh(compressed_mesh([9, 0, 0, 9, 0, 0], [1, 0, 1])).export())["vn"]
 	assert [math.copysign(1, n[2]) for n in vn] == [1, -1, 1]
 	assert [n[:2] for n in vn] == approx([(-0.6, 0), (0, 0.6), (0, 0)])
+
+
+def test_compressed_normal_outside_unit_circle():
+	# x = y = 1 after quantizing: z is 0 and (x, y) is scaled back to length 1
+	vn = parse_obj(OBJMesh(compressed_mesh([15, 15, 0, 0, 0, 0], [1, 1, 1])).export())["vn"]
+	h = math.sqrt(0.5)
+	assert vn[0] == approx([(-h, h, 0)])[0]

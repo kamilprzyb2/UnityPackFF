@@ -36,7 +36,6 @@ A known library bug is a test marked `xfail(strict=True)`: it is expected to fai
 | `unit/test_assetbundle.py::test_two_files`, `integration/test_archives.py::test_unitypack_load` (multi-file archives) | `unitypack.load()` reads only the first file of an archive |
 | `integration/test_survey.py::test_survey` (2 archives) | Format 7: 64-bit object IDs truncated to 32 bits collide |
 | `unit/test_asset_save.py::test_save_is_byte_identical` | `Asset.save()` starts objects on 4 bytes, Unity on 8 |
-| `unit/test_export.py::test_compressed_normals_are_unit_length` | Compressed normals: z = 1 − x² − y² without the square root, so every exported normal is wrong |
 
 Not covered yet: cross-archive pointers (`UnityEnvironment`), `bin/` scripts, `AudioClip` export.
 
