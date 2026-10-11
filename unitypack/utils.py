@@ -1,3 +1,4 @@
+import math
 import struct
 from os import SEEK_CUR
 
@@ -94,8 +95,10 @@ def unpack_floats(pbv):
 	"""
 	The items of a PackedBitVector as floats spread evenly over
 	[m_Start, m_Start + m_Range]: item * m_Range / (2^m_BitSize - 1) + m_Start.
+	A vector with an infinite start or range holds nothing (a mesh without
+	texture coordinates keeps a count of them, 0 bits and an infinite start).
 	"""
-	if pbv['m_NumItems'] == 0:
+	if pbv['m_NumItems'] == 0 or not (math.isfinite(pbv['m_Start']) and math.isfinite(pbv['m_Range'])):
 		return []
 	if pbv['m_BitSize'] == 0:
 		return [float(pbv['m_Start'])] * pbv['m_NumItems']

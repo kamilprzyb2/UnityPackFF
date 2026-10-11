@@ -122,3 +122,9 @@ def test_nan_bits_survive(endian, bits):
 	out = io.BytesIO()
 	BinaryWriter(out, endian).write_float(v)
 	assert out.getvalue() == data
+
+
+def test_unpack_floats_infinite_start():
+	# how a mesh without texture coordinates stores them
+	pbv = dict(m_NumItems=6, m_BitSize=0, m_Data=b"", m_Start=math.inf, m_Range=-math.inf)
+	assert unpack_floats(pbv) == []
