@@ -152,9 +152,9 @@ python3 -m tests.tools.gltf --build 104 --bundle FutureNano.resourceFile
 python3 -m tests.tools.gltf --build all --bundle World_shared_part1.resourceFile
 ```
 
-Exports every prefab (a GameObject listed in the archive's AssetBundle container) with `unitypack.gltf`: its Transform tree, meshes and materials, textures embedded. Pointers into other archives (most textures) resolve against the build's curated archives only, unpacked as needed, so the result doesn't depend on what else is in the cache.
+Exports every prefab (a GameObject listed in the archive's AssetBundle container) with `unitypack.gltf`: its Transform tree, meshes and materials (textures embedded), skins and animation clips. Pointers into other archives (most textures) resolve against the build's curated archives only, unpacked as needed, so the result doesn't depend on what else is in the cache.
 
-Writes `out/gltf/<build>/<archive>/<container path>.glb` and `out/gltf/<build>.json`: per prefab, its node, mesh, primitive and material counts, image sizes, a digest of every accessor, the exporter's warnings and, with the validator, its error and warning counts.
+Writes `out/gltf/<build>/<archive>/<container path>.glb` and `out/gltf/<build>.json`: per prefab, its node, mesh, primitive, material, skin and animation counts, image sizes, a digest of every accessor, the exporter's warnings and, with the validator, its error and warning counts.
 
 **The Khronos glTF validator** is optional. Install the npm package somewhere and point `UNITYPACKFF_GLTF_VALIDATOR` at that folder (Node.js must be on `PATH`):
 

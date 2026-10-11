@@ -97,12 +97,20 @@ def summary(glb_bytes):
 			for name, index in sorted(p["attributes"].items()) + [("indices", p["indices"])]:
 				h.update(("%s:%r;" % (name, g.accessor(index))).encode())
 	h.update(json.dumps(g.get("materials", []), sort_keys=True).encode())
+	for skin in g.get("skins", []):
+		h.update(("%r;%r;" % (skin["joints"], g.accessor(skin["inverseBindMatrices"]))).encode())
+	for anim in g.get("animations", []):
+		h.update(json.dumps([anim["name"], anim["channels"], anim.get("extras")], sort_keys=True).encode())
+		for s in anim["samplers"]:
+			h.update(("%r;%r;" % (g.accessor(s["input"]), g.accessor(s["output"]))).encode())
 	images = [list(Image.open(io.BytesIO(g.image(i))).size) for i in range(len(g.get("images", [])))]
 	return {
 		"nodes": len(g.get("nodes", [])),
 		"meshes": len(g.get("meshes", [])),
 		"primitives": sum(len(m["primitives"]) for m in g.get("meshes", [])),
 		"materials": len(g.get("materials", [])),
+		"skins": len(g.get("skins", [])),
+		"animations": len(g.get("animations", [])),
 		"images": images,
 		"sha256": h.hexdigest()[:16],
 	}

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Export the prefabs (GameObjects) of an asset file as glTF binaries (.glb):
-their Transform tree, meshes and materials, with textures embedded.
+their Transform tree, meshes and materials with textures embedded, skins,
+and the clips of their Animation components.
 
 Prefabs are taken from the file's AssetBundle container; name container
 paths to export only those (a path matches if it contains the text given).
