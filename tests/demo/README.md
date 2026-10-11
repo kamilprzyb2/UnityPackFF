@@ -10,6 +10,7 @@ Command-line tools that run the same operations as the integration tests, but wr
 | `meshes.py` | Exports every mesh of an archive as OBJ, plus the skin weights of skinned meshes | `integration/test_meshes.py` |
 | `clips.py` | Reads every AnimationClip of an archive and samples each curve at the clip's rate | `integration/test_clips.py` |
 | `terrain.py` | Dumps every terrain of an archive with `bin/dump_terrain.py` and compares Unity's level-of-detail data with what `TerrainData` works out | `integration/test_terrain.py` |
+| `gltf.py` | Exports every prefab of an archive as glTF (`.glb`) and runs the Khronos validator on them when it's installed | `integration/test_gltf.py` |
 | `_common.py` | The options all the scripts share (not run directly) | |
 
 Run them from the repository root (`UnityPackFF/`).
@@ -142,3 +143,23 @@ Without `--bundle` or `--all` it takes `DongResources_04_02.resourceFile`, the o
 | `error_smaller` | smaller (0 on every terrain checked) |
 
 Writes `out/terrain/<build>/<archive>/<file>.png` and `.shifts.json` as `bin/dump_terrain.py` writes them (a 16-bit heightmap, north up, and the shifted vertices), and `out/terrain/<build>.json` with the statistics the integration test checks.
+
+## gltf.py
+
+```sh
+python3 tests/demo/gltf.py --build 104 --bundle FutureNano.resourceFile
+python3 tests/demo/gltf.py --build all --bundle World_shared_part1.resourceFile
+```
+
+Exports every prefab (a GameObject listed in the archive's AssetBundle container) with `unitypack.gltf`: its Transform tree, meshes and materials, textures embedded. Pointers into other archives (most textures) resolve against the build's curated archives only, unpacked as needed, so the result doesn't depend on what else is in the cache.
+
+Writes `out/gltf/<build>/<archive>/<container path>.glb` and `out/gltf/<build>.json`: per prefab, its node, mesh, primitive and material counts, image sizes, a digest of every accessor, the exporter's warnings and, with the validator, its error and warning counts.
+
+**The Khronos glTF validator** is optional. Install the npm package somewhere and point `UNITYPACKFF_GLTF_VALIDATOR` at that folder (Node.js must be on `PATH`):
+
+```sh
+mkdir -p ~/gltf-validator && npm install --prefix ~/gltf-validator gltf-validator
+export UNITYPACKFF_GLTF_VALIDATOR=~/gltf-validator
+```
+
+`integration/test_gltf.py` then also requires every exported file to pass it with no errors and no warnings.

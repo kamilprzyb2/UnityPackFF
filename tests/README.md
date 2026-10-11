@@ -14,7 +14,7 @@ pytest -m integration --record           # rewrite tests/expected/<build>.json f
 
 | Path | What |
 | --- | --- |
-| `unit/` | **UnityPackFF itself**, on made-up data. One file per area: `test_utils.py` (binary I/O), `test_asset_read.py` / `test_asset_save.py` (serialized files), `test_assetbundle.py` (archives), `test_texture.py`, `test_export.py` (OBJ, skin weights), `test_animation.py` (clips and curves), `test_terrain.py` (heightmaps), `test_modding.py` (imports), `test_environment.py` (pointers into other files), `test_scripts.py` (`bin/` scripts). No network, no client files |
+| `unit/` | **UnityPackFF itself**, on made-up data. One file per area: `test_utils.py` (binary I/O), `test_asset_read.py` / `test_asset_save.py` (serialized files), `test_assetbundle.py` (archives), `test_texture.py`, `test_export.py` (OBJ, skin weights), `test_animation.py` (clips and curves), `test_terrain.py` (heightmaps), `test_gltf.py` (glTF export), `test_modding.py` (imports), `test_environment.py` (pointers into other files), `test_scripts.py` (`bin/` scripts). No network, no client files |
 | `harness/` | Tests of our own helpers below (`bundles.py`, `serialized.py`, `digest.py`), so they can be trusted as a yardstick |
 | `demo/` | Command-line scripts behind the integration tests, with their own [README](demo/README.md) |
 | `integration/` | UnityPackFF on real archives: one case per operation and archive, parametrized over the builds |
@@ -24,6 +24,7 @@ pytest -m integration --record           # rewrite tests/expected/<build>.json f
 | `serialized.py` | An independent parser for Unity 2.5 serialized files (formats 5 to 7). The survey's instrument: it reads files UnityPackFF can't open yet and checks each file is understood to its last byte. Unit tests don't use it; it can go once UnityPackFF opens every file and checks that itself |
 | `synth.py` | Builders for made-up type trees, serialized files and archives (plain `struct.pack`) |
 | `digest.py` | Stable digests of what unitypack reads |
+| `glb.py` | A reader for binary glTF files, written from the specification, for checking what `unitypack.gltf` writes |
 
 `synth.py` shares no code with unitypack: unit tests feed the library hand-written bytes and compare its output with hand-written bytes, so the library's reader and writer can't agree on a bug and still pass.
 
