@@ -109,3 +109,16 @@ def test_unpack_floats():
 
 def test_unpack_floats_zero_bits():
 	assert unpack_floats(dict(m_NumItems=2, m_BitSize=0, m_Data=b"", m_Start=0.25, m_Range=0.0)) == [0.25, 0.25]
+
+
+@pytest.mark.parametrize("endian", ["<", ">"])
+@pytest.mark.parametrize("bits", [0x7FA45696, 0xFF800001, 0x7FC00000, 0xFFFFFFFF])
+def test_nan_bits_survive(endian, bits):
+	# 0x7fa45696 is a signaling NaN (top fraction bit clear), as found in a
+	# real mesh; a plain float round trip would set that bit
+	data = bits.to_bytes(4, "little" if endian == "<" else "big")
+	v = BinaryReader(io.BytesIO(data), endian).read_float()
+	assert math.isnan(v)
+	out = io.BytesIO()
+	BinaryWriter(out, endian).write_float(v)
+	assert out.getvalue() == data
