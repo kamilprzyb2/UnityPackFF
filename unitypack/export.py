@@ -1,6 +1,6 @@
 import math
 from io import BytesIO
-from .utils import BinaryReader, BitReader
+from .utils import BinaryReader, unpack_floats, unpack_ints
 
 
 class OBJVector2:
@@ -196,35 +196,10 @@ class CompressedMeshData:
 		self.extract_mesh()
 
 	def read_bits(self, pbv):
-		if pbv['m_NumItems'] == 0:
-			return []
-		if pbv['m_BitSize'] == 0:
-			# no bits to store: every item is 0
-			return [0] * pbv['m_NumItems']
-
-		reader = BitReader(pbv['m_Data'], pbv['m_BitSize'])
-
-		ret = []
-		for i in range(pbv['m_NumItems']):
-			ret.append(reader.read())
-
-		return ret
+		return unpack_ints(pbv)
 
 	def read_floats(self, pbv):
-		if pbv['m_NumItems'] == 0:
-			return []
-		if pbv['m_BitSize'] == 0:
-			return [float(pbv['m_Start'])] * pbv['m_NumItems']
-
-		items = self.read_bits(pbv)
-		maxvalue = (1 << pbv['m_BitSize']) - 1
-		_range = pbv['m_Range'] / maxvalue
-
-		floats = []
-		for i in range(len(items)):
-			floats.append(float(items[i] * _range + pbv['m_Start']))
-
-		return floats
+		return unpack_floats(pbv)
 
 	def read_normals(self, normals, normal_signs):
 		items = self.read_bits(normals)
