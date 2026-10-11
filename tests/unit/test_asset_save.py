@@ -47,8 +47,6 @@ def test_save_writes_expected_bytes(fmt):
 	assert save(open_asset(synth.sample_file(fmt))) == synth.sample_file(fmt, align=4)
 
 
-@pytest.mark.xfail(strict=True, reason="BinaryWriter.align() seeks instead of writing, so padding at the end "
-	"of an object is lost (Unity counts it in the object's size)")
 def test_save_keeps_trailing_padding():
 	# the last string, "a/b", needs one byte of padding after it
 	data = synth.serialized_file({49: synth.TEXT_ASSET}, [(1, 49, 49, synth.text_asset("n", "s", "a/b"))], align=4)

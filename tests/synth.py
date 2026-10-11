@@ -189,9 +189,8 @@ def asset_bundle(name, preload, container, main=(0, 0, (0, 0))):
 
 def sample_file(format=6, align=8):
 	"""
-	Three objects: two TextAssets and a Thing pointing at the first one. No
-	object ends in padding (unitypack drops it, see test_save_keeps_trailing_padding),
-	so with align=4 this is byte for byte what Asset.save() should write.
+	Three objects: two TextAssets and a Thing pointing at the first one. With
+	align=4 this is byte for byte what Asset.save() should write.
 	"""
 	return serialized_file(
 		{49: TEXT_ASSET, 1000: THING},

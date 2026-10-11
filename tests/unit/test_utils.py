@@ -54,6 +54,15 @@ def test_align():
 	assert r.tell() == 8
 
 
+def test_writer_align_writes_padding():
+	f = io.BytesIO()
+	w = BinaryWriter(f)
+	w.write(b"abcde")
+	w.align()
+	w.align()
+	assert f.getvalue() == b"abcde\0\0\0"
+
+
 def test_unterminated_string():
 	with pytest.raises(ValueError):
 		BinaryReader(io.BytesIO(b"abc")).read_string()

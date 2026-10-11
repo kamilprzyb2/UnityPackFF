@@ -155,10 +155,11 @@ class BinaryWriter:
 		self.endian = endian
 
 	def align(self):
+		# write the padding: a seek leaves no bytes behind if nothing follows
 		old = self.tell()
 		new = (old + 3) & -4
 		if new > old:
-			self.seek(new - old, SEEK_CUR)
+			self.write(b"\0" * (new - old))
 
 	def write(self, *args):
 		return self.buf.write(*args)
