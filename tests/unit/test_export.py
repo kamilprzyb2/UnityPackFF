@@ -169,3 +169,20 @@ def test_compressed_normal_outside_unit_circle():
 	vn = parse_obj(OBJMesh(compressed_mesh([15, 15, 0, 0, 0, 0], [1, 1, 1])).export())["vn"]
 	h = math.sqrt(0.5)
 	assert vn[0] == approx([(-h, h, 0)])[0]
+
+
+# A vector with m_BitSize 0 has no data at all: every item is 0, so every
+# float is m_Start. Unity writes this when all values are equal, for example
+# the bone indices of a mesh skinned to a single bone.
+
+def test_compressed_zero_bit_normal_signs():
+	m = compressed_mesh([9, 0, 0, 9, 0, 0])
+	m._obj["m_CompressedMesh"]["m_NormalSigns"] = packed([0, 0, 0], 0)
+	vn = parse_obj(OBJMesh(m).export())["vn"]
+	assert vn == approx([(-0.6, 0, -0.8), (-0.0, 0.6, -0.8), (-0.0, 0, -1)])
+
+
+def test_compressed_zero_bit_floats():
+	m = compressed_mesh()
+	m._obj["m_CompressedMesh"]["m_UV"] = packed([0] * 6, 0, 0.5, 0.0)
+	assert parse_obj(OBJMesh(m).export())["vt"] == approx([(0.5, 0.5)] * 3)
