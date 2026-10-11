@@ -1256,11 +1256,9 @@
      ],
      "read_ok": 0,
      "errors": {
-      "struct.error": 5,
-      "AttributeError": 6,
-      "ValueError": 36
+      "ValueError": 47
      },
-     "first_error": "struct.error: unpack requires a buffer of 4 bytes",
+     "first_error": "ValueError: No type tree for class 29 in 'BuildPlayer-Map_18_14', and the layout from structs.dat doesn't fit: unpack requires a buffer of 4 bytes",
      "digest": "56c086d107df79594069c3bb848249aedf62cce23aed42973437a20d1af68e31",
      "pointers": {
       "local": 0,
@@ -1304,7 +1302,7 @@
      "errors": {
       "ValueError": 1
      },
-     "first_error": "ValueError: Expected read_value(<PPtr<Object> data (size=12, index=8, is_array=0, flags='0x0')>) to read 12 bytes, but only read 8 bytes",
+     "first_error": "ValueError: No type tree for class 150 in 'BuildPlayer-Map_18_14.sharedAssets', and the layout from structs.dat doesn't fit: Expected read_value(<PPtr<Object> data (size=12, index=8, is_array=0, flags='0x0')>) to read 12 bytes, but only read 8 bytes",
      "digest": "5c35fa10ccfffe2e02947a7a945775e433ef955588e827840044e899a5ba13da",
      "pointers": {
       "local": 0,
