@@ -5,6 +5,7 @@ on made-up files from tests/synth.py.
 """
 
 import io
+import struct
 
 import pytest
 
@@ -124,5 +125,5 @@ def test_own_type_tree_is_not_structs_dat(asset):
 
 def test_truncated_object_is_an_error():
 	data = synth.serialized_file({49: synth.TEXT_ASSET}, [(1, 49, 49, synth.pack_string("only a name"))])
-	with pytest.raises(Exception):
+	with pytest.raises(struct.error):  # m_Script's length is past the end
 		open_asset(data).objects[1].read()
