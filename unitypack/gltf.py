@@ -122,6 +122,18 @@ def _with_alpha(rgb, alpha):
 	return Image.merge("RGBA", (*rgb.split(), alpha))
 
 
+def _unit(x, y, z):
+	"A normal as glTF requires it, of length 1 (a zero normal points up)"
+	length = math.sqrt(x * x + y * y + z * z)
+	return (x / length, y / length, z / length) if length else (0.0, 1.0, 0.0)
+
+
+def _unit_quaternion(q):
+	"A rotation of length 1; a zero quaternion (some files store one) is no rotation"
+	length = math.sqrt(sum(c * c for c in q))
+	return [c / length for c in q] if length else [0.0, 0.0, 0.0, 1.0]
+
+
 def _vec(v, keys="xyz"):
 	return [float(v[k]) for k in keys]
 
@@ -196,6 +208,9 @@ class GLTFWriter:
 		return self._cached("texture", texture, self._make_texture)
 
 	def _make_texture(self, texture):
+		if not hasattr(texture, "image"):
+			self.warnings.append("%r is not an image texture" % (texture,))
+			return None
 		try:
 			image = texture.image
 		except NotImplementedError as e:
@@ -296,7 +311,7 @@ class GLTFWriter:
 		n = len(data.vertices)
 		attrs = {"POSITION": self.accessor([c for v in data.vertices for c in (v.x, v.y, v.z)], "VEC3", target=ARRAY_BUFFER, minmax=True)}
 		if len(data.normals) == n:
-			attrs["NORMAL"] = self.accessor([c for v in data.normals for c in (v.x, v.y, v.z)], "VEC3", target=ARRAY_BUFFER)
+			attrs["NORMAL"] = self.accessor([c for v in data.normals for c in _unit(v.x, v.y, v.z)], "VEC3", target=ARRAY_BUFFER)
 		if len(data.uv1) == n:
 			attrs["TEXCOORD_0"] = self.accessor([c for v in data.uv1 for c in (v.x, 1 - v.y)], "VEC2", target=ARRAY_BUFFER)
 		return attrs
@@ -426,8 +441,10 @@ class GLTFWriter:
 			node["name"] = name
 		if translation is not None and list(translation) != [0, 0, 0]:
 			node["translation"] = mirror_position(translation)
-		if rotation is not None and list(rotation) != [0, 0, 0, 1]:
-			node["rotation"] = mirror_rotation(rotation)
+		if rotation is not None:
+			rotation = _unit_quaternion(rotation)
+			if rotation != [0, 0, 0, 1]:
+				node["rotation"] = mirror_rotation(rotation)
 		if scale is not None and list(scale) != [1, 1, 1]:
 			node["scale"] = list(scale)
 		if mesh is not None:
@@ -610,7 +627,7 @@ class GameObjectExport:
 			if child_go is not None and (self.inactive or child_go._obj.get("m_IsActive", True)):
 				children.append(self.visit(child_go, "%s/%s" % (path, child_go.name) if path else child_go.name))
 
-		t, q, sc = _vec(transform.position), _vec(transform.rotation, "xyzw"), _vec(transform.scale)
+		t, q, sc = _vec(transform.position), _unit_quaternion(_vec(transform.rotation, "xyzw")), _vec(transform.scale)
 		node = w.add_node(gameobject.name, mesh=mesh, translation=t, rotation=q, scale=sc, children=children)
 		self.nodes[transform_ptr.path_id] = node
 		self.paths.setdefault(path, node)

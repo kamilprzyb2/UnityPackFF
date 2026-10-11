@@ -6101,7 +6101,7 @@
      256
     ]
    ],
-   "sha256": "ed750a5d1c843f7b",
+   "sha256": "c0c6ca5f278e933f",
    "terrains": 1,
    "warnings": 0
   }
@@ -6120,7 +6120,7 @@
      256
     ]
    ],
-   "sha256": "4f458aaf75977110",
+   "sha256": "8f8e61de27b7c3d7",
    "warnings": 2
   },
   "nano/nano_eduardo.kfm": {
@@ -6136,7 +6136,7 @@
      256
     ]
    ],
-   "sha256": "85fae091f8bd74c0",
+   "sha256": "94592fffb788171c",
    "warnings": 2
   },
   "nano/nano_numbuhtwo.kfm": {
@@ -6152,7 +6152,7 @@
      256
     ]
    ],
-   "sha256": "eff717c2d9dd4f98",
+   "sha256": "e4e1af2c75428e85",
    "warnings": 2
   }
  },
@@ -6165,7 +6165,7 @@
    "skins": 2,
    "animations": 6,
    "images": [],
-   "sha256": "2d0ccf285507ce47",
+   "sha256": "cb147e842b3ed36b",
    "warnings": 2
   },
   "mob/npc_arturo.kfm": {
@@ -6176,7 +6176,7 @@
    "skins": 1,
    "animations": 3,
    "images": [],
-   "sha256": "7d2a2ad3abe816fd",
+   "sha256": "9dafc4aa822eaca9",
    "warnings": 2
   },
   "mob/npc_bigbilly.kfm": {
@@ -6187,7 +6187,7 @@
    "skins": 1,
    "animations": 3,
    "images": [],
-   "sha256": "2d890e1356995eda",
+   "sha256": "0369db2d7eb9728e",
    "warnings": 2
   },
   "mob/npc_carl.kfm": {
@@ -6198,7 +6198,7 @@
    "skins": 2,
    "animations": 3,
    "images": [],
-   "sha256": "854052d58f6f12a2",
+   "sha256": "3c083b7fc9d08f3a",
    "warnings": 2
   },
   "mob/npc_edd2.kfm": {
@@ -6209,7 +6209,7 @@
    "skins": 1,
    "animations": 3,
    "images": [],
-   "sha256": "09609d4f48dc01cc",
+   "sha256": "ecb8b888dfeba186",
    "warnings": 2
   },
   "mob/npc_eddy2.kfm": {
@@ -6220,7 +6220,7 @@
    "skins": 1,
    "animations": 3,
    "images": [],
-   "sha256": "f89e5f8bb5c518ff",
+   "sha256": "080c3a2f99703f0b",
    "warnings": 2
   },
   "mob/npc_grubber.kfm": {
@@ -6231,7 +6231,7 @@
    "skins": 1,
    "animations": 3,
    "images": [],
-   "sha256": "275c5fcdd5458195",
+   "sha256": "801afd2036738b55",
    "warnings": 2
   },
   "mob/npc_jeff.kfm": {
@@ -6242,7 +6242,7 @@
    "skins": 1,
    "animations": 3,
    "images": [],
-   "sha256": "41edd9ce997ca3b0",
+   "sha256": "3c553d0ec4b46db7",
    "warnings": 2
   },
   "mob/npc_mandroid_disguise.kfm": {
@@ -6253,7 +6253,7 @@
    "skins": 2,
    "animations": 2,
    "images": [],
-   "sha256": "572ed54a717a87e3",
+   "sha256": "a1fc3a08ffb7c5b0",
    "warnings": 2
   },
   "mob/npc_snake.kfm": {
@@ -6264,7 +6264,7 @@
    "skins": 2,
    "animations": 3,
    "images": [],
-   "sha256": "fa3f5bbc3b0324ca",
+   "sha256": "90b62a11e642b3ac",
    "warnings": 2
   },
   "mob/npc_timepod.kfm": {
@@ -6280,7 +6280,7 @@
      1024
     ]
    ],
-   "sha256": "5e3dc4d3ab6bba51",
+   "sha256": "e6e1f5c5a7716d38",
    "warnings": 0
   },
   "mob/npc_tuddrussel.kfm": {
@@ -6291,7 +6291,7 @@
    "skins": 1,
    "animations": 3,
    "images": [],
-   "sha256": "f663c05a8bc10fd9",
+   "sha256": "08559e66cbae961e",
    "warnings": 2
   },
   "mob/npc_wilt2.kfm": {
@@ -6302,7 +6302,7 @@
    "skins": 1,
    "animations": 3,
    "images": [],
-   "sha256": "fbce09ebfe8c1360",
+   "sha256": "380ff2fc486b20da",
    "warnings": 2
   },
   "wear/back_bats.nif": {
@@ -6313,7 +6313,7 @@
    "skins": 1,
    "animations": 1,
    "images": [],
-   "sha256": "715ae5a28c63099c",
+   "sha256": "6283d172b2c41173",
    "warnings": 3
   },
   "wear/back_bmo.nif": {
@@ -6324,7 +6324,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "2c2dea13b387e274",
+   "sha256": "e45f13f538503d26",
    "warnings": 2
   },
   "wear/back_cardboardwings.nif": {
@@ -6335,7 +6335,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "c3d0a95a37680103",
+   "sha256": "7f69b2bf151f6b03",
    "warnings": 2
   },
   "wear/back_penguin.nif": {
@@ -6346,7 +6346,7 @@
    "skins": 2,
    "animations": 1,
    "images": [],
-   "sha256": "2feb69d61cee8e3b",
+   "sha256": "36b8fc2347302841",
    "warnings": 4
   },
   "wear/back_rodney.nif": {
@@ -6357,7 +6357,7 @@
    "skins": 1,
    "animations": 1,
    "images": [],
-   "sha256": "ea331ad76ef58179",
+   "sha256": "9997efafed3d86fd",
    "warnings": 3
   },
   "wear/back_scooby.nif": {
@@ -6368,7 +6368,7 @@
    "skins": 0,
    "animations": 1,
    "images": [],
-   "sha256": "2c357f2a3288565e",
+   "sha256": "a12baf281df6bace",
    "warnings": 3
   },
   "wear/back_shards.nif": {
@@ -6379,7 +6379,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "6230cce1d6711823",
+   "sha256": "0166b80c4c4d010c",
    "warnings": 2
   },
   "wear/back_wreath.nif": {
@@ -6390,7 +6390,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "93af05b6c34a75e3",
+   "sha256": "eef9e850984aa069",
    "warnings": 2
   },
   "wear/face_2020.nif": {
@@ -6401,7 +6401,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "00b1fa16ec44af47",
+   "sha256": "848f034d5d14ea81",
    "warnings": 2
   },
   "wear/face_icicle.nif": {
@@ -6412,7 +6412,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "0770220d49ed44c2",
+   "sha256": "9fccc4155e9c1440",
    "warnings": 2
   },
   "wear/face_larimar.nif": {
@@ -6423,7 +6423,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "e31810d03cbffef7",
+   "sha256": "ce2aa37512e2a111",
    "warnings": 2
   },
   "wear/face_monkeymask.nif": {
@@ -6434,7 +6434,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "bcde4deebeac9d98",
+   "sha256": "a6d37c25a8b66dd0",
    "warnings": 2
   },
   "wear/face_peppermint.nif": {
@@ -6445,7 +6445,7 @@
    "skins": 1,
    "animations": 1,
    "images": [],
-   "sha256": "75cb9418453cf320",
+   "sha256": "fcdc71a72f513d98",
    "warnings": 2
   },
   "wear/face_rudolph.nif": {
@@ -6456,7 +6456,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "6538e58fcb83926e",
+   "sha256": "c1e6a5dec3036e86",
    "warnings": 2
   },
   "wear/glasses_1.nif": {
@@ -6467,7 +6467,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "633ffecba7472534",
+   "sha256": "18252268db8de63c",
    "warnings": 2
   },
   "wear/glasses_2.nif": {
@@ -6478,7 +6478,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "3a26dc04357eb0ce",
+   "sha256": "ff319af733b0864a",
    "warnings": 2
   },
   "wear/glasses_3.nif": {
@@ -6489,7 +6489,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "ee7a243f47eb3ab1",
+   "sha256": "5ea4a9e0c1dd7f81",
    "warnings": 2
   },
   "wear/hat_earmuffs.nif": {
@@ -6500,7 +6500,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "1174f74e5909b00a",
+   "sha256": "3460796d3e24b0b9",
    "warnings": 2
   },
   "wear/hat_eduardohornschristmas.nif": {
@@ -6511,7 +6511,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "4dd7e4be498774c3",
+   "sha256": "8237cc1958572b20",
    "warnings": 2
   },
   "wear/hat_enid.nif": {
@@ -6522,7 +6522,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "dcf29bb1777738a4",
+   "sha256": "652f799174a06f4c",
    "warnings": 3
   },
   "wear/hat_executioner.nif": {
@@ -6533,7 +6533,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "c3ce40ddca6e07a2",
+   "sha256": "5d6348ba12e4f251",
    "warnings": 3
   },
   "wear/hat_greg.nif": {
@@ -6544,7 +6544,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "a198f5ca7e8b2c79",
+   "sha256": "71f88f1b595782cd",
    "warnings": 3
   },
   "wear/hat_halo.nif": {
@@ -6555,7 +6555,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "9487eccf5566feb5",
+   "sha256": "dbc4a3dc41ae78e8",
    "warnings": 1
   },
   "wear/hat_icekingcrown.nif": {
@@ -6566,7 +6566,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "3daa479820c971c0",
+   "sha256": "a7c03880d068cd7b",
    "warnings": 2
   },
   "wear/hat_icequeencrown.nif": {
@@ -6577,7 +6577,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "d33ffa84eb8da7e9",
+   "sha256": "56deb7a54cacd283",
    "warnings": 2
   },
   "wear/hat_lincoln.nif": {
@@ -6588,7 +6588,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "da6a518e7ff4b87c",
+   "sha256": "fd4d32ef87275f4e",
    "warnings": 3
   },
   "wear/hat_numbuhfive.nif": {
@@ -6599,7 +6599,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "0c02d40196871f99",
+   "sha256": "94db522cf0c23b99",
    "warnings": 2
   },
   "wear/hat_pumpkin.nif": {
@@ -6610,7 +6610,7 @@
    "skins": 1,
    "animations": 1,
    "images": [],
-   "sha256": "fe3e0e32b3ac57dd",
+   "sha256": "cbde74b4c403bd58",
    "warnings": 2
   },
   "wear/hat_snowflake.nif": {
@@ -6621,7 +6621,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "9173a57dc273bca8",
+   "sha256": "c903984062dfc100",
    "warnings": 1
   },
   "wear/hat_taskhat.nif": {
@@ -6632,7 +6632,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "483251c174c05693",
+   "sha256": "ccc991fabc5d1bea",
    "warnings": 2
   },
   "wear/hat_wirt.nif": {
@@ -6643,7 +6643,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "5ce42f63a31ba5fb",
+   "sha256": "7e5200a109d0f020",
    "warnings": 3
   },
   "wear/head_boogeyman.nif": {
@@ -6654,7 +6654,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "f4e159099bfa0125",
+   "sha256": "9d562bcdf7026c20",
    "warnings": 3
   },
   "wear/head_christmasnever.nif": {
@@ -6665,7 +6665,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "8ccc73030e631e66",
+   "sha256": "7d58aa81bf3a9703",
    "warnings": 2
   },
   "wear/head_jack.nif": {
@@ -6676,7 +6676,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "ebd44419d33b76cd",
+   "sha256": "9759e6e45e2bb329",
    "warnings": 3
   },
   "wear/head_jerk.nif": {
@@ -6687,7 +6687,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "4f17698d6d3dfc12",
+   "sha256": "ee445f8aef6816a1",
    "warnings": 3
   },
   "wear/head_santa.nif": {
@@ -6698,7 +6698,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "3f0f3fe04709ce24",
+   "sha256": "c437b8e8a385bffc",
    "warnings": 2
   },
   "wear/head_spooka.nif": {
@@ -6709,7 +6709,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "1b8a5e4fb7b8671b",
+   "sha256": "c0e8712373e012b1",
    "warnings": 3
   },
   "wear/helmet_atomix.nif": {
@@ -6720,7 +6720,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "a6ec9dac3e5392d1",
+   "sha256": "c6117b9a9b1f73fc",
    "warnings": 2
   },
   "wear/helmet_eon.nif": {
@@ -6731,7 +6731,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "7fa74b93d8c0cfe1",
+   "sha256": "2a3485b67e2bef51",
    "warnings": 2
   },
   "wear/helmet_timesquadcowl.nif": {
@@ -6742,7 +6742,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "930bb1188499c709",
+   "sha256": "3886f886dc89e9e0",
    "warnings": 2
   },
   "wear/melee_abracadagger.nif": {
@@ -6753,7 +6753,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "c98fdeee7188e509",
+   "sha256": "8762ede3a74310d6",
    "warnings": 3
   },
   "wear/melee_christmasclaws.nif": {
@@ -6764,7 +6764,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "b72fd0e7967ce274",
+   "sha256": "6241686fb40cbeb0",
    "warnings": 2
   },
   "wear/melee_crystalsword.nif": {
@@ -6775,7 +6775,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "f58085da23be0c5e",
+   "sha256": "b5c53c5f8dba3187",
    "warnings": 2
   },
   "wear/melee_fireaxe.nif": {
@@ -6786,7 +6786,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "ce200d6e2c2ed34e",
+   "sha256": "0ab07a24a94b3caf",
    "warnings": 2
   },
   "wear/melee_gemrejuvenator.nif": {
@@ -6797,7 +6797,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "a668c78242682c32",
+   "sha256": "4a61591588f6f68d",
    "warnings": 3
   },
   "wear/vehicle_cardboardbox.nif": {
@@ -6808,7 +6808,7 @@
    "skins": 1,
    "animations": 1,
    "images": [],
-   "sha256": "9e9145448c3974cd",
+   "sha256": "70dad7d32c2f5e5f",
    "warnings": 1
   },
   "wear/vehicle_dynomutt.nif": {
@@ -6819,7 +6819,7 @@
    "skins": 2,
    "animations": 1,
    "images": [],
-   "sha256": "e49a981f0a10b206",
+   "sha256": "dcf5ccc941fc020c",
    "warnings": 2
   },
   "wear/vehicle_eggplant.nif": {
@@ -6830,7 +6830,7 @@
    "skins": 1,
    "animations": 1,
    "images": [],
-   "sha256": "1a35323ece2b678f",
+   "sha256": "1ee98f3a30e029dc",
    "warnings": 2
   },
   "wear/vehicle_plank.nif": {
@@ -6841,7 +6841,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "6faa52517c4ed9bb",
+   "sha256": "60fa688c5a64186b",
    "warnings": 2
   },
   "wear/vehicle_timesquad.nif": {
@@ -6852,7 +6852,7 @@
    "skins": 2,
    "animations": 1,
    "images": [],
-   "sha256": "1d099f6f0c819cf9",
+   "sha256": "b26e53d63c36f78b",
    "warnings": 2
   },
   "wear/vehicle_ufo.nif": {
@@ -6863,7 +6863,7 @@
    "skins": 1,
    "animations": 1,
    "images": [],
-   "sha256": "6b4ddda244da04cb",
+   "sha256": "8e473d41a040cbf1",
    "warnings": 3
   }
  },
@@ -6897,7 +6897,7 @@
      512
     ]
    ],
-   "sha256": "23aa6ba5f3b80dce",
+   "sha256": "1542cc4ddcd24e98",
    "warnings": 1
   },
   "map/beach/dt_obbh_beach chair_01.nif": {
@@ -6913,7 +6913,7 @@
      256
     ]
    ],
-   "sha256": "fb8db9a7f452ac41",
+   "sha256": "27c1a6bbf0c9e249",
    "warnings": 1
   },
   "map/beach/dt_obbh_beach chair_01_notowel.nif": {
@@ -6929,7 +6929,7 @@
      256
     ]
    ],
-   "sha256": "0e482e6bcc8e7451",
+   "sha256": "c9ce05450f1e3ac9",
    "warnings": 1
   },
   "map/beach/dt_obbh_board.nif": {
@@ -7009,7 +7009,7 @@
      128
     ]
    ],
-   "sha256": "f9d7503ae576c027",
+   "sha256": "be812cc929fcd855",
    "warnings": 1
   },
   "map/beach/dt_obbh_strusture_tower_01.nif": {
@@ -7029,7 +7029,7 @@
      256
     ]
    ],
-   "sha256": "969935553dc46369",
+   "sha256": "fdc10caa776880e0",
    "warnings": 1
   },
   "map/beach/dt_obbh_tube.nif": {
@@ -7069,7 +7069,7 @@
      256
     ]
    ],
-   "sha256": "4e489c2f41ed43d7",
+   "sha256": "cd43aad5b7b4133a",
    "warnings": 2
   },
   "map/charlesdarwin/sb_otcd_school_gymtree02.nif": {
@@ -7089,7 +7089,7 @@
      256
     ]
    ],
-   "sha256": "01f18d3624c1b0bd",
+   "sha256": "5adc5e942c6dc083",
    "warnings": 2
   },
   "map/charlesdarwin/sb_otcd_school_tree_b_01.nif": {
@@ -7109,7 +7109,7 @@
      256
     ]
    ],
-   "sha256": "6f21131ea96a9f84",
+   "sha256": "75d0c285cbfac99e",
    "warnings": 2
   },
   "map/dtetc/dt_etc_busstop02.nif": {
@@ -7133,7 +7133,7 @@
      128
     ]
    ],
-   "sha256": "a60a60b9744a57d7",
+   "sha256": "88510c69a7bc218d",
    "warnings": 3
   },
   "map/dtetc/dt_etc_dustbin_01.nif": {
@@ -7144,7 +7144,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "6625d1a1b7d51844",
+   "sha256": "9f968b5ab650a4b9",
    "warnings": 2
   },
   "map/dtetc/dt_etc_passengercar_a_01.nif": {
@@ -7160,7 +7160,7 @@
      512
     ]
    ],
-   "sha256": "4f00e587c7fecb8a",
+   "sha256": "48728bbd8625a86c",
    "warnings": 1
   },
   "map/dtetc/dt_etc_passengercar_d_01.nif": {
@@ -7176,7 +7176,7 @@
      512
     ]
    ],
-   "sha256": "e12c3b0ce1a755cc",
+   "sha256": "ac2c1746e2864e0e",
    "warnings": 1
   },
   "map/dtetc/dt_mtdb_bench_a01.nif": {
@@ -7192,7 +7192,7 @@
      256
     ]
    ],
-   "sha256": "5aa48f3cac51e41c",
+   "sha256": "9dcd271bb8d9c742",
    "warnings": 1
   },
   "map/dtetc/dt_mtdb_bench_a02.nif": {
@@ -7208,7 +7208,7 @@
      256
     ]
    ],
-   "sha256": "3bdc272857d97abb",
+   "sha256": "20350b8611e43196",
    "warnings": 1
   },
   "map/dtetc/dt_mtdb_etc01.nif": {
@@ -7224,7 +7224,7 @@
      512
     ]
    ],
-   "sha256": "aa8b9e7d49d4b2cd",
+   "sha256": "e25498f73f1c0eb7",
    "warnings": 1
   },
   "map/dtetc/dt_mtdb_fountain_01.nif": {
@@ -7252,7 +7252,7 @@
      128
     ]
    ],
-   "sha256": "1e286d2466c18c87",
+   "sha256": "b9fd5eaa02519126",
    "warnings": 2
   },
   "map/dtetc/dt_mtdb_parasol_a01.nif": {
@@ -7268,7 +7268,7 @@
      512
     ]
    ],
-   "sha256": "51c931020965b48e",
+   "sha256": "8aea8a90fb4807ab",
    "warnings": 1
   },
   "map/dtetc/dt_mtdb_table_a01.nif": {
@@ -7284,7 +7284,7 @@
      256
     ]
    ],
-   "sha256": "b66c51012f673f50",
+   "sha256": "234d8667a7ea9a5b",
    "warnings": 1
   },
   "map/dtetc/dt_obj_signs_03.nif": {
@@ -7308,7 +7308,7 @@
      128
     ]
    ],
-   "sha256": "e30dd4ebf9943c28",
+   "sha256": "d99ced9cf5c58a7b",
    "warnings": 3
   },
   "map/dtetc/dt_obj_signs_04.nif": {
@@ -7332,7 +7332,7 @@
      256
     ]
    ],
-   "sha256": "d4e5f10da1478c48",
+   "sha256": "71bb094e99c52ece",
    "warnings": 3
   },
   "map/dtetc/dt_obj_signs_05.nif": {
@@ -7360,7 +7360,7 @@
      128
     ]
    ],
-   "sha256": "a449f4c541f0fa5a",
+   "sha256": "cfb1dccabdf96777",
    "warnings": 3
   },
   "map/dtetc/dt_tree_02.nif": {
@@ -7376,7 +7376,7 @@
      256
     ]
    ],
-   "sha256": "8df8087be8621a4f",
+   "sha256": "de78a0a73489cdac",
    "warnings": 1
   },
   "map/dtetc/dt_tree_04.nif": {
@@ -7392,7 +7392,7 @@
      256
     ]
    ],
-   "sha256": "77135e8981312718",
+   "sha256": "8d44496c5f2160dd",
    "warnings": 1
   },
   "map/dtetc/dt_tree_14.nif": {
@@ -7403,7 +7403,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "c4457ad4263dedc4",
+   "sha256": "a6946eae33ed7c4a",
    "warnings": 2
   },
   "map/ep/downtown_jumppad_01.nif": {
@@ -7419,7 +7419,7 @@
      256
     ]
    ],
-   "sha256": "d1d40df08979deef",
+   "sha256": "6b7f46fad334aa13",
    "warnings": 1
   },
   "map/ep/downtown_jumppad_02.nif": {
@@ -7435,7 +7435,7 @@
      256
     ]
    ],
-   "sha256": "b6484e0b44663712",
+   "sha256": "4b319dc9f0eee5ca",
    "warnings": 1
   },
   "map/ep/ep_beach_mat.nif": {
@@ -7451,7 +7451,7 @@
      256
     ]
    ],
-   "sha256": "11521c1a6159bc77",
+   "sha256": "ba19629532b5ee51",
    "warnings": 1
   },
   "map/ep/ep_course.nif": {
@@ -7467,7 +7467,7 @@
      128
     ]
    ],
-   "sha256": "b46ea4e0cab22886",
+   "sha256": "8310795751822196",
    "warnings": 1
   },
   "map/ep/ep_zip_dt_a.nif": {
@@ -7483,7 +7483,7 @@
      256
     ]
    ],
-   "sha256": "b41011270017686b",
+   "sha256": "77b03d8037541a4c",
    "warnings": 1
   },
   "map/ep/ep_zip_dt_b.nif": {
@@ -7499,7 +7499,7 @@
      32
     ]
    ],
-   "sha256": "2ec70dcf096ee859",
+   "sha256": "1b5c22512a6769d6",
    "warnings": 1
   },
   "map/ep/ep_zip_dt_c.nif": {
@@ -7515,7 +7515,7 @@
      256
     ]
    ],
-   "sha256": "e7d13daf7c5be1a5",
+   "sha256": "724f3e8aa1a9583a",
    "warnings": 1
   },
   "map/ep/fusion_ring.nif": {
@@ -7535,7 +7535,7 @@
      256
     ]
    ],
-   "sha256": "11efc3c044c58cf9",
+   "sha256": "2b78d398bff50434",
    "warnings": 3
   },
   "map/etc/dt_mtsm_fence_ef03_10.nif": {
@@ -7546,7 +7546,7 @@
    "skins": 0,
    "animations": 1,
    "images": [],
-   "sha256": "daf42a565e4da0a1",
+   "sha256": "2b817dada767a64e",
    "warnings": 5
   },
   "map/etc/dt_mtsm_fence_ef03_5.nif": {
@@ -7557,7 +7557,7 @@
    "skins": 0,
    "animations": 1,
    "images": [],
-   "sha256": "b196bb3bb276b2a0",
+   "sha256": "f46a2937401aebb1",
    "warnings": 5
   },
   "map/etc/etc_beach_a01_120.nif": {
@@ -7573,7 +7573,7 @@
      512
     ]
    ],
-   "sha256": "079c7ab079bdfebc",
+   "sha256": "a44f264480e8bb69",
    "warnings": 1
   },
   "map/etc/etc_beach_a02_90.nif": {
@@ -7589,7 +7589,7 @@
      512
     ]
    ],
-   "sha256": "affb2ef49a6a7d4a",
+   "sha256": "a772d40b34b3624d",
    "warnings": 1
   },
   "map/etc/etc_beach_e01.nif": {
@@ -7605,7 +7605,7 @@
      512
     ]
    ],
-   "sha256": "dc3994f1c5592cee",
+   "sha256": "6632300ac15334f0",
    "warnings": 1
   },
   "map/etc/etc_beach_e02.nif": {
@@ -7621,7 +7621,7 @@
      256
     ]
    ],
-   "sha256": "d470850c54ce919d",
+   "sha256": "be29c277f71f526a",
    "warnings": 1
   },
   "map/etc/etc_beach_e02_480.nif": {
@@ -7637,7 +7637,7 @@
      256
     ]
    ],
-   "sha256": "4ab325e9c78eae1a",
+   "sha256": "752df73fd3770b8b",
    "warnings": 1
   },
   "map/etc/etc_beach_e03_560.nif": {
@@ -7653,7 +7653,7 @@
      256
     ]
    ],
-   "sha256": "e0f4974ea61b740a",
+   "sha256": "157291b589a1d5d2",
    "warnings": 1
   },
   "map/etc/etc_beach_l01_120.nif": {
@@ -7669,7 +7669,7 @@
      512
     ]
    ],
-   "sha256": "fa0596a891d922da",
+   "sha256": "c1cdcc08efbd5c09",
    "warnings": 1
   },
   "map/etc/etc_beach_y01_120.nif": {
@@ -7685,7 +7685,7 @@
      512
     ]
    ],
-   "sha256": "55bb4fe868c69932",
+   "sha256": "6ed11173bdcd49c4",
    "warnings": 1
   },
   "map/etc/etc_parasol_01.nif": {
@@ -7705,7 +7705,7 @@
      512
     ]
    ],
-   "sha256": "8537284c8ff234b5",
+   "sha256": "855fd59811e08f76",
    "warnings": 1
   },
   "map/etc/etc_signs_06.nif": {
@@ -7725,7 +7725,7 @@
      128
     ]
    ],
-   "sha256": "a90d23b4a074e08d",
+   "sha256": "934f0195b7524f3a",
    "warnings": 1
   },
   "map/etc/etc_signs_10.nif": {
@@ -7745,7 +7745,7 @@
      128
     ]
    ],
-   "sha256": "a6ea1a166bc91a9a",
+   "sha256": "d82b8e56e6f74485",
    "warnings": 1
   },
   "map/etc/etc_store_03.nif": {
@@ -7769,7 +7769,7 @@
      256
     ]
    ],
-   "sha256": "bd5d218f642e36f3",
+   "sha256": "704eba126adb4379",
    "warnings": 1
   },
   "map/etc/etc_store_04.nif": {
@@ -7793,7 +7793,7 @@
      128
     ]
    ],
-   "sha256": "7c80e495993a7e04",
+   "sha256": "409e08fc034684b5",
    "warnings": 1
   },
   "map/etc/etc_tree_04.nif": {
@@ -7809,7 +7809,7 @@
      128
     ]
    ],
-   "sha256": "caa86fec952547fa",
+   "sha256": "d9dbc025227cbc57",
    "warnings": 3
   },
   "map/etc/wd_etc_stone04_01.nif": {
@@ -7825,7 +7825,7 @@
      256
     ]
    ],
-   "sha256": "f84e4d6272bf52ca",
+   "sha256": "28369b467dc485b5",
    "warnings": 1
   },
   "map/etc/wd_etc_stone04_02.nif": {
@@ -7841,7 +7841,7 @@
      256
     ]
    ],
-   "sha256": "e63c90c18b4df72e",
+   "sha256": "fcea4ab76501ee93",
    "warnings": 1
   },
   "map/etc/wd_etc_stone04_03.nif": {
@@ -7857,7 +7857,7 @@
      256
     ]
    ],
-   "sha256": "8fd3c7819bacf8e3",
+   "sha256": "d2e4491436769384",
    "warnings": 1
   },
   "map/etc/wd_etc_stone07_01.nif": {
@@ -7873,7 +7873,7 @@
      256
     ]
    ],
-   "sha256": "e1b3d8150e7ede1f",
+   "sha256": "e4dd6ec68b515fd3",
    "warnings": 1
   },
   "map/etc/wd_etc_stone07_02.nif": {
@@ -7889,7 +7889,7 @@
      256
     ]
    ],
-   "sha256": "786a35ea7760d5d2",
+   "sha256": "69bb85b2741d7159",
    "warnings": 1
   },
   "map/etc/wd_etc_stone07_04.nif": {
@@ -7905,7 +7905,7 @@
      256
     ]
    ],
-   "sha256": "84c8e042d4e0d8d8",
+   "sha256": "f32997e3c299d6e5",
    "warnings": 1
   },
   "map/questitem/quest_item_box.nif": {
@@ -7921,7 +7921,7 @@
      256
     ]
    ],
-   "sha256": "207d0a5af8d4d63b",
+   "sha256": "cec42de68bde4c8a",
    "warnings": 1
   },
   "map/questitem/quest_item_chests.nif": {
@@ -7937,7 +7937,7 @@
      256
     ]
    ],
-   "sha256": "67d898f05d021416",
+   "sha256": "a1ee84844eaac68d",
    "warnings": 1
   },
   "map/questitem/quest_item_k_ecom.nif": {
@@ -7961,7 +7961,7 @@
      64
     ]
    ],
-   "sha256": "60f521f7dc392598",
+   "sha256": "e462ec5ef5f118bb",
    "warnings": 3
   },
   "map/questitem/quest_item_k_ecom_b2.nif": {
@@ -7977,7 +7977,7 @@
      256
     ]
    ],
-   "sha256": "b77a38c9f4a6d893",
+   "sha256": "89cdc447ecd357dd",
    "warnings": 1
   },
   "map/wharf/dt_obwh_fishing.nif": {
@@ -7997,7 +7997,7 @@
      32
     ]
    ],
-   "sha256": "15cab3b804b5d241",
+   "sha256": "9dc3057012d02d24",
    "warnings": 2
   },
   "map/wharf/dt_obwh_ship1.nif": {
@@ -8021,7 +8021,7 @@
      256
     ]
    ],
-   "sha256": "c5fdbeb4db1bf4de",
+   "sha256": "65574a9bafd217ab",
    "warnings": 1
   },
   "map/wharf/dt_obwh_ship2.nif": {
@@ -8037,7 +8037,7 @@
      512
     ]
    ],
-   "sha256": "3d9dfac45e4c47a8",
+   "sha256": "2295457abfebefe6",
    "warnings": 1
   },
   "map/wharf/dt_obwh_ship_01.nif": {
@@ -8053,7 +8053,7 @@
      512
     ]
    ],
-   "sha256": "bb50a45551f4dbe4",
+   "sha256": "5f8d3e6595e99470",
    "warnings": 1
   },
   "map/wharf/dt_obwh_shoppingmall_02.nif": {
@@ -8085,7 +8085,7 @@
      256
     ]
    ],
-   "sha256": "1aabc07acbad9be8",
+   "sha256": "17ce5558d259eabd",
    "warnings": 1
   },
   "mob/dt_etc_passengercar_a.kfm": {
@@ -8096,7 +8096,7 @@
    "skins": 1,
    "animations": 1,
    "images": [],
-   "sha256": "ed57feb59a1af539",
+   "sha256": "66ebb6382fde3913",
    "warnings": 1
   },
   "mob/dt_etc_pickupcar_a.kfm": {
@@ -8107,7 +8107,7 @@
    "skins": 1,
    "animations": 1,
    "images": [],
-   "sha256": "b6989dde8c835ef4",
+   "sha256": "327dfec2fb90f614",
    "warnings": 1
   },
   "mob/mob_dolbelzet.kfm": {
@@ -8123,7 +8123,7 @@
      256
     ]
    ],
-   "sha256": "082cd52125074379",
+   "sha256": "7c3580c9cef598c3",
    "warnings": 2
   },
   "mob/mob_kingshoulderrobo.kfm": {
@@ -8139,7 +8139,7 @@
      256
     ]
    ],
-   "sha256": "90f6450e6725900e",
+   "sha256": "268e49efdcb64a7c",
    "warnings": 2
   },
   "mob/npc_bomerbango2.kfm": {
@@ -8150,7 +8150,7 @@
    "skins": 1,
    "animations": 3,
    "images": [],
-   "sha256": "79b693586efd472d",
+   "sha256": "6e9ceffee838d436",
    "warnings": 6
   },
   "mob/npc_majorglory.kfm": {
@@ -8166,7 +8166,7 @@
      256
     ]
    ],
-   "sha256": "c14b38f387c796f5",
+   "sha256": "a8f00212b2f4480f",
    "warnings": 0
   },
   "mob/rxcom.kfm": {
@@ -8177,7 +8177,7 @@
    "skins": 0,
    "animations": 1,
    "images": [],
-   "sha256": "29dac3fce29d9046",
+   "sha256": "a2e0a7e9d6dcd9c8",
    "warnings": 0
   },
   "prefabs/eps/epelements/epe[153].prefab": {
@@ -8197,7 +8197,7 @@
      256
     ]
    ],
-   "sha256": "94e05c5b86ae9fa9",
+   "sha256": "520a74b7599fa482",
    "warnings": 3
   },
   "prefabs/eps/epelements/epe[218].prefab": {
@@ -8213,7 +8213,7 @@
      256
     ]
    ],
-   "sha256": "e79247ee713952b3",
+   "sha256": "b3e44d64aa08888f",
    "warnings": 1
   },
   "prefabs/eps/epelements/epe[221].prefab": {
@@ -8229,7 +8229,7 @@
      256
     ]
    ],
-   "sha256": "449c6327cc79c321",
+   "sha256": "dc06d74f2b1621ba",
    "warnings": 1
   },
   "prefabs/eps/epelements/epe[252].prefab": {
@@ -8249,7 +8249,7 @@
      128
     ]
    ],
-   "sha256": "27a424db650de154",
+   "sha256": "a9486b1d527d0e6e",
    "warnings": 2
   },
   "prefabs/eps/epelements/epe[418].prefab": {
@@ -8265,7 +8265,7 @@
      512
     ]
    ],
-   "sha256": "95863f6752720ea9",
+   "sha256": "bf3943649b046fd6",
    "warnings": 1
   },
   "prefabs/eps/epelements/epe[421].prefab": {
@@ -8289,7 +8289,7 @@
      256
     ]
    ],
-   "sha256": "b67b73ca68cf450c",
+   "sha256": "4f9c92c0b63136b0",
    "warnings": 1
   },
   "prefabs/eps/epelements/epe[422].prefab": {
@@ -8305,7 +8305,7 @@
      512
     ]
    ],
-   "sha256": "0208d3393ecd2c8d",
+   "sha256": "b635b60d98743f29",
    "warnings": 1
   }
  },

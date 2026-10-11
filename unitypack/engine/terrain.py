@@ -68,8 +68,8 @@ class TerrainData(Object):
 
 	@property
 	def shifts(self):
-		"[Shift] (the records name z 'y')"
-		return [Shift(s["x"], s["y"], s["flags"]) for s in self.heightmap["m_Shifts"]]
+		"[Shift] (the records name z 'y'); none for terrains saved by newer Unity versions, which have no m_Shifts"
+		return [Shift(s["x"], s["y"], s["flags"]) for s in self.heightmap.get("m_Shifts", [])]
 
 	def set_heights(self, heights):
 		"""
@@ -94,6 +94,8 @@ class TerrainData(Object):
 		data is left as it is: how the engine counts shifts in it is not
 		worked out (see update_lod()).
 		"""
+		if "m_Shifts" not in self.heightmap:
+			raise ValueError("%r was saved without m_Shifts (a newer Unity version), so it can't have shifts" % (self,))
 		records = []
 		for x, z, flags in shifts:
 			if not (0 <= x < self.width and 0 <= z < self.height):
@@ -146,7 +148,7 @@ class TerrainData(Object):
 			minmax = [0.0] * (2 * len(patches))
 			error = [0.0] * len(patches)
 			changed = None
-		keep_old = bool(self.heightmap["m_Shifts"])
+		keep_old = bool(self.heightmap.get("m_Shifts"))
 
 		def h(x, z):
 			return heights[x * w + z] / MAX_HEIGHT
