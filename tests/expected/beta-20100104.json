@@ -347,6 +347,266 @@
   "m_pClassSkillTable": 8,
   "m_pSkillBookTable": 3
  },
+ "meshes/FutureNano.resourceFile": {
+  "CustomAssetBundle-50513e574023b4e259c6fd245ae5bc06": {
+   "2": {
+    "name": "Biped Object@#2",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "0f27abf6565dce6e"
+   },
+   "3": {
+    "name": "Biped Object@#3",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "f69f120e7131ea8c"
+   },
+   "4": {
+    "name": "Editable Poly",
+    "compressed": true,
+    "vertices": 3,
+    "triangles": [
+     1
+    ],
+    "obj_sha256": "1b68594dedce8156"
+   },
+   "5": {
+    "name": "Biped Object@#4",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "9b96eabd705c3b32"
+   },
+   "6": {
+    "name": "Editable Mesh",
+    "compressed": true,
+    "vertices": 3,
+    "triangles": [
+     1
+    ],
+    "obj_sha256": "6f8294e97ebdb9b2"
+   },
+   "7": {
+    "name": "Editable Mesh@#5",
+    "compressed": true,
+    "vertices": 3,
+    "triangles": [
+     1
+    ],
+    "obj_sha256": "f0061c46b39b7684"
+   },
+   "8": {
+    "name": "Editable Poly@#7",
+    "compressed": true,
+    "vertices": 3,
+    "triangles": [
+     1
+    ],
+    "obj_sha256": "6c02c26283eb1147"
+   },
+   "9": {
+    "name": "Biped Object@#1",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "1a0568c7897d2988"
+   },
+   "10": {
+    "name": "Editable Mesh",
+    "compressed": true,
+    "vertices": 1235,
+    "triangles": [
+     1260
+    ],
+    "obj_sha256": "4f4aa9e70054b1df",
+    "skin": {
+     "vertices": 1235,
+     "influences": {
+      "1": 825,
+      "2": 392,
+      "4": 18
+     },
+     "max_bone": 47,
+     "sha256": "23ceeb2d330699de"
+    }
+   },
+   "11": {
+    "name": "Bone@#0",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     14
+    ],
+    "obj_sha256": "e77583e0fd327728"
+   },
+   "12": {
+    "name": "Bone",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     14
+    ],
+    "obj_sha256": "9eab8304b1db01d8"
+   },
+   "13": {
+    "name": "Editable Poly@#2",
+    "compressed": true,
+    "vertices": 3,
+    "triangles": [
+     1
+    ],
+    "obj_sha256": "5775dfa7cc5362d9"
+   },
+   "14": {
+    "name": "Editable Poly@#1",
+    "compressed": true,
+    "vertices": 3,
+    "triangles": [
+     1
+    ],
+    "obj_sha256": "dc66c61903374997"
+   },
+   "15": {
+    "name": "Editable Poly@#0",
+    "compressed": true,
+    "vertices": 3,
+    "triangles": [
+     1
+    ],
+    "obj_sha256": "842620840a503b9b"
+   },
+   "16": {
+    "name": "Editable Poly1",
+    "compressed": true,
+    "vertices": 3,
+    "triangles": [
+     1
+    ],
+    "obj_sha256": "5d0b5ea8bd3495f6"
+   },
+   "17": {
+    "name": "Editable Poly",
+    "compressed": true,
+    "vertices": 886,
+    "triangles": [
+     893
+    ],
+    "obj_sha256": "4400cfa64a19e636",
+    "skin": {
+     "vertices": 886,
+     "influences": {
+      "1": 666,
+      "2": 205,
+      "4": 15
+     },
+     "max_bone": 43,
+     "sha256": "1a6de26f86ddee06"
+    }
+   },
+   "18": {
+    "name": "Biped Object@#0",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "0bcf58adf89749e3"
+   },
+   "19": {
+    "name": "Biped Object",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "c9def488d20323e0"
+   },
+   "20": {
+    "name": "Nano_Eduardo:0",
+    "compressed": true,
+    "vertices": 31,
+    "triangles": [
+     48
+    ],
+    "obj_sha256": "7446e7f45601cdaf",
+    "skin": {
+     "vertices": 31,
+     "influences": {
+      "1": 27,
+      "2": 4
+     },
+     "max_bone": 3,
+     "sha256": "0a72bf3abccdeb3a"
+    }
+   },
+   "21": {
+    "name": "Object01:0",
+    "compressed": true,
+    "vertices": 49,
+    "triangles": [
+     52
+    ],
+    "obj_sha256": "7faf9ed721c8808b",
+    "skin": {
+     "vertices": 49,
+     "influences": {
+      "1": 39,
+      "2": 10
+     },
+     "max_bone": 2,
+     "sha256": "2ff06c6c33e84aed"
+    }
+   },
+   "22": {
+    "name": "Nano_03_Eduardo:1",
+    "compressed": true,
+    "vertices": 219,
+    "triangles": [
+     275
+    ],
+    "obj_sha256": "2ea44f4820a4f592",
+    "skin": {
+     "vertices": 219,
+     "influences": {
+      "1": 141,
+      "2": 68,
+      "4": 10
+     },
+     "max_bone": 8,
+     "sha256": "eab30c1d7e1977e6"
+    }
+   },
+   "23": {
+    "name": "Nano_03_Eduardo:0",
+    "compressed": true,
+    "vertices": 408,
+    "triangles": [
+     530
+    ],
+    "obj_sha256": "622bce4e6a3e38db",
+    "skin": {
+     "vertices": 408,
+     "influences": {
+      "1": 279,
+      "2": 124,
+      "4": 5
+     },
+     "max_bone": 15,
+     "sha256": "75287405aa0bc26d"
+    }
+   }
+  }
+ },
  "roundtrip/Icons.resourceFile": {
   "CustomAssetBundle-784fa24bcf2da4f5eabe9547958616eb": {
    "saved": "b719421167413f5b550a33a067e5a2ce62bc0b6315947195c54c7f4c93eae2aa",

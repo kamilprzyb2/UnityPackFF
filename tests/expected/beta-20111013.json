@@ -368,6 +368,2599 @@
   "m_pClassSkillTable": 8,
   "m_pSkillBookTable": 3
  },
+ "meshes/CharacterSelection_wear_face.resourceFile": {
+  "CustomAssetBundle-CharacterSelection_wear_face": {
+   "669712222501": {
+    "name": "Biped Object@#56",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "afa94aab7a7599ca"
+   },
+   "1175356302997": {
+    "name": "Biped Object@#6",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "d8013f2ce6fab6ce"
+   },
+   "2627552211597": {
+    "name": "Biped Object@#57",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "aa14dedcec5172b1"
+   },
+   "3255802024325": {
+    "name": "Biped Object@#28",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "a9e425690b449131"
+   },
+   "4713216860492": {
+    "name": "Biped Object@#39",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "8a64d0a35a1e4216"
+   },
+   "6838645792212": {
+    "name": "Biped Object@#5",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "00065a01d46f2a50"
+   },
+   "8362834894904": {
+    "name": "Editable Poly@#65",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "7f3d30f51d9eac70"
+   },
+   "8998491051595": {
+    "name": "M_Face:1",
+    "compressed": true,
+    "vertices": 162,
+    "triangles": [
+     260
+    ],
+    "obj_sha256": "1fc415b8458edd1e",
+    "skin": {
+     "vertices": 162,
+     "influences": {
+      "1": 162
+     },
+     "max_bone": 0,
+     "sha256": "192b6968ce5ba221"
+    }
+   },
+   "9613813061398": {
+    "name": "Biped Object@#23",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "e68a45241f99fb78"
+   },
+   "10376379470244": {
+    "name": "Biped Object@#58",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "3e51e2e59836320e"
+   },
+   "10469460436947": {
+    "name": "Biped Object@#10",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "095fb29090a64b5b"
+   },
+   "11167980552549": {
+    "name": "Biped Object@#39",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "aafe00e1e7bc2eef"
+   },
+   "11213166789595": {
+    "name": "Biped Object@#32",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "97159e9ae876edc6"
+   },
+   "12068702372946": {
+    "name": "Editable Poly@#64",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "17fc89b0eaf38b24"
+   },
+   "12932940891499": {
+    "name": "Editable Mesh@#6",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "3211f67d4a0ca001"
+   },
+   "13876564710985": {
+    "name": "Biped Object@#21",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "9d53637a9b42cf57"
+   },
+   "15517812235361": {
+    "name": "Editable Mesh",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "32e211474fff9c1c"
+   },
+   "17725539009529": {
+    "name": "Biped Object@#33",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "7ce04a5f381f151b"
+   },
+   "18406534410694": {
+    "name": "Biped Object@#60",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "4c91c2fc3bdf3a8e"
+   },
+   "18439500141354": {
+    "name": "Biped Object@#37",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "edc47815465369e1"
+   },
+   "18730190472584": {
+    "name": "Biped Object@#53",
+    "compressed": true,
+    "vertices": 48,
+    "triangles": [
+     24
+    ],
+    "obj_sha256": "45e8a17ed51232b1"
+   },
+   "20022945262290": {
+    "name": "Biped Object@#5",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "f0afbb952c81dac1"
+   },
+   "20029882812310": {
+    "name": "Editable Poly@#66",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "3a54dcb4e90bc56f"
+   },
+   "20205208263628": {
+    "name": "Biped Object@#61",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "032f3800fedefc91"
+   },
+   "21004365707062": {
+    "name": "Biped Object@#22",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "f7ed3baa1a2d9aee"
+   },
+   "21354981366998": {
+    "name": "Box@#1",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "dcd879ba86528c4a"
+   },
+   "22350030766610": {
+    "name": "Biped Object@#9",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "973d3460bc404d9f"
+   },
+   "22658765741158": {
+    "name": "Biped Object@#30",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "21d05165822d59ff"
+   },
+   "24146771600674": {
+    "name": "Biped Object@#21",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "bd376336f3ca5855"
+   },
+   "24215422876281": {
+    "name": "Biped Object@#1",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "ae44dd26d468dc2d"
+   },
+   "24407010856832": {
+    "name": "Editable Poly@#64",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "0f87f1ddce6a5f06"
+   },
+   "24913877016767": {
+    "name": "Biped Object@#47",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "14c4698422e8e3a0"
+   },
+   "26528194616235": {
+    "name": "Biped Object@#38",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "732bc10130eff05c"
+   },
+   "27450033305742": {
+    "name": "Biped Object@#42",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "1eb2ee455688e900"
+   },
+   "28446079406576": {
+    "name": "Biped Object@#25",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "befcab428fec6903"
+   },
+   "29267016002433": {
+    "name": "W_Face:1",
+    "compressed": true,
+    "vertices": 68,
+    "triangles": [
+     102
+    ],
+    "obj_sha256": "c5ead2557be757e5",
+    "skin": {
+     "vertices": 68,
+     "influences": {
+      "1": 68
+     },
+     "max_bone": 0,
+     "sha256": "dd749c6c79f6460e"
+    }
+   },
+   "29426334718813": {
+    "name": "Editable Poly@#63",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "5940d3de5b8dc61c"
+   },
+   "30110576031574": {
+    "name": "Editable Poly@#66",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "0ab16c58784120de"
+   },
+   "32852753897861": {
+    "name": "Biped Object@#45",
+    "compressed": true,
+    "vertices": 48,
+    "triangles": [
+     24
+    ],
+    "obj_sha256": "84b6e5d0901561bb"
+   },
+   "35426065172614": {
+    "name": "Biped Object@#35",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "931e46bb05ec24e1"
+   },
+   "36797965826163": {
+    "name": "Biped Object@#27",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "5e8de715bc37725b"
+   },
+   "37509167080101": {
+    "name": "Biped Object@#22",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "a70f7f6d16514428"
+   },
+   "37726120881979": {
+    "name": "Editable Mesh@#6",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "fba353330b4ae8ce"
+   },
+   "38854584585143": {
+    "name": "Box@#42",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "4ab9694d5603300e"
+   },
+   "41630254165254": {
+    "name": "Biped Object@#51",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "9d5ebac929bbe891"
+   },
+   "42249125358448": {
+    "name": "Biped Object@#69",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "e28c88f56814933b"
+   },
+   "43496235189231": {
+    "name": "Biped Object@#19",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "6f3dfe72336eb761"
+   },
+   "44341202555800": {
+    "name": "Biped Object@#18",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "a363cf4fd1bc35b2"
+   },
+   "47436781254204": {
+    "name": "Biped Object@#20",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "03f29de98d86c791"
+   },
+   "49426664244453": {
+    "name": "Biped Object",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "d2580f0a94729689"
+   },
+   "50111001380976": {
+    "name": "Editable Mesh@#36",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "cf7b33d3c28cbdd7"
+   },
+   "50780406391186": {
+    "name": "Biped Object@#38",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "5b3e523c7491f5b9"
+   },
+   "50845739861564": {
+    "name": "Editable Mesh@#36",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "26445723306b5d9f"
+   },
+   "50904067744763": {
+    "name": "Biped Object@#28",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "33f1ee33f034e025"
+   },
+   "53290984887682": {
+    "name": "Biped Object@#49",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "c5cfc94031c31464"
+   },
+   "54047612902564": {
+    "name": "Biped Object@#9",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "ca6819d1ae524a48"
+   },
+   "56368015715197": {
+    "name": "Biped Object@#43",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "02adbf0134b8a92c"
+   },
+   "57877463338871": {
+    "name": "Editable Poly@#63",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "091568b9b9c64749"
+   },
+   "58684015701543": {
+    "name": "W_Face:0",
+    "compressed": true,
+    "vertices": 250,
+    "triangles": [
+     374
+    ],
+    "obj_sha256": "6ceab816d535ac80",
+    "skin": {
+     "vertices": 250,
+     "influences": {
+      "1": 250
+     },
+     "max_bone": 0,
+     "sha256": "75d054a331c43e3f"
+    }
+   },
+   "59747688324534": {
+    "name": "Biped Object@#60",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "dd63794df5a2efe3"
+   },
+   "59952996880458": {
+    "name": "Biped Object@#58",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "dfe6101266ce1a38"
+   },
+   "60403799952424": {
+    "name": "Biped Object@#40",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "553663b4d7c21886"
+   },
+   "61815400791904": {
+    "name": "Biped Object@#17",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "4aa5961023c0b60a"
+   },
+   "63228321704354": {
+    "name": "Biped Object@#28",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "1d3096c0c56a80f7"
+   },
+   "63831556619338": {
+    "name": "Editable Mesh",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "60148fcbdb674d9d"
+   },
+   "66890151705837": {
+    "name": "Biped Object@#24",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "66ea9ec435b70e7a"
+   },
+   "67754095480627": {
+    "name": "Biped Object@#49",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "aaa3d2e7b3454504"
+   },
+   "70907832768935": {
+    "name": "Editable Poly@#65",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "3d6970f4c82ae74b"
+   },
+   "71163606231192": {
+    "name": "Biped Object@#23",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "7bb08fd00f9ff9ac"
+   },
+   "72920418268169": {
+    "name": "Biped Object@#42",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "097fa65d019ec869"
+   },
+   "74460350994982": {
+    "name": "Biped Object@#48",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "150b3c8b7053d104"
+   },
+   "74855978452834": {
+    "name": "Biped Object@#52",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "f4dc25fb8c411560"
+   },
+   "78562934803606": {
+    "name": "Box@#43",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "76a2e71cc0b48c7d"
+   },
+   "79174062762684": {
+    "name": "Biped Object@#38",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "79e48e85a9b9b631"
+   },
+   "81075165314520": {
+    "name": "Biped Object@#27",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "65c4d08e03727059"
+   },
+   "81927061481947": {
+    "name": "Biped Object@#11",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "3109102c7e838955"
+   },
+   "82522582857551": {
+    "name": "Biped Object@#51",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "bc528459d59f3a36"
+   },
+   "82620448068382": {
+    "name": "Biped Object@#8",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "ff3bc056d48e4d7a"
+   },
+   "82706098999303": {
+    "name": "Biped Object@#18",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "6d1fe2e62f4a079d"
+   },
+   "83750749860928": {
+    "name": "Biped Object@#10",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "8080129f3710e523"
+   },
+   "83932560952090": {
+    "name": "Box",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "79a5718dc37b7190"
+   },
+   "85981605555482": {
+    "name": "Biped Object@#53",
+    "compressed": true,
+    "vertices": 48,
+    "triangles": [
+     24
+    ],
+    "obj_sha256": "611d045ce235fd72"
+   },
+   "86399759911364": {
+    "name": "Biped Object",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "da9f82d3fa502218"
+   },
+   "87138528860325": {
+    "name": "Biped Object@#14",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "38393b22f7c2c2a3"
+   },
+   "88385884914781": {
+    "name": "Biped Object@#59",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "ad4dc4965c93e289"
+   },
+   "88580590629660": {
+    "name": "Biped Object@#47",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "f915e3320337bf0b"
+   },
+   "89839039331598": {
+    "name": "Biped Object@#36",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "56fe8b3f7b78d7da"
+   },
+   "93198212617169": {
+    "name": "Biped Object@#12",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "053da59832655858"
+   },
+   "93323388526243": {
+    "name": "Biped Object@#50",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "17568b88f804e19e"
+   },
+   "97049220497657": {
+    "name": "Biped Object@#24",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "77b867c564582cb7"
+   },
+   "98757623165758": {
+    "name": "Biped Object@#57",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "1de36a8fa1e0f585"
+   },
+   "99450068963002": {
+    "name": "Biped Object@#47",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "a9f70089fe1e6430"
+   },
+   "99821922991658": {
+    "name": "Biped Object@#2",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "c41d2990222423f4"
+   },
+   "102027823989241": {
+    "name": "Biped Object@#17",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "08bb02dabb33b9af"
+   },
+   "104054661397505": {
+    "name": "Biped Object@#41",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "86a566b8a67a8f06"
+   },
+   "104307665677669": {
+    "name": "Editable Mesh@#7",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "f2cc69846d7a6b45"
+   },
+   "104551656793771": {
+    "name": "Biped Object@#0",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "59170512b9c3a800"
+   },
+   "104827448468198": {
+    "name": "Editable Poly",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "8e846f4684cb4da6"
+   },
+   "105690899581301": {
+    "name": "Editable Poly",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "89fbfc4f8fe972f2"
+   },
+   "107346557532359": {
+    "name": "Biped Object@#26",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "8b07a0874f017614"
+   },
+   "108109386713516": {
+    "name": "Biped Object@#4",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "3fb16e68a75aa3ae"
+   },
+   "109567780850689": {
+    "name": "Editable Mesh@#67",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "1a5447e736205bf9"
+   },
+   "111505133643807": {
+    "name": "Biped Object@#6",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "4a2af7b29775a57a"
+   },
+   "113239242241274": {
+    "name": "Biped Object@#45",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "92520da52527aaaa"
+   },
+   "113843460177584": {
+    "name": "Box",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "86a117e4bb4bbc71"
+   },
+   "115679427406478": {
+    "name": "Biped Object@#41",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "fc2e1615adb04364"
+   },
+   "117249322272477": {
+    "name": "Biped Object@#0",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "85f86044a7d78e08"
+   },
+   "121384551505539": {
+    "name": "Biped Object@#28",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "af08751190d17f53"
+   },
+   "121758859277410": {
+    "name": "Box@#51",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "9a72377660f01a24"
+   },
+   "123053385939267": {
+    "name": "Biped Object@#11",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "613d0569b22e14e2"
+   },
+   "123087406823523": {
+    "name": "Editable Poly@#62",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "18294c8b0bc85833"
+   },
+   "123623661326502": {
+    "name": "Biped Object@#49",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "34639580f0618376"
+   },
+   "123963926704331": {
+    "name": "Biped Object@#20",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "ec1734f763bcff17"
+   },
+   "125596458584463": {
+    "name": "Biped Object@#2",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "60655e7c688b45c0"
+   },
+   "126863640762280": {
+    "name": "Biped Object@#25",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "2ba119b694d5f311"
+   },
+   "127612778622336": {
+    "name": "Editable Mesh@#55",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "4ad3e8a8c3ce778f"
+   },
+   "128590795973804": {
+    "name": "Biped Object@#35",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "e85396650368264a"
+   },
+   "129537224748792": {
+    "name": "Biped Object@#22",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "4099a8d1082000ac"
+   },
+   "130999147276648": {
+    "name": "Biped Object@#30",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "4d8cda2cd840d6c6"
+   },
+   "131816049737481": {
+    "name": "Biped Object@#0",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "c2a3a4153249bf01"
+   },
+   "131999333981492": {
+    "name": "Biped Object@#59",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "1cd56fde70ad2d42"
+   },
+   "132130825719189": {
+    "name": "Editable Mesh@#54",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "00aaeed2106af9c8"
+   },
+   "132826252294867": {
+    "name": "Biped Object@#35",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "ec59fc30e2fae538"
+   },
+   "133181184764297": {
+    "name": "Biped Object@#1",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "b91dbeb43bc173cb"
+   },
+   "133308122623846": {
+    "name": "Biped Object@#43",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "1cd9a91996c51aaa"
+   },
+   "133500526107299": {
+    "name": "Biped Object@#48",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "cc044ea6775186f3"
+   },
+   "135737866415292": {
+    "name": "Editable Mesh@#24",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "0db663d7a9de905e"
+   },
+   "136542919327844": {
+    "name": "Biped Object@#19",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "d01c67f15a5cc31a"
+   },
+   "137948443382518": {
+    "name": "Biped Object@#46",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "94bc7c5f43f1b469"
+   },
+   "138737234742738": {
+    "name": "Biped Object@#22",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "add5bf1140d07c6e"
+   },
+   "139290568999773": {
+    "name": "Biped Object@#32",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "68ddca5607d1a890"
+   },
+   "139506153726007": {
+    "name": "Editable Mesh@#44",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "f87af73dad26587e"
+   },
+   "140565440742438": {
+    "name": "Editable Mesh@#7",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "73fe155bf99bd19f"
+   },
+   "141281301673580": {
+    "name": "M_Face:1",
+    "compressed": true,
+    "vertices": 77,
+    "triangles": [
+     117
+    ],
+    "obj_sha256": "376625410cc5c7ea",
+    "skin": {
+     "vertices": 77,
+     "influences": {
+      "1": 77
+     },
+     "max_bone": 0,
+     "sha256": "d79384083e53f795"
+    }
+   },
+   "142309339741894": {
+    "name": "Biped Object@#13",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "96386c46c28d95b1"
+   },
+   "142585582750490": {
+    "name": "Biped Object@#39",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "2582dcf9a3f231fc"
+   },
+   "143378004576976": {
+    "name": "Biped Object@#31",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "9b8dac593c87bad5"
+   },
+   "145257793452728": {
+    "name": "Biped Object@#34",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "846f9ce59bd85f81"
+   },
+   "145321674161868": {
+    "name": "Biped Object@#55",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "6299af539204cc62"
+   },
+   "145441274110729": {
+    "name": "Editable Mesh@#68",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "005ad5eab3b22577"
+   },
+   "145636222683655": {
+    "name": "Editable Mesh",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "e9ce320a7d46609f"
+   },
+   "146901502870460": {
+    "name": "Box@#50",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "e2778deb411f01f0"
+   },
+   "147863099890642": {
+    "name": "Biped Object@#2",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "c8514dee56665a3f"
+   },
+   "149478888345453": {
+    "name": "Biped Object@#3",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "d3af618185f0d140"
+   },
+   "151241188863554": {
+    "name": "Biped Object@#56",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "1a5efcc7b5633957"
+   },
+   "152263776635211": {
+    "name": "Biped Object@#10",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "79327b19dac4b81f"
+   },
+   "153754303313739": {
+    "name": "Biped Object@#16",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "2808b0de090be291"
+   },
+   "154994113023850": {
+    "name": "Biped Object@#27",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "94ef531d918e3455"
+   },
+   "155582082879676": {
+    "name": "Biped Object@#21",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "cd0373e0aed0b82b"
+   },
+   "157664291446583": {
+    "name": "Box",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "79a5718dc37b7190"
+   },
+   "158090592780710": {
+    "name": "Biped Object@#13",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "3ac5acb50655b599"
+   },
+   "158112851199023": {
+    "name": "Biped Object@#47",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "12fc38d9462bc045"
+   },
+   "158508691097912": {
+    "name": "Biped Object",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "f0823a93edb49510"
+   },
+   "158541308248667": {
+    "name": "Biped Object@#37",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "9cff27e40be41d60"
+   },
+   "158801846507522": {
+    "name": "Biped Object@#31",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "0257ba1c3effeb04"
+   },
+   "159451518767311": {
+    "name": "Biped Object@#9",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "e5dbf3331c65ec42"
+   },
+   "160901131761814": {
+    "name": "Biped Object@#7",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "cc7b3ba8a4c13f91"
+   },
+   "162570588848676": {
+    "name": "Biped Object@#8",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "0340870e6fc634a4"
+   },
+   "164452607896424": {
+    "name": "Editable Mesh@#5",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "4eecaf31259ea91b"
+   },
+   "166747912207691": {
+    "name": "Biped Object@#11",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "2851cf9b03fd8357"
+   },
+   "167072075422812": {
+    "name": "Biped Object@#26",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "b0444f3ac5a5258b"
+   },
+   "167088743724852": {
+    "name": "Biped Object@#49",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "ca4ff3d19b65e68d"
+   },
+   "167302326269190": {
+    "name": "Biped Object@#29",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "3aa57c3371dc9ee0"
+   },
+   "167592487908097": {
+    "name": "Biped Object@#40",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "6bfecbe0372e363e"
+   },
+   "167728050828639": {
+    "name": "Biped Object@#29",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "a5f06e1b75abedac"
+   },
+   "170114691899265": {
+    "name": "Biped Object@#29",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "a017d72a9ffaed98"
+   },
+   "170256548243757": {
+    "name": "Biped Object@#69",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "8e32ebba74a8981b"
+   },
+   "170283395049237": {
+    "name": "Biped Object@#17",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "6cdd8989b507abf6"
+   },
+   "170685694109646": {
+    "name": "Biped Object@#45",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "225e83e87330958d"
+   },
+   "170810507469995": {
+    "name": "Biped Object@#50",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "bf592a2f773ab3ea"
+   },
+   "171306541182803": {
+    "name": "Biped Object@#14",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "dfb202d31f404506"
+   },
+   "172044232762932": {
+    "name": "Editable Mesh@#44",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "5cd498663553b229"
+   },
+   "172212129555887": {
+    "name": "Biped Object@#54",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "84b7e11d1177b11a"
+   },
+   "172460936400870": {
+    "name": "Biped Object@#16",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "1dc514e7865a9df5"
+   },
+   "173360005504177": {
+    "name": "Biped Object@#15",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "2cddbf1b7caa67cb"
+   },
+   "173714812037238": {
+    "name": "Biped Object@#56",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "6da2f58454fa0bc9"
+   },
+   "173788181913868": {
+    "name": "Biped Object",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "8e2429514f0fb32b"
+   },
+   "174280083848729": {
+    "name": "Biped Object@#41",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "888520c4777f4f53"
+   },
+   "177179242482212": {
+    "name": "Biped Object@#3",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "1bd798d27dd3a37e"
+   },
+   "177424545971450": {
+    "name": "M_Face:0",
+    "compressed": true,
+    "vertices": 276,
+    "triangles": [
+     428
+    ],
+    "obj_sha256": "530874cf00cca17f",
+    "skin": {
+     "vertices": 276,
+     "influences": {
+      "1": 276
+     },
+     "max_bone": 0,
+     "sha256": "2192228a146328d8"
+    }
+   },
+   "177750805420216": {
+    "name": "Biped Object@#53",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "3fb92a0b235834c6"
+   },
+   "177867940950674": {
+    "name": "Biped Object@#44",
+    "compressed": true,
+    "vertices": 48,
+    "triangles": [
+     24
+    ],
+    "obj_sha256": "fda62ecb2823cf43"
+   },
+   "178348044533431": {
+    "name": "Biped Object@#35",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "fe7af77b6dccef69"
+   },
+   "178885418833963": {
+    "name": "Biped Object@#18",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "472a91a8c0a840dc"
+   },
+   "181216312305263": {
+    "name": "Biped Object@#44",
+    "compressed": true,
+    "vertices": 48,
+    "triangles": [
+     24
+    ],
+    "obj_sha256": "c81addde14f05e4a"
+   },
+   "182011450385439": {
+    "name": "Biped Object@#46",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "af7f630d70d35fa8"
+   },
+   "182512619775226": {
+    "name": "Biped Object@#32",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "3ecc9d8bbd6448b6"
+   },
+   "184092331174237": {
+    "name": "Biped Object@#23",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "f5953cef7fc32ad6"
+   },
+   "184814425460517": {
+    "name": "Box",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "86a117e4bb4bbc71"
+   },
+   "184913545324975": {
+    "name": "Biped Object@#15",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "007b64cea6223b49"
+   },
+   "185932255713408": {
+    "name": "Biped Object@#12",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "60d3ac8044db2c08"
+   },
+   "187297358247748": {
+    "name": "Biped Object@#34",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "a5c2874571d89a53"
+   },
+   "188722431538457": {
+    "name": "Biped Object@#10",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "4c662d557d230518"
+   },
+   "188940451496722": {
+    "name": "Biped Object@#40",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "8d94a23f1b2f7cfb"
+   },
+   "189096333452686": {
+    "name": "Biped Object@#9",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "fb7bcadc42fc1761"
+   },
+   "189258705221049": {
+    "name": "Biped Object@#17",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "e8c9ae7d90c79ce5"
+   },
+   "189686614297607": {
+    "name": "Biped Object@#30",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "6e6892b381fb4399"
+   },
+   "191067234650256": {
+    "name": "Biped Object@#13",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "246de4e031403d3f"
+   },
+   "192233476918692": {
+    "name": "Biped Object@#46",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "1776544a0bc032c7"
+   },
+   "194065123762125": {
+    "name": "Biped Object@#23",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "f009cfd2b70b52f6"
+   },
+   "194279193178069": {
+    "name": "Biped Object@#21",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "01f2ddfdaa836b02"
+   },
+   "194759244152625": {
+    "name": "Biped Object@#4",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "96d5c71264da4311"
+   },
+   "195186537214522": {
+    "name": "Biped Object@#45",
+    "compressed": true,
+    "vertices": 48,
+    "triangles": [
+     24
+    ],
+    "obj_sha256": "a8460ef1aa23f8c6"
+   },
+   "197002502808855": {
+    "name": "Biped Object@#19",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "c2a314d339d7f99b"
+   },
+   "197140527424015": {
+    "name": "Biped Object@#54",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "a4cfeec09abf03b5"
+   },
+   "197753190619892": {
+    "name": "Biped Object@#26",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "47629d31632ef308"
+   },
+   "199787525901066": {
+    "name": "Editable Mesh@#67",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "ad87b2bf43f5a955"
+   },
+   "200542718989180": {
+    "name": "Biped Object@#33",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "4bc4c16fef32a616"
+   },
+   "202047197061784": {
+    "name": "Biped Object@#3",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "9dc56d49ea83a6aa"
+   },
+   "203829565622314": {
+    "name": "Biped Object@#25",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "bcc035119b10bcad"
+   },
+   "204327747837913": {
+    "name": "Biped Object@#30",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "2dd19cc44f9e5647"
+   },
+   "205283653928437": {
+    "name": "Biped Object@#41",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "d9ec678bedb6c579"
+   },
+   "205660744864512": {
+    "name": "Biped Object@#15",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "4e599c8311f08d6b"
+   },
+   "206711402242126": {
+    "name": "Editable Mesh@#24",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "22d508e9faf4c04c"
+   },
+   "206822593335879": {
+    "name": "Biped Object@#20",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "43de7d4606f11ce1"
+   },
+   "207927981771307": {
+    "name": "Biped Object@#32",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "216977933967c518"
+   },
+   "207955382415466": {
+    "name": "Editable Mesh@#68",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "283b2a10899c7b36"
+   },
+   "208820064233263": {
+    "name": "Editable Mesh@#55",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "a5ab4492a0461afe"
+   },
+   "209143912017534": {
+    "name": "Biped Object@#56",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "4f8460d1cc2825b3"
+   },
+   "210603552658979": {
+    "name": "Biped Object@#48",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "50e34fbef95ccd6a"
+   },
+   "210955260925434": {
+    "name": "Biped Object@#52",
+    "compressed": true,
+    "vertices": 48,
+    "triangles": [
+     24
+    ],
+    "obj_sha256": "c511e65c3361bc91"
+   },
+   "216017960879008": {
+    "name": "Editable Mesh@#54",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "5466ccf1a488e9b1"
+   },
+   "219175413699740": {
+    "name": "Biped Object@#20",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "0caaa74750b7c275"
+   },
+   "220522738085931": {
+    "name": "Biped Object@#12",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "cba683bd315f43a3"
+   },
+   "220989650681080": {
+    "name": "M_Face:0",
+    "compressed": true,
+    "vertices": 144,
+    "triangles": [
+     194
+    ],
+    "obj_sha256": "9b432240dee23fcd",
+    "skin": {
+     "vertices": 144,
+     "influences": {
+      "1": 144
+     },
+     "max_bone": 0,
+     "sha256": "e3f9e27b487b7f44"
+    }
+   },
+   "222277539696997": {
+    "name": "Biped Object@#12",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "5e9798365062761c"
+   },
+   "224044720866142": {
+    "name": "Biped Object@#25",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "2891042e01441a20"
+   },
+   "225404250956053": {
+    "name": "Biped Object@#39",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "509f9ab413868b75"
+   },
+   "226941853153373": {
+    "name": "Biped Object@#52",
+    "compressed": true,
+    "vertices": 48,
+    "triangles": [
+     24
+    ],
+    "obj_sha256": "e0d4c8a2f3be61e4"
+   },
+   "228420636591439": {
+    "name": "Biped Object@#55",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "221cf9a2325fce9e"
+   },
+   "230080031342771": {
+    "name": "Biped Object@#4",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "2501844d2ab8ef95"
+   },
+   "230396078343309": {
+    "name": "Editable Mesh",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "084a9ef3a7943430"
+   },
+   "230826498278186": {
+    "name": "Biped Object@#16",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "10bcb6d1f91ad9eb"
+   },
+   "233918000684139": {
+    "name": "Editable Poly@#62",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "9574d74fd6c2db97"
+   },
+   "234700451185557": {
+    "name": "Biped Object@#11",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "766e9b8309096930"
+   },
+   "237690307901329": {
+    "name": "Biped Object@#0",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "9c16656548bb1aa7"
+   },
+   "239222280575279": {
+    "name": "Biped Object@#33",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "dcbe087639ab61bd"
+   },
+   "243686226518115": {
+    "name": "Biped Object@#27",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "38eeaca443713b19"
+   },
+   "243991845640903": {
+    "name": "W_Face:0",
+    "compressed": true,
+    "vertices": 142,
+    "triangles": [
+     184
+    ],
+    "obj_sha256": "dafcdf010aea5305",
+    "skin": {
+     "vertices": 142,
+     "influences": {
+      "1": 142
+     },
+     "max_bone": 0,
+     "sha256": "53e73ec695373e1c"
+    }
+   },
+   "245166128036577": {
+    "name": "Box@#8",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "f5d9dee8e46e0870"
+   },
+   "246405129307672": {
+    "name": "Box@#51",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "1b8761746237e9c5"
+   },
+   "248696757355979": {
+    "name": "Biped Object@#3",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "5b825d93bed8e447"
+   },
+   "248862781199760": {
+    "name": "Biped Object@#53",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "c7aa9c638a45debd"
+   },
+   "249066979969812": {
+    "name": "Biped Object@#61",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "e4a0f987c16b4232"
+   },
+   "250048677405161": {
+    "name": "Box@#1",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "88ad24c70c4a1f29"
+   },
+   "251941980638020": {
+    "name": "Biped Object@#37",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "12025de698880257"
+   },
+   "252404415605395": {
+    "name": "Biped Object@#36",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "49b4a648e58a9c0c"
+   },
+   "253193605415085": {
+    "name": "Biped Object@#26",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "6de720e41df50b63"
+   },
+   "253643947741127": {
+    "name": "Box@#43",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "3230ee9bee264a3f"
+   },
+   "254247015057590": {
+    "name": "Biped Object@#4",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "363d438612c19dd9"
+   },
+   "255251708623921": {
+    "name": "W_Face:1",
+    "compressed": true,
+    "vertices": 122,
+    "triangles": [
+     196
+    ],
+    "obj_sha256": "7b25e81e52355dfc",
+    "skin": {
+     "vertices": 122,
+     "influences": {
+      "1": 122
+     },
+     "max_bone": 0,
+     "sha256": "a0266024a34cff7b"
+    }
+   },
+   "256151795796530": {
+    "name": "Biped Object@#19",
+    "compressed": true,
+    "vertices": 40,
+    "triangles": [
+     28
+    ],
+    "obj_sha256": "420e65e1a7230e8b"
+   },
+   "256539095840500": {
+    "name": "Editable Mesh@#5",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "9b03b2ffc2df327a"
+   },
+   "257303095012456": {
+    "name": "Biped Object@#48",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "e9c8ae0cc9c4e96b"
+   },
+   "257950614585308": {
+    "name": "Biped Object@#18",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "dece5166d1f3847c"
+   },
+   "258049520066498": {
+    "name": "Biped Object@#40",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "5d56eeb81272c6bc"
+   },
+   "258511493612836": {
+    "name": "Biped Object@#33",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "5d446a38332b721a"
+   },
+   "259046147671645": {
+    "name": "Biped Object@#34",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "905e2f63478bbc26"
+   },
+   "259182433437936": {
+    "name": "Biped Object@#14",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "d0266861884ea2d9"
+   },
+   "259373313031723": {
+    "name": "Biped Object@#16",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "5866a02f3d7083c5"
+   },
+   "259583464336355": {
+    "name": "Box@#8",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "24da46c222adcaae"
+   },
+   "262168387074676": {
+    "name": "Biped Object@#7",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "8b008a27edccc71f"
+   },
+   "262660663699169": {
+    "name": "Biped Object@#34",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "2e17a84ee80cd4c2"
+   },
+   "262809867639771": {
+    "name": "Biped Object@#31",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "61938495569d2243"
+   },
+   "263382286216211": {
+    "name": "Biped Object@#38",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "d103de27839d50bf"
+   },
+   "263740223298853": {
+    "name": "Biped Object@#13",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "26f3a022cd3741f7"
+   },
+   "268683144064543": {
+    "name": "Biped Object@#29",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "7eef682b025f4911"
+   },
+   "269278214279718": {
+    "name": "Biped Object@#37",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "1b82f0c6b6cb7bb6"
+   },
+   "269659310685411": {
+    "name": "Biped Object@#31",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "b4d7275a98b3d6bf"
+   },
+   "271051273612073": {
+    "name": "Biped Object@#2",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "67e5f3a8aca97967"
+   },
+   "272660539552423": {
+    "name": "Biped Object@#14",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "09ad4788a366d6fe"
+   },
+   "276315030188408": {
+    "name": "Biped Object@#52",
+    "compressed": true,
+    "vertices": 32,
+    "triangles": [
+     20
+    ],
+    "obj_sha256": "e2d416d3b310bccf"
+   },
+   "277940556361018": {
+    "name": "Biped Object@#15",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "63aadd46ae9443ca"
+   },
+   "279389227304789": {
+    "name": "Box@#42",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "95077c614ed547bb"
+   },
+   "280502738036785": {
+    "name": "Box@#50",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "3971da5f0eb1f6b3"
+   },
+   "280753412065863": {
+    "name": "Biped Object@#46",
+    "compressed": true,
+    "vertices": 24,
+    "triangles": [
+     12
+    ],
+    "obj_sha256": "1c4a9c711c87b170"
+   }
+  }
+ },
+ "meshes/Nano_001.resourceFile": {
+  "CustomAssetBundle-Nano_001": {
+   "114825745242064": {
+    "name": "Box05:0",
+    "compressed": true,
+    "vertices": 1056,
+    "triangles": [
+     1172
+    ],
+    "obj_sha256": "d6acf4b89d0394f6",
+    "skin": {
+     "vertices": 1056,
+     "influences": {
+      "1": 513,
+      "2": 497,
+      "4": 46
+     },
+     "max_bone": 46,
+     "sha256": "7974f9ee779a2ca1"
+    }
+   },
+   "210514971061810": {
+    "name": "Box05:1",
+    "compressed": true,
+    "vertices": 126,
+    "triangles": [
+     148
+    ],
+    "obj_sha256": "294c3f0e6669f970",
+    "skin": {
+     "vertices": 126,
+     "influences": {
+      "1": 122,
+      "2": 4
+     },
+     "max_bone": 4,
+     "sha256": "bc8d4a3d85cc5a4b"
+    }
+   }
+  }
+ },
  "roundtrip/Icons.resourceFile": {
   "CustomAssetBundle-Icons": {
    "saved": "6c32deda7d72b74880438b67b3151b4c2bcb7e78f16cada1e1c2c4154de505bb",
