@@ -193,7 +193,7 @@ class Asset:
 		# write object data
 		layout = []
 		for obj in self.objects.values(): # will load() if necessary
-			buf.align()
+			buf.align(8) # like Unity
 			layout.append(obj.save_data(buf))
 
 		# start of metadata

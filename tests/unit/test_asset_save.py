@@ -42,14 +42,19 @@ def test_save_twice():
 	assert save(asset) == save(asset)
 
 
-def test_save_writes_expected_bytes(fmt):
-	# what Asset.save() should write: the same file with objects on 4-byte boundaries
-	assert save(open_asset(synth.sample_file(fmt))) == synth.sample_file(fmt, align=4)
+def test_save_is_byte_identical(fmt):
+	data = synth.sample_file(fmt)  # synth lays objects out like Unity: 8-byte aligned
+	assert save(open_asset(data)) == data
+
+
+def test_save_aligns_objects_like_unity():
+	# a file with objects on 4-byte boundaries, as older UnityPackFF versions saved them
+	assert save(open_asset(synth.sample_file(6, align=4))) == synth.sample_file(6)
 
 
 def test_save_keeps_trailing_padding():
 	# the last string, "a/b", needs one byte of padding after it
-	data = synth.serialized_file({49: synth.TEXT_ASSET}, [(1, 49, 49, synth.text_asset("n", "s", "a/b"))], align=4)
+	data = synth.serialized_file({49: synth.TEXT_ASSET}, [(1, 49, 49, synth.text_asset("n", "s", "a/b"))])
 	assert save(open_asset(data)) == data
 
 
@@ -64,12 +69,6 @@ def test_edits_survive_save(fmt):
 	assert (after.objects[1].read().name, after.objects[1].read().script) == ("renamed", "a longer script than before")
 	assert after.objects[2].read()["m_Values"] == [1, 2, 65535, 7]
 	assert after.objects[5].read().script == "second"  # later objects move, but still read
-
-
-@pytest.mark.xfail(strict=True, reason="Asset.save() starts objects on 4 bytes; Unity-written files always start them on 8")
-def test_save_is_byte_identical():
-	data = synth.sample_file(6)  # synth lays objects out like Unity: 8-byte aligned
-	assert save(open_asset(data)) == data
 
 
 def test_add_object():
