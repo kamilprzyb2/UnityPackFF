@@ -166,9 +166,7 @@ def test_import_then_export(tmp_path):
 	out = OBJMesh(imported_mesh(tmp_path)).export().splitlines()
 	assert [l for l in out if l.startswith("v ")] == ["v 1.0 2.0 3.0", "v 4.0 5.0 6.0", "v 7.0 8.0 9.0"]
 	assert [l.strip() for l in out if l.startswith("f ")] == ["f 1/1/1 2/2/2 3/3/3"]
-	# export writes v as 1 - v but import doesn't undo it, so v comes back flipped.
-	# Whether that's a bug depends on the texture orientation each side assumes (open question).
-	assert [l for l in out if l.startswith("vt ")] == ["vt 0.0 0.75", "vt 1.0 1.0", "vt 0.0 0.0"]
+	assert [l for l in out if l.startswith("vt ")] == ["vt 0.0 0.25", "vt 1.0 0.0", "vt 0.0 1.0"]  # as imported
 
 
 def test_import_mesh_needs_triangles(tmp_path):
