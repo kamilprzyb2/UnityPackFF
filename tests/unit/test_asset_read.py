@@ -58,6 +58,26 @@ def test_contents_is_memoized(asset):
 	assert obj.read() is obj.contents  # read() returns the memoized object once there is one
 
 
+def test_get_object_by_path():
+	asset = open_asset(synth.bundle_file())
+	assert asset.get_object_by_path("assets/a.txt") is asset.objects[2]
+	assert asset.get_object_by_path("Assets/A.TXT") is asset.objects[2]  # case doesn't matter
+	with pytest.raises(KeyError):
+		asset.get_object_by_path("assets/missing.txt")
+
+
+def test_get_object_by_path_skips_null_entries():
+	ab = synth.asset_bundle("b", [], [("x.txt", 0, 0, (0, 0)), ("x.txt", 0, 1, (0, 2))])
+	asset = open_asset(synth.serialized_file({142: synth.ASSET_BUNDLE, 49: synth.TEXT_ASSET},
+		[(1, 142, 142, ab), (2, 49, 49, synth.text_asset("a", "first"))]))
+	assert asset.get_object_by_path("x.txt") is asset.objects[2]
+
+
+def test_get_object_by_path_needs_an_asset_bundle():
+	with pytest.raises(ValueError):
+		open_asset(synth.sample_file(6)).get_object_by_path("assets/a.txt")
+
+
 def test_unnamed_file():
 	asset = Asset.from_file(io.BytesIO(synth.sample_file()))
 	assert asset.name == ""
