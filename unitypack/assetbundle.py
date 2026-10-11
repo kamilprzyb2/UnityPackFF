@@ -69,13 +69,27 @@ class AssetBundle:
 
 		# Preload assets
 		buf.seek(self.header_size)
-		if not self.compressed:
-			num_assets = buf.read_int()
-		else:
-			num_assets = 1
+		if self.compressed:
+			self.load_compressed(buf)
+			return
+
+		num_assets = buf.read_int()
 		for i in range(num_assets):
 			asset = Asset.from_bundle(self, buf)
 			self.assets.append(asset)
+
+	def load_compressed(self, buf):
+		# one LZMA stream: a table of (name, offset, size), then the files
+		data = lzma.LZMADecompressor().decompress(buf.read())
+		assert len(data) == self.uncompressed_bundle_size
+
+		table = BinaryReader(BytesIO(data), endian=">")
+		num_files = table.read_uint()
+		for i in range(num_files):
+			name = table.read_string()
+			offset = table.read_uint()
+			size = table.read_uint()
+			self.assets.append(Asset.from_bundle_data(self, name, data[offset:offset + size]))
 
 	def read_compressed_data(self, buf, compression):
 		data = buf.read(self.ciblock_size)
