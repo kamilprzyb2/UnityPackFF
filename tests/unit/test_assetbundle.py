@@ -38,8 +38,9 @@ def test_not_an_archive():
 		unitypack.load(f)
 
 
-@pytest.mark.xfail(strict=True, reason="unitypack.load() reads only the first file of an archive")
 def test_two_files():
-	data = synth.sample_file()
-	bundle = load([("BuildPlayer-Map", data), ("BuildPlayer-Map.sharedAssets", data)], "Map.unity3d")
+	# like a map tile: the scene and its .sharedAssets
+	bundle = load([("BuildPlayer-Map", synth.sample_file()), ("BuildPlayer-Map.sharedAssets", synth.bundle_file())], "Map.unity3d")
 	assert [a.name for a in bundle.assets] == ["BuildPlayer-Map", "BuildPlayer-Map.sharedAssets"]
+	assert bundle.assets[0].objects[1].read().script == "world"
+	assert bundle.assets[1].objects[2].read().script == "first"

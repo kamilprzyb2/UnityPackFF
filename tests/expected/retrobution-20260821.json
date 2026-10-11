@@ -813,7 +813,8 @@
    "bundle_size": 3267
   },
   "unitypack_load": [
-   "BuildPlayer-Map_00_00"
+   "BuildPlayer-Map_00_00",
+   "BuildPlayer-Map_00_00.sharedAssets"
   ],
   "files": {
    "BuildPlayer-Map_00_00": {
@@ -941,7 +942,8 @@
    "bundle_size": 203817
   },
   "unitypack_load": [
-   "BuildPlayer-Map_04_02"
+   "BuildPlayer-Map_04_02",
+   "BuildPlayer-Map_04_02.sharedAssets"
   ],
   "files": {
    "BuildPlayer-Map_04_02": {
@@ -1402,7 +1404,11 @@
    "bundle_size": 8221718
   },
   "unitypack_load": [
-   "Assembly - CSharp - first pass.dll"
+   "Assembly - CSharp - first pass.dll",
+   "Assembly - CSharp.dll",
+   "mainData",
+   "sharedassets0.assets",
+   "System.dll"
   ],
   "files": {
    "Assembly - CSharp - first pass.dll": {
