@@ -14,7 +14,7 @@ pytest -m integration --record           # rewrite tests/expected/<build>.json f
 
 | Path | What |
 | --- | --- |
-| `unit/` | **UnityPackFF itself**, on made-up data. One file per area: `test_utils.py` (binary I/O), `test_asset_read.py` / `test_asset_save.py` (serialized files), `test_assetbundle.py` (archives), `test_texture.py`, `test_export.py` (OBJ), `test_modding.py` (imports). No network, no client files |
+| `unit/` | **UnityPackFF itself**, on made-up data. One file per area: `test_utils.py` (binary I/O), `test_asset_read.py` / `test_asset_save.py` (serialized files), `test_assetbundle.py` (archives), `test_texture.py`, `test_export.py` (OBJ), `test_modding.py` (imports), `test_scripts.py` (`bin/` scripts). No network, no client files |
 | `harness/` | Tests of our own helpers below (`bundles.py`, `serialized.py`, `digest.py`), so they can be trusted as a yardstick |
 | `demo/` | Command-line scripts behind the integration tests, with their own [README](demo/README.md) |
 | `integration/` | UnityPackFF on real archives: one case per operation and archive, parametrized over the builds |
@@ -33,7 +33,7 @@ A known library bug is a test marked `xfail(strict=True)`: it is expected to fai
 
 There are none at the moment.
 
-Not covered yet: cross-archive pointers (`UnityEnvironment`), `bin/` scripts, `AudioClip` export.
+Not covered yet: cross-archive pointers (`UnityEnvironment`), `bin/` scripts other than `index_bundles.py`, `AudioClip` export.
 
 ## Builds
 

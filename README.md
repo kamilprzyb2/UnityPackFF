@@ -215,6 +215,18 @@ I used these with a few shell one-liners to construct a directory hierarchy that
 This makes it easy to figure out which bundle a given asset is stored in using good ol' `grep`.
 In hindsight, I probably should have just written a Python script to do that, instead of enduring the overhead of invoking the Python interpreter to execute these scripts in every loop iteration, but oh well.
 
+#### `index_bundles.py`
+
+---
+
+This script does the above in one go: it walks a directory of `.unity3d`/`.resourceFile` archives and/or extracted asset bundles (like the asset cache) and prints one tab-separated line per entry of each bundle's `AssetBundle` container: archive, file, `path_id`, `file_id`, class and asset filename.
+Scene bundles, which have no `AssetBundle` member, get one line each with the last four fields empty.
+
+```
+/path/to/index_bundles.py /path/to/cache > index.tsv
+grep -i nano_ index.tsv
+```
+
 #### `show_gameobject.py`
 
 ---
