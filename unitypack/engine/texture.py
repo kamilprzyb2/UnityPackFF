@@ -72,12 +72,15 @@ class TextureFormat(IntEnum):
 		elif self == TextureFormat.ARGB32:
 			return "ARGB"
 		elif self == TextureFormat.RGB565:
-			return "RGB;16"
+			# a little-endian word with red in the top bits
+			return "BGR;16"
 		elif self == TextureFormat.Alpha8:
 			return "A"
 		elif self == TextureFormat.RGBA4444:
 			return "RGBA;4B"
 		elif self == TextureFormat.ARGB4444:
+			# A, R, G, B from the top bits of a little-endian word; Pillow
+			# has no mode for it, so Texture2D.image swaps red and blue
 			return "RGBA;4B"
 		return "RGBA"
 
@@ -184,7 +187,7 @@ class Texture2D(Texture):
 			codec = "raw"
 			args = (self.format.pixel_format, )
 
-		mode = "RGB" if self.format.pixel_format in ("RGB", "RGB;16") else "RGBA"
+		mode = "RGB" if self.format.pixel_format in ("RGB", "BGR;16") else "RGBA"
 		size = (self.width, self.height)
 
 		data = self.image_data
@@ -197,7 +200,11 @@ class Texture2D(Texture):
 		if not data and size == (0, 0):
 			return None
 
-		return Image.frombytes(mode, size, data, codec, args)
+		img = Image.frombytes(mode, size, data, codec, args)
+		if self.format == TextureFormat.ARGB4444:
+			b, g, r, a = img.split()
+			img = Image.merge("RGBA", (r, g, b, a))
+		return img
 
 
 class StreamingInfo(Object):
