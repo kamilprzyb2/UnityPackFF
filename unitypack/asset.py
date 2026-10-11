@@ -245,6 +245,21 @@ class Asset:
 
 		return obj
 
+	def get_object_by_path(self, path):
+		"""
+		The object this file's AssetBundle lists under a container path, such
+		as "xdtdatas.asset" in TableData. Paths compare case-insensitively;
+		if a path is listed more than once, the first entry wins. Prefer this
+		over a fixed path_id: IDs differ between builds.
+		"""
+		if 1 not in self.objects or self.objects[1].type != 'AssetBundle':
+			raise ValueError('AssetBundle object not found. Is this a Scene bundle?')
+
+		for name, info in self.objects[1].contents['m_Container']:
+			if name.lower() == path.lower() and info['asset'] is not None:
+				return info['asset'].object
+		raise KeyError('No %r in the AssetBundle of %r' % (path, self.name))
+
 	def add2ab(self, path, path_id, file_id=0, preloads=None):
 		"Add a path -> ObjectPointer connection into the AssetBundle object"
 
