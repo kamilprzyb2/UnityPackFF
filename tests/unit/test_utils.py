@@ -84,3 +84,16 @@ def test_bit_reader():
 def test_bit_reader_bytes():
 	r = BitReader(b"\x01\xff\x80", 8)
 	assert [r.read() for _ in range(3)] == [1, 255, 128]
+
+
+@pytest.mark.parametrize("endian", ["<", ">"])
+@pytest.mark.parametrize("bits", [0x7FA45696, 0xFF800001, 0x7FC00000, 0xFFFFFFFF])
+def test_nan_bits_survive(endian, bits):
+	# 0x7fa45696 is a signaling NaN (top fraction bit clear), as found in a
+	# real mesh; a plain float round trip would set that bit
+	data = bits.to_bytes(4, "little" if endian == "<" else "big")
+	v = BinaryReader(io.BytesIO(data), endian).read_float()
+	assert math.isnan(v)
+	out = io.BytesIO()
+	BinaryWriter(out, endian).write_float(v)
+	assert out.getvalue() == data
