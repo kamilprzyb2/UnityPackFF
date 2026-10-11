@@ -3,7 +3,7 @@ import math
 
 import pytest
 
-from unitypack.utils import BinaryReader, BinaryWriter, BitReader
+from unitypack.utils import BinaryReader, BinaryWriter, BitReader, unpack_floats, unpack_ints
 
 VALUES = [
 	("boolean", True),
@@ -84,6 +84,31 @@ def test_bit_reader():
 def test_bit_reader_bytes():
 	r = BitReader(b"\x01\xff\x80", 8)
 	assert [r.read() for _ in range(3)] == [1, 255, 128]
+
+
+def packed_bit_vector(items, bits, **kw):
+	n = sum(v << (bits * i) for i, v in enumerate(items))
+	return dict(m_NumItems=len(items), m_BitSize=bits, m_Data=n.to_bytes((len(items) * bits + 7) // 8, "little"), **kw)
+
+
+def test_unpack_ints():
+	assert unpack_ints(packed_bit_vector([5, 0, 31, 17], 5)) == [5, 0, 31, 17]
+	assert unpack_ints(packed_bit_vector([], 5)) == []
+
+
+def test_unpack_ints_zero_bits():
+	# no data at all: every item is 0
+	assert unpack_ints(dict(m_NumItems=3, m_BitSize=0, m_Data=b"")) == [0, 0, 0]
+
+
+def test_unpack_floats():
+	# 2 bits over [-1, 2]: 0..3 map to -1, 0, 1, 2
+	pbv = packed_bit_vector([0, 1, 2, 3], 2, m_Start=-1.0, m_Range=3.0)
+	assert unpack_floats(pbv) == pytest.approx([-1, 0, 1, 2])
+
+
+def test_unpack_floats_zero_bits():
+	assert unpack_floats(dict(m_NumItems=2, m_BitSize=0, m_Data=b"", m_Start=0.25, m_Range=0.0)) == [0.25, 0.25]
 
 
 @pytest.mark.parametrize("endian", ["<", ">"])
