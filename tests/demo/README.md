@@ -9,6 +9,7 @@ Command-line tools that run the same operations as the integration tests, but wr
 | `roundtrip.py` | ffbuildtool extract → UnityPackFF save → ffbuildtool pack → re-open and compare; optionally a whole playable build | `integration/test_roundtrip.py` |
 | `meshes.py` | Exports every mesh of an archive as OBJ, plus the skin weights of skinned meshes | `integration/test_meshes.py` |
 | `clips.py` | Reads every AnimationClip of an archive and samples each curve at the clip's rate | `integration/test_clips.py` |
+| `terrain.py` | Dumps every terrain of an archive with `bin/dump_terrain.py` and compares Unity's level-of-detail data with what `TerrainData` works out | `integration/test_terrain.py` |
 | `_common.py` | The options all the scripts share (not run directly) | |
 
 Run them from the repository root (`UnityPackFF/`).
@@ -122,3 +123,22 @@ python3 tests/demo/clips.py --build retro --bundle Retro_shared_part2.resourceFi
 ```
 
 Prints how many clips each archive has and how many store their rotations compressed. Writes, per serialized file, `out/clips/<build>/<archive>/<file>/<path ID>_<name>.json` for each clip: its name, sample rate, length and events, then per curve its kind (`rotation`, `position`, `scale` or `float`), the transform path it moves (for a `float` curve, path and property), its keys, and its values at every frame from 0 to the clip's length. Rotations are sampled as `evaluate()` returns them, without normalizing. Also writes `out/clips/<build>.json` with the statistics the integration test checks (curve and key counts per kind, length, event names, a digest of the samples).
+
+## terrain.py
+
+```sh
+python3 tests/demo/terrain.py --build 104                  # DongResources_04_02 (Orchid Bay)
+python3 tests/demo/terrain.py --build 1013 --bundle DongResources_07_08.resourceFile
+```
+
+Without `--bundle` or `--all` it takes `DongResources_04_02.resourceFile`, the one terrain archive in the curated set. Prints, per terrain, its size, how many shifted vertices it has, and how Unity's level-of-detail data compares with a recomputation from the heights:
+
+| Count | Meaning |
+| --- | --- |
+| `minmax_equal` / `minmax_one_step` | patch min/max heights equal to ours as float32, or one float32 step away (Unity's own rounding) |
+| `minmax_other` | further apart (0 on every terrain checked) |
+| `error_equal` | patch error equal to the bilinear one, to 0.1% |
+| `error_larger` | larger: only on terrains with shifts, which the engine also counts |
+| `error_smaller` | smaller (0 on every terrain checked) |
+
+Writes `out/terrain/<build>/<archive>/<file>.png` and `.shifts.json` as `bin/dump_terrain.py` writes them (a 16-bit heightmap, north up, and the shifted vertices), and `out/terrain/<build>.json` with the statistics the integration test checks.

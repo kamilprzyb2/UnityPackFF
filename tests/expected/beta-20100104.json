@@ -4659,5 +4659,43 @@
     }
    }
   }
+ },
+ "terrain/DongResources_04_02.resourceFile": {
+  "CustomAssetBundle-8e708e0a88a7c4ef1b2b5f51ace52370": {
+   "size": [
+    129,
+    129
+   ],
+   "levels": 3,
+   "scale": [
+    4.0,
+    600.0,
+    4.0
+   ],
+   "heights": [
+    12303,
+    14132
+   ],
+   "heights_sha256": "e1c14b5b3c2baeb2",
+   "shifts": 959,
+   "shift_flags": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    8,
+    9,
+    10
+   ],
+   "lod": {
+    "minmax_equal": 120,
+    "minmax_one_step": 50,
+    "minmax_other": 0,
+    "error_equal": 77,
+    "error_larger": 8,
+    "error_smaller": 0
+   }
+  }
  }
 }

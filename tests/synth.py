@@ -252,3 +252,55 @@ def ogg(seconds=2, rate=22050):
 	ident = b"\x01vorbis" + struct.pack("<IBIiiiBB", 0, 1, rate, 0, 64000, 0, 0xB8, 1)
 	comment = b"\x03vorbis" + struct.pack("<I", 0) + struct.pack("<I", 0) + b"\x01"
 	return page(0, 0, ident, 2) + page(0, 1, comment) + page(seconds * rate, 2, b"\0", 4)
+
+
+# TerrainData (class 156) with its heightmap: the 104 client's Heightmap
+# layout; the splat and detail databases are left out of the tree
+HEIGHTMAP = Node("Heightmap", "m_Heightmap", children=[
+	Node("vector", "m_Heights", children=[
+		Node("Array", "Array", children=[int_node("size"), int_node("data", "SInt16", 2)], is_array=True),
+	], flags=ALIGN),
+	Node("vector", "m_Shifts", children=[
+		Node("Array", "Array", children=[
+			int_node("size"),
+			Node("Shift", "data", 6, [int_node("x", "UInt16", 2), int_node("y", "UInt16", 2), int_node("flags", "UInt16", 2)]),
+		], is_array=True),
+	], flags=ALIGN),
+	array_node("m_PrecomputedError", float_node("data")),
+	array_node("m_MinMaxPatchHeights", float_node("data")),
+	pptr_node("m_DefaultPhysicMaterial", "PhysicMaterial"),
+	int_node("m_Width"),
+	int_node("m_Height"),
+	int_node("m_Levels"),
+	Node("Vector3f", "m_Scale", 12, [float_node("x"), float_node("y"), float_node("z")]),
+])
+
+TERRAIN_DATA = Node("TerrainData", "Base", children=[
+	string_node("m_Name"),
+	HEIGHTMAP,
+	pptr_node("m_Lightmap", "Texture2D"),
+])
+
+
+def terrain_data(heights, shifts, error, minmax, size, levels, scale=(4.0, 600.0, 4.0), name="terrain"):
+	"heights: x-major, size * size values; shifts: [(x, z, flags)]"
+	def aligned(b):
+		return b + b"\0" * (-len(b) % 4)
+
+	data = pack_string(name)
+	data += aligned(struct.pack("<I", len(heights)) + b"".join(struct.pack("<h", h) for h in heights))
+	data += aligned(struct.pack("<I", len(shifts)) + b"".join(struct.pack("<HHH", *s) for s in shifts))
+	data += struct.pack("<I", len(error)) + b"".join(struct.pack("<f", e) for e in error)
+	data += struct.pack("<I", len(minmax)) + b"".join(struct.pack("<f", m) for m in minmax)
+	data += struct.pack("<ii", 0, 0)
+	data += struct.pack("<iii", size, size, levels)
+	data += struct.pack("<fff", *scale)
+	return data + struct.pack("<ii", 0, 0)
+
+
+def terrain_file(heights, shifts=(), size=33, levels=1, error=None, minmax=None):
+	"A file holding one TerrainData (path ID 1); its level-of-detail arrays default to the right length, all 0"
+	patches = sum(4 ** level for level in range(levels + 1))
+	error = error if error is not None else [0.0] * patches
+	minmax = minmax if minmax is not None else [0.0] * (2 * patches)
+	return serialized_file({156: TERRAIN_DATA}, [(1, 156, 156, terrain_data(heights, list(shifts), error, minmax, size, levels))])
