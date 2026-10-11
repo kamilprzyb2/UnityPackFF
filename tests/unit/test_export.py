@@ -5,8 +5,9 @@ returns them.
 
 Conventions the exporter applies, checked below: x is negated (Unity is
 left-handed, OBJ right-handed), faces are written in reverse order to keep
-them facing outwards after that mirror, indices become 1-based, and v
-becomes 1 - v.
+them facing outwards after that mirror, and indices become 1-based. UVs are
+written as stored: OBJ and Unity both put v = 0 at the bottom of the image,
+and the bin/ scripts save textures upright.
 """
 
 import math
@@ -73,7 +74,7 @@ def test_uncompressed_quad():
 	obj = parse_obj(OBJMesh(mesh(indices=[0, 1, 2, 0, 2, 3], **QUAD)).export())
 	assert obj["v"] == [(-0.0, 0, 0), (-1, 0, 0), (-1, 1, 0), (-0.0, 1, 0)]  # x mirrored
 	assert obj["vn"] == [(-0.0, 0, 1)] * 4
-	assert obj["vt"] == [(0, 1), (1, 1), (1, 0), (0, 0.75)]  # v -> 1 - v
+	assert obj["vt"] == [(0, 0), (1, 0), (1, 1), (0, 0.25)]  # as stored
 	assert obj["f"] == [(3, 2, 1), (4, 3, 1)]  # reversed, 1-based
 	assert obj["usemtl"] == ["m"]
 
@@ -148,7 +149,7 @@ def test_compressed_submeshes():
 def test_compressed_positions_uvs_triangles():
 	obj = parse_obj(OBJMesh(compressed_mesh([0, 0, 0, 0, 0, 0], [1, 1, 1])).export())
 	assert obj["v"] == approx([(1, -1, -1), (-1, 1, 1), (0.6, -0.6, -0.6)])
-	assert obj["vt"] == approx([(0, 1), (1, 0), (0.6, 0.4)])
+	assert obj["vt"] == approx([(0, 0), (1, 1), (0.6, 0.6)])
 	assert obj["f"] == [(3, 2, 1)]
 
 

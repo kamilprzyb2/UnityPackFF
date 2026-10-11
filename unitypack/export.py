@@ -103,7 +103,7 @@ class MeshData:
 			self.normals.append(OBJVector3(-v['x'], v['y'], v['z']))
 
 		for v in self.mesh._obj['m_UV']:
-			self.uv1.append(OBJVector2(v['x'], 1-v['y']))
+			self.uv1.append(OBJVector2(v['x'], v['y']))
 
 	def extract_indices(self):
 		for sub in self.mesh.submeshes:
@@ -257,7 +257,7 @@ class CompressedMeshData:
 
 		uv_floats = self.read_floats(cmesh['m_UV'])
 		for i in range(0, len(uv_floats), 2):
-			self.uv1.append(OBJVector2(uv_floats[i], 1-uv_floats[i+1]))
+			self.uv1.append(OBJVector2(uv_floats[i], uv_floats[i+1]))
 
 		# one index list for all submeshes, as in an uncompressed index buffer
 		indices = self.read_bits(cmesh['m_Triangles'])
