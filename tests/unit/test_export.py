@@ -1,0 +1,152 @@
+"""
+OBJ export: unitypack/export.py (OBJMesh, MeshData, CompressedMeshData,
+handle_strip_topology) on meshes built in memory, the way ObjectInfo.read()
+returns them.
+
+Conventions the exporter applies, checked below: x is negated (Unity is
+left-handed, OBJ right-handed), faces are written in reverse order to keep
+them facing outwards after that mirror, indices become 1-based, and v
+becomes 1 - v.
+"""
+
+import math
+import struct
+
+import pytest
+
+from unitypack.engine.mesh import Mesh, SubMesh
+from unitypack.export import OBJMesh
+from unitypack.object import FFOrderedDict
+
+
+def fdict(**kw):
+	d = FFOrderedDict()
+	d.update(kw)
+	return d
+
+
+def vec(*xs):
+	return fdict(**dict(zip("xyz", xs)))
+
+
+def submesh(first_byte, index_count, strip=False):
+	return SubMesh(fdict(firstByte=first_byte, indexCount=index_count, isTriStrip=int(strip), triangleCount=0))
+
+
+def mesh(vertices, normals, uvs, indices, submeshes=None, strip=False, name="m"):
+	"An uncompressed mesh. indices: one flat list of 16-bit indices."
+	return Mesh(fdict(
+		m_Name=name,
+		m_MeshCompression=0,
+		m_Vertices=[vec(*v) for v in vertices],
+		m_Normals=[vec(*n) for n in normals],
+		m_UV=[vec(*t) for t in uvs],
+		m_IndexBuffer=struct.pack("<%dH" % len(indices), *indices),
+		m_SubMeshes=submeshes or [submesh(0, len(indices), strip)],
+	))
+
+
+def parse_obj(text):
+	"OBJ text -> {'v': [...], 'vn': [...], 'vt': [...], 'f': [...], 'usemtl': [...]}"
+	out = {"v": [], "vn": [], "vt": [], "f": [], "usemtl": []}
+	for line in text.splitlines():
+		parts = line.split()
+		if not parts or parts[0] not in out:
+			continue
+		if parts[0] == "f":
+			out["f"].append(tuple(int(p.split("/")[0]) for p in parts[1:]))
+		elif parts[0] == "usemtl":
+			out["usemtl"].append(parts[1])
+		else:
+			out[parts[0]].append(tuple(float(p) for p in parts[1:]))
+	return out
+
+
+QUAD = dict(
+	vertices=[(0, 0, 0), (1, 0, 0), (1, 1, 0), (0, 1, 0)],
+	normals=[(0, 0, 1)] * 4,
+	uvs=[(0, 0), (1, 0), (1, 1), (0, 0.25)],
+)
+
+
+def test_uncompressed_quad():
+	obj = parse_obj(OBJMesh(mesh(indices=[0, 1, 2, 0, 2, 3], **QUAD)).export())
+	assert obj["v"] == [(-0.0, 0, 0), (-1, 0, 0), (-1, 1, 0), (-0.0, 1, 0)]  # x mirrored
+	assert obj["vn"] == [(-0.0, 0, 1)] * 4
+	assert obj["vt"] == [(0, 1), (1, 1), (1, 0), (0, 0.75)]  # v -> 1 - v
+	assert obj["f"] == [(3, 2, 1), (4, 3, 1)]  # reversed, 1-based
+	assert obj["usemtl"] == ["m"]
+
+
+def test_triangle_strip():
+	# a strip 0 1 2 3 is the triangles (0 1 2) and (3 2 1): every other one flips
+	obj = parse_obj(OBJMesh(mesh(indices=[0, 1, 2, 3], strip=True, **QUAD)).export())
+	assert obj["f"] == [(3, 2, 1), (2, 3, 4)]
+
+
+def test_triangle_strip_skips_degenerate_triangles():
+	# repeated indices join strips; the zero-area triangles they make are dropped
+	obj = parse_obj(OBJMesh(mesh(indices=[0, 1, 2, 2, 3], strip=True, **QUAD)).export())
+	assert obj["f"] == [(3, 2, 1)]
+
+
+def test_submeshes():
+	subs = [submesh(0, 3), submesh(6, 3)]  # firstByte counts bytes: 3 indices of 2 bytes
+	obj = OBJMesh(mesh(indices=[0, 1, 2, 0, 2, 3], submeshes=subs, **QUAD)).export()
+	assert parse_obj(obj)["usemtl"] == ["m_0", "m_1"]
+	assert parse_obj(obj)["f"] == [(3, 2, 1), (4, 3, 1)]
+
+
+# Compressed meshes: every value is an N-bit integer in a PackedBitVector,
+# scaled to a float with start + item * range / (2^N - 1). Every mesh in the
+# FusionFall builds checked so far is stored this way.
+
+def packed(items, bits, start=None, range_=None):
+	"Pack integers least significant bit first, as BitReader reads them."
+	n = sum(v << (bits * i) for i, v in enumerate(items))
+	d = fdict(m_NumItems=len(items), m_BitSize=bits, m_Data=n.to_bytes((len(items) * bits + 7) // 8, "little"))
+	if start is not None:
+		d["m_Start"], d["m_Range"] = start, range_
+	return d
+
+
+def compressed_mesh(normal_items, signs):
+	return Mesh(fdict(
+		m_Name="c",
+		m_MeshCompression=2,
+		m_SubMeshes=[submesh(0, 3)],
+		m_CompressedMesh=fdict(
+			# 8 bits over [-1, 1]: items 0, 255 and 51 are -1, 1 and -0.6
+			m_Vertices=packed([0, 0, 0, 255, 255, 255, 51, 51, 51], 8, -1.0, 2.0),
+			# 8 bits over [0, 1]: 0, 1 and 0.6
+			m_UV=packed([0, 0, 255, 255, 153, 153], 8, 0.0, 1.0),
+			# 4 bits over [0, 1]: items 0, 9 and 15 are 0, 0.6 and 1; two per vertex (x, y)
+			m_Normals=packed(normal_items, 4, 0.0, 1.0),
+			m_NormalSigns=packed(signs, 1),  # 1: z positive, 0: z negative
+			m_Triangles=packed([0, 1, 2], 2),
+		),
+	))
+
+
+def approx(rows):
+	return [tuple(pytest.approx(x, abs=1e-6) for x in r) for r in rows]
+
+
+def test_compressed_positions_uvs_triangles():
+	obj = parse_obj(OBJMesh(compressed_mesh([0, 0, 0, 0, 0, 0], [1, 1, 1])).export())
+	assert obj["v"] == approx([(1, -1, -1), (-1, 1, 1), (0.6, -0.6, -0.6)])
+	assert obj["vt"] == approx([(0, 1), (1, 0), (0.6, 0.4)])
+	assert obj["f"] == [(3, 2, 1)]
+
+
+@pytest.mark.xfail(strict=True, reason="CompressedMeshData.read_normals computes z = 1 - x² - y² without the square root")
+def test_compressed_normals_are_unit_length():
+	obj = parse_obj(OBJMesh(compressed_mesh([9, 0, 0, 9, 0, 0], [1, 0, 1])).export())
+	assert obj["vn"] == approx([(-0.6, 0, 0.8), (-0.0, 0.6, -0.8), (-0.0, 0, 1)])
+
+
+def test_compressed_normal_signs():
+	# only the sign of z is checked here; its size is the bug above
+	vn = parse_obj(OBJMesh(compressed_mesh([9, 0, 0, 9, 0, 0], [1, 0, 1])).export())["vn"]
+	assert [math.copysign(1, n[2]) for n in vn] == [1, -1, 1]
+	assert [n[:2] for n in vn] == approx([(-0.6, 0), (0, 0.6), (0, 0)])
