@@ -31,9 +31,7 @@ pytest -m integration --record           # rewrite tests/expected/<build>.json f
 
 A known library bug is a test marked `xfail(strict=True)`: it is expected to fail, and the run fails if it passes, so fixing a bug forces removing its marker.
 
-| Test | Bug |
-| --- | --- |
-| `unit/test_asset_save.py::test_save_is_byte_identical` | `Asset.save()` starts objects on 4 bytes, Unity on 8 |
+There are none at the moment.
 
 Not covered yet: cross-archive pointers (`UnityEnvironment`), `bin/` scripts, `AudioClip` export.
 

@@ -1,7 +1,8 @@
 """
 ffbuildtool extract -> unitypack save -> ffbuildtool pack -> re-open, with no
-edits: every object must read back the same. Byte-identical saves are
-recorded but not required (Asset.save() lays objects out differently).
+edits: every object must read back the same. Whether the saved file is byte
+for byte the original is recorded: it is for every file Unity wrote, but not
+for files an older Asset.save() laid out on 4 bytes (some of Retrobution's).
 """
 
 import pytest

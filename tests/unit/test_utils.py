@@ -61,6 +61,11 @@ def test_writer_align_writes_padding():
 	w.align()
 	w.align()
 	assert f.getvalue() == b"abcde\0\0\0"
+	w.align(8)
+	assert f.getvalue() == b"abcde\0\0\0"
+	w.write(b"x")
+	w.align(8)
+	assert f.getvalue() == b"abcde\0\0\0x" + bytes(7)
 
 
 def test_unterminated_string():

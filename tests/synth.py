@@ -73,7 +73,7 @@ def serialized_file(types, objects, externals=(), format=6, big_ids=None, align=
 	types:     {class id: Node}
 	objects:   [(path id, type id, class id, data bytes)]
 	externals: [path, ...]
-	align:     where objects start: 8 as Unity writes them, 4 as Asset.save() does
+	align:     where objects start: 8 as Unity writes them, 4 as older UnityPackFF versions did
 	Little-endian metadata, as in every FusionFall file seen so far. Object
 	offsets in the table count from the start of the file, header included.
 	"""
@@ -189,8 +189,7 @@ def asset_bundle(name, preload, container, main=(0, 0, (0, 0))):
 
 def sample_file(format=6, align=8):
 	"""
-	Three objects: two TextAssets and a Thing pointing at the first one. With
-	align=4 this is byte for byte what Asset.save() should write.
+	Three objects: two TextAssets and a Thing pointing at the first one.
 	"""
 	return serialized_file(
 		{49: TEXT_ASSET, 1000: THING},
@@ -215,7 +214,7 @@ def big_pointer(file_index, path_id):
 	return ((path_id >> 32) << 16 | file_index, path_id & 0xFFFFFFFF)
 
 
-def big_id_file(align=8):
+def big_id_file():
 	"Format 7: two TextAssets whose IDs share the low 32 bits, and a Thing (ID 1) pointing at the second."
 	return serialized_file(
 		{49: TEXT_ASSET, 1000: THING},
@@ -225,7 +224,6 @@ def big_id_file(align=8):
 			(BIG_B, 49, 49, text_asset("b", "second")),
 		],
 		format=7,
-		align=align,
 	)
 
 
