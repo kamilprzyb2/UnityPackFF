@@ -260,9 +260,15 @@ class CompressedMeshData:
 		for i in range(0, len(normal_floats), 3):
 			self.normals.append(OBJVector3(-normal_floats[i], normal_floats[i+1], normal_floats[i+2]))
 
+		# both UV sets in one vector: the second (lightmap coordinates, for
+		# example) follows the first when there are two per vertex
 		uv_floats = self.read_floats(cmesh['m_UV'])
-		for i in range(0, len(uv_floats), 2):
-			self.uv1.append(OBJVector2(uv_floats[i], uv_floats[i+1]))
+		uvs = [OBJVector2(uv_floats[i], uv_floats[i+1]) for i in range(0, len(uv_floats) - 1, 2)]
+		n = len(self.vertices)
+		if n and len(uvs) == 2 * n:
+			self.uv1, self.uv2 = uvs[:n], uvs[n:]
+		else:
+			self.uv1 = uvs
 
 		# one index list for all submeshes, as in an uncompressed index buffer
 		indices = self.read_bits(cmesh['m_Triangles'])
