@@ -16,7 +16,7 @@ import pytest
 from PIL import Image
 
 from tests.glb import GLB
-from tests.unit.test_export import QUAD, compressed_mesh, fdict, mesh, submesh, vec
+from tests.unit.test_export import QUAD, compressed_mesh, fdict, mesh, packed, submesh, vec
 from unitypack.engine.component import Transform
 from unitypack.engine.object import GameObject
 from unitypack.engine.texture import Material, Texture2D, TextureFormat
@@ -193,6 +193,15 @@ def test_mesh_without_uvs_gets_untextured_material():
 	p = g["meshes"][0]["primitives"][0]
 	assert "TEXCOORD_0" not in p["attributes"]
 	assert "baseColorTexture" not in g["materials"][p["material"]]["pbrMetallicRoughness"]
+
+
+def test_compressed_mesh_with_two_uv_sets_is_textured():
+	m = compressed_mesh()
+	m._obj["m_CompressedMesh"]["m_UV"] = packed([0, 0, 255, 255, 153, 153, 255, 0, 0, 255, 51, 51], 8, 0.0, 1.0)
+	g = GLB(export_mesh(m, [material(tex=Pointer(texture(), 5))]))
+	p = g["meshes"][0]["primitives"][0]
+	assert g.accessor(p["attributes"]["TEXCOORD_0"]) == approx([(0, 1), (1, 0), (0.6, 0.4)])
+	assert "baseColorTexture" in g["materials"][p["material"]]["pbrMetallicRoughness"]
 
 
 def test_mesh_without_triangles():
