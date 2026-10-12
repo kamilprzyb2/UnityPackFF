@@ -156,6 +156,16 @@ def test_compressed_positions_uvs_triangles():
 	assert obj["f"] == [(3, 2, 1)]
 
 
+def test_compressed_second_uv_set():
+	# six pairs for three vertices: the first three are UV set 1, the rest set 2
+	m = compressed_mesh()
+	m._obj["m_CompressedMesh"]["m_UV"] = packed([0, 0, 255, 255, 153, 153, 255, 0, 0, 255, 51, 51], 8, 0.0, 1.0)
+	data = OBJMesh(m).mesh_data
+	assert [(v.x, v.y) for v in data.uv1] == approx([(0, 0), (1, 1), (0.6, 0.6)])
+	assert [(v.x, v.y) for v in data.uv2] == approx([(1, 0), (0, 1), (0.2, 0.2)])
+	assert parse_obj(OBJMesh(m).export())["vt"] == approx([(0, 0), (1, 1), (0.6, 0.6)])
+
+
 def test_compressed_normals_are_unit_length():
 	obj = parse_obj(OBJMesh(compressed_mesh([9, 0, 0, 9, 0, 0], [1, 0, 1])).export())
 	assert obj["vn"] == approx([(-0.6, 0, 0.8), (-0.0, 0.6, -0.8), (-0.0, 0, 1)])

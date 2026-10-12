@@ -4111,10 +4111,6 @@
    [
     "nano_eduardo-sub-link_b.dds",
     "nano_eduardo_face"
-   ],
-   [
-    "nano_eduardo-main-link_a.dds",
-    null
    ]
   ],
   "nano_nano_numbuhtwo.kfm.glb": [
@@ -4145,7 +4141,7 @@
    "nodes": 59,
    "meshes": 4,
    "primitives": 4,
-   "materials": 3,
+   "materials": 2,
    "skins": 4,
    "animations": 31,
    "images": [
@@ -4154,7 +4150,7 @@
      256
     ]
    ],
-   "sha256": "71d7f8dc9707596b",
+   "sha256": "37038e5439595bda",
    "warnings": 2
   },
   "nano/nano_numbuhtwo.kfm": {
@@ -4942,7 +4938,7 @@
    "nodes": 78,
    "meshes": 5,
    "primitives": 5,
-   "materials": 4,
+   "materials": 3,
    "skins": 3,
    "animations": 16,
    "images": [
@@ -4955,7 +4951,7 @@
      256
     ]
    ],
-   "sha256": "ef26894834c4e35a",
+   "sha256": "afc28de4816d6b37",
    "warnings": 4
   },
   "mob/fusion_deedee.kfm": {
@@ -5748,7 +5744,7 @@
     "triangles": [
      48
     ],
-    "obj_sha256": "7446e7f45601cdaf",
+    "obj_sha256": "99cf7b64fc4beb04",
     "skin": {
      "vertices": 31,
      "influences": {
