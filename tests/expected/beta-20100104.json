@@ -4116,6 +4116,34 @@
    "warnings": 0
   }
  },
+ "gltf-xdt/FutureNano.resourceFile": {
+  "nano_nano_eddy.kfm.glb": [
+   [
+    "nano_eddy-main-link_a.dds",
+    "nano_eddy"
+   ]
+  ],
+  "nano_nano_eduardo.kfm.glb": [
+   [
+    "nano_eduardo-main-link_a.dds",
+    "nano_eduardo"
+   ],
+   [
+    "nano_eduardo-sub-link_b.dds",
+    "nano_eduardo_face"
+   ],
+   [
+    "nano_eduardo-main-link_a.dds",
+    null
+   ]
+  ],
+  "nano_nano_numbuhtwo.kfm.glb": [
+   [
+    "nano_numbuhtwo-main-link_a.dds",
+    "nano_numbuhtwo"
+   ]
+  ]
+ },
  "gltf/FutureNano.resourceFile": {
   "nano/nano_eddy.kfm": {
    "nodes": 59,

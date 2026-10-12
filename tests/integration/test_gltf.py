@@ -66,3 +66,38 @@ def test_scene(build, bundle, unpacked, expected, tmp_path):
 	if have_validator():
 		issues = validate(files)
 		assert {f: r for f, r in issues.items() if r["errors"] or r["warnings"]} == {}
+
+
+@pytest.mark.bundles("FutureNano.resourceFile")
+def test_export_gltf_xdt_textures(build, bundle, unpacked, expected, env_dir, tmp_path):
+	"""
+	The nanos with the textures the game puts on them (the XDT's, found in
+	the curated TableData and NpcTexture) against their own: Eduardo's face
+	material stores his body texture, and the XDT names his face texture.
+	"""
+	from tests.glb import GLB
+
+	path = build.inner_files(bundle)[0]
+	run_script("export_gltf.py", path, "nano/", "-o", tmp_path / "xdt", "--env", env_dir)
+	run_script("export_gltf.py", path, "nano/", "-o", tmp_path / "own", "--env", env_dir, "--no-xdt")
+
+	def images(folder):
+		"{file: [(material, image)]}"
+		ret = {}
+		for f in sorted(folder.glob("*.glb")):
+			g = GLB(f.read_bytes())
+			pairs = []
+			for m in g.get("materials", []):
+				t = m["pbrMetallicRoughness"].get("baseColorTexture")
+				pairs.append([m["name"], g["images"][g["textures"][t["index"]]["source"]]["name"] if t else None])
+			ret[f.name] = pairs
+		return ret
+
+	xdt, own = images(tmp_path / "xdt"), images(tmp_path / "own")
+	assert xdt and xdt.keys() == own.keys()
+	eduardo = "nano_nano_eduardo.kfm.glb"
+	if eduardo in xdt:
+		face = "nano_eduardo-sub-link_b.dds"
+		assert dict(own[eduardo])[face] == "nano_eduardo"
+		assert dict(xdt[eduardo])[face] == "nano_eduardo_face"
+	expected.check("gltf-xdt/" + bundle, xdt)
