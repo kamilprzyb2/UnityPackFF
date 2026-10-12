@@ -146,12 +146,19 @@ class GLTFWriter:
 	"""
 	Builds one glTF document with a single binary buffer. Add meshes,
 	materials and nodes, mark the top nodes with add_root(), then call glb().
+
+	texture_override(material, slot), if given, can replace a material's
+	_MainTex: it gets each renderer's Material and its slot (submesh index)
+	and returns a Texture2D to use instead, or None to keep the material's
+	own. FusionFall's client does this when it spawns nanos, NPCs and
+	vehicles (see unitypack.xdttextures).
 	"""
 
-	def __init__(self, generator="unitypack"):
+	def __init__(self, generator="unitypack", texture_override=None):
 		self.json = {"asset": {"version": "2.0", "generator": generator}, "scene": 0, "scenes": [{"nodes": []}]}
 		self.bin = bytearray()
 		self.warnings = []
+		self.texture_override = texture_override
 		self._cache = {}
 
 	def _add(self, key, item):
@@ -253,16 +260,17 @@ class GLTFWriter:
 				"magFilter": LINEAR, "minFilter": LINEAR_MIPMAP_LINEAR, "wrapS": wrap, "wrapT": wrap})
 		return self._add("textures", {"source": image_index, "sampler": self._cache[("sampler", wrap)]})
 
-	def add_material(self, material):
+	def add_material(self, material, main_texture=None):
 		"""
 		A Material (or a pointer to one): _Color as the base colour and
-		_MainTex as its texture. Every saved property and the shader's name
-		go into the material's extras, since Unity shaders differ in what
-		they do with them (FusionFall's toon shaders double _Color, for one).
+		_MainTex (or main_texture, a Texture2D, in its place) as its texture.
+		Every saved property and the shader's name go into the material's
+		extras, since Unity shaders differ in what they do with them
+		(FusionFall's toon shaders double _Color, for one).
 		"""
-		return self._cached("material", material, self._make_material)
+		return self._cached(("material", main_texture), material, lambda m: self._make_material(m, main_texture))
 
-	def _make_material(self, material):
+	def _make_material(self, material, main_texture=None):
 		props = material.saved_properties
 		colors = props.get("m_Colors", {})
 		floats = props.get("m_Floats", {})
@@ -271,7 +279,10 @@ class GLTFWriter:
 		color = _color(colors["_Color"]) if "_Color" in colors else [1.0, 1.0, 1.0, 1.0]
 		pbr = {"baseColorFactor": [min(max(c, 0.0), 1.0) for c in color], "metallicFactor": 0.0, "roughnessFactor": 1.0}
 		main = texenvs.get("_MainTex")
-		texture = self.add_texture(main["m_Texture"]) if main else None
+		if main_texture is not None:
+			texture = self.add_texture(main_texture)
+		else:
+			texture = self.add_texture(main["m_Texture"]) if main else None
 		if texture is not None:
 			pbr["baseColorTexture"] = {"index": texture}
 
@@ -292,6 +303,9 @@ class GLTFWriter:
 			"floats": {k: float(v) for k, v in floats.items()},
 			"textures": textures,
 		}
+		if main_texture is not None:
+			# what the material stores stays in "textures"
+			extras["main_texture"] = main_texture.name
 		gltf_material["extras"] = extras
 		return self._add("materials", gltf_material)
 
@@ -345,7 +359,7 @@ class GLTFWriter:
 			primitive = {"attributes": attrs, "indices": self.accessor(indices, "SCALAR", ctype, ELEMENT_ARRAY_BUFFER)}
 			material = materials[i] if i < len(materials) else None
 			if material is not None:
-				index = self.add_material(material)
+				index = self.add_material(material, self._override(material, i))
 				if index is not None and "TEXCOORD_0" not in attrs:
 					index = self._untextured(index)
 				if index is not None:
@@ -354,6 +368,13 @@ class GLTFWriter:
 		if not primitives:
 			return None
 		return self._add("meshes", {"name": mesh.name, "primitives": primitives})
+
+	def _override(self, material, slot):
+		"texture_override's texture for a material (or a pointer to one) on a slot, or None"
+		if self.texture_override is None:
+			return None
+		target = self.resolve(material) if hasattr(material, "path_id") else material
+		return self.texture_override(target, slot) if target is not None else None
 
 	def add_mesh_pointer(self, pointer, materials=()):
 		"add_mesh() for the Mesh a pointer points to, once per mesh and materials"

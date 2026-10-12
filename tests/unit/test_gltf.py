@@ -153,6 +153,40 @@ def test_missing_texture():
 	assert len(w.warnings) == 1 and "elsewhere" in w.warnings[0]
 
 
+def test_texture_override():
+	# the hook sees each material and its slot; here it replaces slot 0's texture only
+	own, other = Pointer(texture("own"), 5), texture("other", pixels=((0, 255, 0, 255), (0, 255, 0, 255)))
+	shared = material("shared", own)
+	seen = []
+
+	def override(mat, slot):
+		seen.append((mat.name, slot))
+		return other if slot == 0 else None
+
+	m = mesh(**QUAD, indices=[0, 1, 2, 0, 2, 3], submeshes=[submesh(0, 3), submesh(6, 3)])
+	w = GLTFWriter(texture_override=override)
+	w.add_root(w.add_node("m", mesh=w.add_mesh(m, [Pointer(shared, 7), shared])))
+	g = GLB(w.glb())
+	assert seen == [("shared", 0), ("shared", 1)]
+	first, second = [g["materials"][p["material"]] for p in g["meshes"][0]["primitives"]]
+
+	def image_name(mat):
+		return g["images"][g["textures"][mat["pbrMetallicRoughness"]["baseColorTexture"]["index"]]["source"]]["name"]
+
+	# the same Material becomes two glTF materials: replaced on slot 0, its own on slot 1
+	assert (image_name(first), image_name(second)) == ("other", "own")
+	assert first["extras"]["main_texture"] == "other"
+	assert first["extras"]["textures"]["_MainTex"]["texture"] == "own"  # what the material stores
+	assert "main_texture" not in second["extras"]
+
+
+def test_texture_override_keeps_own_on_none():
+	g = GLB(export_mesh(mesh(**QUAD, indices=[0, 1, 2]), [material(tex=Pointer(texture(), 5))]))
+	w = GLTFWriter(texture_override=lambda mat, slot: None)
+	w.add_root(w.add_node("m", mesh=w.add_mesh(mesh(**QUAD, indices=[0, 1, 2]), [material(tex=Pointer(texture(), 5))])))
+	assert GLB(w.glb())["materials"] == g["materials"]
+
+
 def test_mesh_without_uvs_gets_untextured_material():
 	m = mesh(QUAD["vertices"], QUAD["normals"], [], [0, 1, 2])
 	g = GLB(export_mesh(m, [material(tex=Pointer(texture(), 5))]))
