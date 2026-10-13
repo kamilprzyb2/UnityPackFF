@@ -56,6 +56,13 @@ ANIMATION = 111
 TERRAIN_COLLIDER = 154
 SKINNED_MESH_RENDERER = 137
 LIGHT = 108
+RIGIDBODY = 54
+MESH_COLLIDER = 64
+BOX_COLLIDER = 65
+SPHERE_COLLIDER = 135
+CAPSULE_COLLIDER = 136
+CHARACTER_CONTROLLER = 143
+COLLIDERS = (MESH_COLLIDER, BOX_COLLIDER, SPHERE_COLLIDER, CAPSULE_COLLIDER, CHARACTER_CONTROLLER)
 RENDER_SETTINGS = 104
 # Unity's Light.m_Type
 LIGHT_TYPES = {0: "spot", 1: "directional", 2: "point"}
@@ -511,10 +518,41 @@ class GLTFWriter:
 		lights.append(gltf_light)
 		return len(lights) - 1
 
+	def add_collider(self, component, class_id):
+		"""
+		A collider as a dict for a node's extras: its "type" (mesh, box,
+		sphere or capsule; a CharacterController is a capsule along y),
+		"trigger", and its shape: "mesh" (the index of a glTF mesh no node
+		draws, with no material) and "convex"; "center" (in the node's
+		space, mirrored like positions), "size", "radius", "height" and
+		"axis" (0, 1 or 2 for x, y or z). None for a disabled one or a mesh
+		collider without a mesh.
+		"""
+		f = _fields(component)
+		if not f.get("m_Enabled", True):
+			return None
+		info = {"trigger": bool(f.get("m_IsTrigger", False))}
+		if class_id == MESH_COLLIDER:
+			mesh = self.add_mesh_pointer(f["m_Mesh"]) if f["m_Mesh"] else None
+			if mesh is None:
+				return None
+			info.update(type="mesh", mesh=mesh, convex=bool(f.get("m_Convex", False)))
+			return info
+		info["center"] = mirror_position(_vec(f["m_Center"]))
+		if class_id == BOX_COLLIDER:
+			info.update(type="box", size=_vec(f["m_Size"]))
+		elif class_id == SPHERE_COLLIDER:
+			info.update(type="sphere", radius=float(f["m_Radius"]))
+		elif class_id == CAPSULE_COLLIDER:
+			info.update(type="capsule", radius=float(f["m_Radius"]), height=float(f["m_Height"]), axis=int(f["m_Direction"]))
+		else:
+			info.update(type="capsule", radius=float(f["m_Radius"]), height=float(f["m_Height"]), axis=1)
+		return info
+
 	def add_root(self, node):
 		self.json["scenes"][0]["nodes"].append(node)
 
-	def add_scene(self, asset, skins=True, animations=True, sample_rate=None, inactive=False):
+	def add_scene(self, asset, skins=True, animations=True, sample_rate=None, inactive=False, colliders=False):
 		"""
 		Every root GameObject of a scene file (BuildPlayer-...): props,
 		terrain, skinned and animated objects, lights. Inactive GameObjects
@@ -545,18 +583,20 @@ class GLTFWriter:
 			gameobject = self.resolve(transform.game_object)
 			if gameobject is None or not (inactive or gameobject._obj.get("m_IsActive", True)):
 				continue
-			roots.append(self.add_gameobject(gameobject, skins, animations, sample_rate, inactive))
+			roots.append(self.add_gameobject(gameobject, skins, animations, sample_rate, inactive, colliders))
 		return roots
 
-	def add_gameobject(self, gameobject, skins=True, animations=True, sample_rate=None, inactive=True):
+	def add_gameobject(self, gameobject, skins=True, animations=True, sample_rate=None, inactive=True, colliders=False):
 		"""
 		A GameObject and everything under it: one node per Transform, with
 		the meshes of MeshFilter + MeshRenderer and SkinnedMeshRenderer
 		components, skins for the latter, and the clips of Animation
-		components (sampled at each clip's rate, or sample_rate). Returns the
-		root node; it and the skinned mesh nodes are added to the scene.
+		components (sampled at each clip's rate, or sample_rate). With
+		colliders, each node's colliders (add_collider()) and Rigidbody go
+		into its extras. Returns the root node; it and the skinned mesh
+		nodes are added to the scene.
 		"""
-		export = GameObjectExport(self, gameobject, skins, animations, sample_rate, inactive)
+		export = GameObjectExport(self, gameobject, skins, animations, sample_rate, inactive, colliders)
 		self.add_root(export.root)
 		for node in export.extra_roots:
 			self.add_root(node)
@@ -640,9 +680,10 @@ class GameObjectExport:
 	clips of its Animation components.
 	"""
 
-	def __init__(self, writer, gameobject, skins=True, animations=True, sample_rate=None, inactive=True):
+	def __init__(self, writer, gameobject, skins=True, animations=True, sample_rate=None, inactive=True, colliders=False):
 		self.writer = writer
 		self.inactive = inactive
+		self.colliders = colliders
 		self.nodes = {}  # Transform path ID -> node index
 		self.paths = {}  # path from the root ("" for the root) -> node index
 		self.local = {}  # node index -> local matrix, in Unity's coordinates
@@ -675,6 +716,7 @@ class GameObjectExport:
 		mesh = None
 		skinned = None
 		light = None
+		extras = {}
 		renderer = next((w.resolve(p) for cid, p in comps if cid == MESH_RENDERER), None)
 		for cid, ptr in comps:
 			if cid == MESH_FILTER and renderer is not None:
@@ -696,6 +738,16 @@ class GameObjectExport:
 				component = w.resolve(ptr)
 				if component is not None:
 					light = w.add_light(component)
+			elif self.colliders and cid in COLLIDERS:
+				component = w.resolve(ptr)
+				collider = w.add_collider(component, cid) if component is not None else None
+				if collider is not None:
+					extras.setdefault("colliders", []).append(collider)
+			elif self.colliders and cid == RIGIDBODY:
+				body = w.resolve(ptr)
+				if body is not None:
+					f = _fields(body)
+					extras["rigidbody"] = {"mass": float(f["m_Mass"]), "kinematic": bool(f["m_IsKinematic"]), "gravity": bool(f["m_UseGravity"])}
 
 		children = []
 		for child_ptr in _fields(transform)["m_Children"]:
@@ -709,7 +761,8 @@ class GameObjectExport:
 			children.append(w.add_node(gameobject.name + " (light)", rotation=(0, 1, 0, 0),
 				extensions={"KHR_lights_punctual": {"light": light}}))
 		t, q, sc = _vec(transform.position), _unit_quaternion(_vec(transform.rotation, "xyzw")), _vec(transform.scale)
-		node = w.add_node(gameobject.name, mesh=mesh, translation=t, rotation=q, scale=sc, children=children)
+		node = w.add_node(gameobject.name, mesh=mesh, translation=t, rotation=q, scale=sc, children=children,
+			**({"extras": extras} if extras else {}))
 		self.nodes[transform_ptr.path_id] = node
 		self.paths.setdefault(path, node)
 		self.local[node] = trs_matrix(t, q, sc)
