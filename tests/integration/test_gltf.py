@@ -5,6 +5,8 @@ Khronos validator is installed (see tests/tools/gltf.py), that every file
 passes it with no errors and no warnings. bin/export_gltf.py exports one.
 """
 
+import re
+
 import pytest
 
 from tests.tools.gltf import CuratedEnvironment, export_prefabs, have_validator, validate
@@ -237,6 +239,46 @@ def test_export_gltf_float_curves(build, bundle, unpacked, tmp_path):
 		at = dict(zip(track["times"], track["values"]))
 		assert [at[0.0], at[0.5], at[1.0]] == pytest.approx([0.0075, 0.0, -0.0078])
 	assert all(track["values"] == [0.0] for track in height.values())
+
+
+@pytest.mark.bundles("CharacterSelection.resourceFile", "CharacterCreation.resourceFile")
+def test_export_gltf_split_clips(build, bundle, unpacked, tmp_path):
+	"""
+	--split-clips on the boy actor: the model without clips, and a file per
+	clip with the same nodes and that clip as the whole export has it
+	"""
+	from tests.glb import GLB
+
+	env = CuratedEnvironment(build)
+	try:
+		path = build.inner_files(bundle)[0]
+		run_script("export_gltf.py", path, "actor/m.kfm", "-o", tmp_path / "split", "--env", env.dir, "--split-clips")
+		run_script("export_gltf.py", path, "actor/m.kfm", "-o", tmp_path / "whole", "--env", env.dir)
+	finally:
+		env.close()
+	whole_file = tmp_path / "whole" / "actor_m.kfm.glb"
+	if not whole_file.exists():
+		pytest.skip("no actors in this archive")
+	whole = GLB(whole_file.read_bytes())
+	model = GLB((tmp_path / "split" / "actor_m.kfm.glb").read_bytes())
+	assert "animations" not in model.json
+	assert model["nodes"] == whole["nodes"] and model.get("meshes") == whole.get("meshes")
+
+	clips = sorted((tmp_path / "split").glob("actor_m.kfm@*.glb"))
+	assert len(clips) == len(whole["animations"]) > 200
+	by_name = {a["name"]: a for a in whole["animations"]}
+	for f in clips:
+		g = GLB(f.read_bytes())
+		assert g["nodes"] == [{k: v for k, v in n.items() if k not in ("mesh", "skin")} for n in whole["nodes"]]
+		[a] = g["animations"]
+		assert f.name == "actor_m.kfm@%s.glb" % re.sub(r"[^\w.@-]", "_", a["name"])
+		w = by_name[a["name"]]
+		assert a["channels"] == w["channels"] and a.get("extras") == w.get("extras")
+		assert [g.accessor(s["output"]) for s in a["samplers"]] == [whole.accessor(s["output"]) for s in w["samplers"]]
+
+	if have_validator():
+		issues = validate([tmp_path / "split" / "actor_m.kfm.glb"] + clips[:20])
+		assert {f: r for f, r in issues.items() if r["errors"] or r["warnings"]} == {}
 
 
 @pytest.mark.bundles("Map_04_02.unity3d")

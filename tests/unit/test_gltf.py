@@ -973,3 +973,68 @@ def test_external_files_put(tmp_path):
 	(tmp_path / "d" / name).write_bytes(b"kept")
 	assert other.put(b"data", "bin") == name and other.written == set()
 	assert (tmp_path / "d" / name).read_bytes() == b"kept"
+
+
+# Clips in files of their own
+
+def split_rig():
+	"The rig with two clips, a material-only clip and a collider"
+	move = clip("move", position_curves=[curve_on("bone", key(0.0, vec(1, 0, 0), vec(1, 0, 0)), key(1.0, vec(2, 0, 0), vec(1, 0, 0)))])
+	turn = clip("turn", rotation_curves=[curve_on("bone",
+		key(0.0, fdict(x=0, y=0, z=0, w=1), fdict(x=0, y=0, z=0, w=0)), key(1.0, fdict(x=0, y=1, z=0, w=0), fdict(x=0, y=0, z=0, w=0)))])
+	scroll = clip("scroll", float_curves=[float_curve("_MainTex.offset.x", key(0.0, 0.0, 1.0), key(1.0, 1.0, 1.0))])
+	return rig(clips=[move, turn, scroll])
+
+
+def test_split_clips():
+	w = GLTFWriter()
+	w.add_gameobject(split_rig())
+	whole = GLB(w.glb())
+	base, clips = w.split_clips()
+	assert [name for name, _ in clips] == ["move", "turn", "scroll"]
+
+	model = GLB(base.glb())
+	assert "animations" not in model.json and "extras" not in model.json
+	assert model["nodes"] == whole["nodes"]
+	assert model["meshes"] == whole["meshes"] and model["skins"] == whole["skins"]
+	skinned = model["meshes"][0]["primitives"][0]["attributes"]
+	for attribute, accessor in skinned.items():
+		assert model.accessor(accessor) == whole.accessor(whole["meshes"][0]["primitives"][0]["attributes"][attribute])
+	assert model.accessor(model["skins"][0]["inverseBindMatrices"]) == whole.accessor(whole["skins"][0]["inverseBindMatrices"])
+
+	for (name, writer), animation in zip(clips, whole["animations"]):
+		g = GLB(writer.glb())
+		# the same nodes in the same order, without meshes or skins
+		assert [n.get("name") for n in g["nodes"]] == [n.get("name") for n in whole["nodes"]]
+		assert [n.get("children") for n in g["nodes"]] == [n.get("children") for n in whole["nodes"]]
+		assert not any("mesh" in n or "skin" in n for n in g["nodes"])
+		for key in ("meshes", "skins", "materials", "images"):
+			assert key not in g.json
+		[a] = g["animations"]
+		assert a["name"] == name == animation["name"]
+		assert a["channels"] == animation["channels"]
+		for s, ws in zip(a["samplers"], animation["samplers"]):
+			assert g.accessor(s["input"]) == whole.accessor(ws["input"])
+			assert g.accessor(s["output"]) == whole.accessor(ws["output"])
+	scroll = GLB(clips[2][1].glb())
+	assert "animations" not in scroll.json
+	assert scroll["extras"]["material_clips"] == whole["extras"]["material_clips"]
+
+
+def test_split_clips_with_external_files(tmp_path):
+	w = GLTFWriter(external=ExternalFiles(tmp_path / "shared"))
+	w.add_gameobject(split_rig())
+	base, clips = w.split_clips()
+	model = GLB(base.glb(tmp_path), base=tmp_path)
+	assert [b.get("uri", "").startswith("shared/") for b in model["buffers"]] == [False, True]
+	assert len(model.accessor(model["meshes"][0]["primitives"][0]["attributes"]["POSITION"])) == 3
+	move = GLB(clips[0][1].glb(tmp_path), base=tmp_path)
+	assert [b.get("uri") for b in move["buffers"]] == [None]  # the clip's own samples only
+
+
+def test_split_clips_without_clips():
+	w = GLTFWriter()
+	w.add_gameobject(gameobject_tree())
+	base, clips = w.split_clips()
+	assert clips == []
+	assert base.glb() == w.glb()

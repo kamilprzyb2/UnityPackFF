@@ -34,6 +34,11 @@ as node indices, on its root; and on each worn item's skin, the index into
 that list of each joint, for boys and for girls (see
 unitypack.gltf.GLTFWriter.add_gameobject()).
 
+With --split-clips, each export is written without its clips, as
+<name>.glb, and each clip on its own as <name>@<clip>.glb: the same nodes
+in the same order, with no meshes, so a viewer can load a clip when it's
+needed and play it on the model.
+
 With --external DIR, images and mesh data go to DIR instead of into each
 .glb, as files named by their content that every .glb using them points to
 (by a path relative to the output directory). Exports into the same DIR
@@ -75,14 +80,33 @@ def prefabs(asset):
 			yield path, ptr
 
 
-def write(writer, outdir, name):
-	out = os.path.join(outdir, re.sub(r'[^\w.@-]', '_', name) + '.glb')
+def write(writer, outdir, name, split_clips=False):
+	"""
+	Write a .glb named after name; with split_clips, one without the clips
+	and one per clip (<name>@<clip>.glb). Returns the first's path and the
+	number of clip files.
+	"""
+	parts = [(name, writer)]
+	if split_clips:
+		base, clips = writer.split_clips()
+		parts = [(name, base)]
+		seen = {}
+		for clip, w in clips:
+			seen[clip] = seen.get(clip, 0) + 1
+			parts.append(('{}@{}'.format(name, clip) + ('-%d' % seen[clip] if seen[clip] > 1 else ''), w))
 	os.makedirs(outdir, exist_ok=True)
-	with open(out, 'wb') as o:
-		o.write(writer.glb(outdir))
+	for n, w in parts:
+		out = os.path.join(outdir, re.sub(r'[^\w.@-]', '_', n) + '.glb')
+		with open(out, 'wb') as o:
+			o.write(w.glb(outdir))
 	for warning in writer.warnings:
 		print('  warning: ' + warning, file=sys.stderr)
-	return out
+	first = os.path.join(outdir, re.sub(r'[^\w.@-]', '_', name) + '.glb')
+	return first, len(parts) - 1
+
+
+def clip_note(count):
+	return ' (+{} clip files)'.format(count) if count else ''
 
 
 def report_external(external):
@@ -212,6 +236,7 @@ def main():
 	xdt_group = p.add_mutually_exclusive_group()
 	xdt_group.add_argument('--xdt', metavar='TABLEDATA', help='the TableData file whose XDT names the game\'s textures (default: the one in the environment)')
 	xdt_group.add_argument('--no-xdt', action='store_true', help='keep the prefabs\' own textures (no XDT: not with --as-worn)')
+	p.add_argument('--split-clips', action='store_true', help='write each clip to a file of its own, <name>@<clip>.glb, and the model without them')
 	p.add_argument('--actor-bones', action='store_true', help='add the bone lists that bind worn items to the character (ActorSkinCombiner, ActorWearIndexTable) to the extras')
 	p.add_argument('--as-worn', action='store_true', help='export what players wear (clothes, capes, faces, hair) with its skinned meshes only, as the game combines it; needs the XDT')
 	args = p.parse_args()
@@ -234,7 +259,8 @@ def main():
 		if not any(o.type_id == ASSET_BUNDLE for o in asset.objects.values()):
 			w = GLTFWriter(external=external)
 			w.add_scene(asset, colliders=args.colliders)
-			print('scene -> {}'.format(write(w, args.outdir, os.path.basename(args.file))))
+			out, clips = write(w, args.outdir, os.path.basename(args.file), args.split_clips)
+			print('scene -> {}{}'.format(out, clip_note(clips)))
 			report_external(external)
 			return
 
@@ -266,7 +292,8 @@ def main():
 				w.add_gameobject(ptr.resolve(), colliders=args.colliders, skinned_only=key in worn, actor_bones=args.actor_bones)
 				name = variant_name(path, swap, sets) if swap else path
 				note = ' ({} plain meshes left out)'.format(len(w.left_out)) if w.left_out else ''
-				print('{} -> {}{}'.format(name, write(w, args.outdir, name), note))
+				out, clips = write(w, args.outdir, name, args.split_clips)
+				print('{} -> {}{}{}'.format(name, out, note, clip_note(clips)))
 				for t in sorted(missing):
 					print('  warning: no texture/{}.dds in the environment; kept the prefab\'s own'.format(t), file=sys.stderr)
 				if key in worn_all:

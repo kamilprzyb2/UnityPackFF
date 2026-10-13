@@ -30,6 +30,7 @@ ExternalFiles), for exports that share them: every map tile uses the same
 grass and the same fences.
 """
 
+import copy
 import hashlib
 import json
 import math
@@ -714,6 +715,102 @@ class GLTFWriter:
 		for node in export.extra_roots:
 			self.add_root(node)
 		return export.root
+
+	def split_clips(self):
+		"""
+		The document as one without its clips, and one per clip: [(name,
+		GLTFWriter)], in order, glTF animations first and then the
+		document's material_clips. A clip's document has the same nodes in
+		the same order, so a viewer can play it on the first one's model, but
+		no meshes, skins, materials or colliders: only that clip. Each is
+		ready for glb(). Warnings stay with the first.
+		"""
+		animations = self.json.get("animations", [])
+		material_clips = self.json.get("extras", {}).get("material_clips", [])
+		base = self._subset(geometry=True, animations=[], material_clips=[])
+		base.warnings = self.warnings
+		clips = [(a["name"], self._subset(geometry=False, animations=[a], material_clips=[])) for a in animations]
+		clips += [(c["name"], self._subset(geometry=False, animations=[], material_clips=[c])) for c in material_clips]
+		return base, clips
+
+	def _subset(self, geometry, animations, material_clips):
+		"A writer with a copy of this document: its nodes, its geometry or none, and the clips given"
+		doc = copy.deepcopy({k: v for k, v in self.json.items() if k not in ("animations", "accessors", "bufferViews")})
+		if animations:
+			doc["animations"] = copy.deepcopy(animations)
+		extras = doc.get("extras", {})
+		extras.pop("material_clips", None)
+		if material_clips:
+			extras["material_clips"] = copy.deepcopy(material_clips)
+		if "extras" in doc and not extras:
+			del doc["extras"]
+		if not geometry:
+			for key in ("meshes", "skins", "materials", "textures", "images", "samplers"):
+				doc.pop(key, None)
+			for node in doc["nodes"]:
+				node.pop("mesh", None)
+				node.pop("skin", None)
+				node_extras = node.get("extras", {})
+				node_extras.pop("colliders", None)  # their meshes are gone
+				if "extras" in node and not node_extras:
+					del node["extras"]
+
+		# the accessors, buffer views and buffers left in use, renumbered in order
+		used = set()
+		for mesh in doc.get("meshes", []):
+			for primitive in mesh["primitives"]:
+				used.update(primitive["attributes"].values())
+				if "indices" in primitive:
+					used.add(primitive["indices"])
+		for skin in doc.get("skins", []):
+			if "inverseBindMatrices" in skin:
+				used.add(skin["inverseBindMatrices"])
+		for animation in doc.get("animations", []):
+			for sampler in animation["samplers"]:
+				used.update((sampler["input"], sampler["output"]))
+		accessors = {old: new for new, old in enumerate(sorted(used))}
+		views = {self.json["accessors"][a]["bufferView"] for a in used}
+		views.update(i["bufferView"] for i in doc.get("images", []) if "bufferView" in i)
+		views = {old: new for new, old in enumerate(sorted(views))}
+		buffers = {0: 0}
+		for old in views:
+			buffer = self.json["bufferViews"][old]["buffer"]
+			if buffer not in buffers:
+				buffers[buffer] = len(buffers)
+
+		w = GLTFWriter(external=self.external)
+		w.json = doc
+		w._buffers = [self._buffers[old - 1] for old, new in sorted(buffers.items(), key=lambda b: b[1]) if old]
+		if accessors:
+			doc["accessors"] = [dict(self.json["accessors"][old], bufferView=views[self.json["accessors"][old]["bufferView"]]) for old in sorted(accessors)]
+		if views:
+			doc["bufferViews"] = []
+			for old in sorted(views):
+				view = dict(self.json["bufferViews"][old], buffer=buffers[self.json["bufferViews"][old]["buffer"]])
+				if view["buffer"] == 0:  # in the BIN chunk: copied over
+					data = self.bin[view["byteOffset"]:view["byteOffset"] + view["byteLength"]]
+					w.bin += b"\0" * (-len(w.bin) % 4)
+					view["byteOffset"] = len(w.bin)
+					w.bin += data
+				doc["bufferViews"].append(view)
+		for mesh in doc.get("meshes", []):
+			for primitive in mesh["primitives"]:
+				primitive["attributes"] = {k: accessors[v] for k, v in primitive["attributes"].items()}
+				if "indices" in primitive:
+					primitive["indices"] = accessors[primitive["indices"]]
+		for skin in doc.get("skins", []):
+			if "inverseBindMatrices" in skin:
+				skin["inverseBindMatrices"] = accessors[skin["inverseBindMatrices"]]
+		for animation in doc.get("animations", []):
+			for sampler in animation["samplers"]:
+				sampler["input"], sampler["output"] = accessors[sampler["input"]], accessors[sampler["output"]]
+		for image in doc.get("images", []):
+			if "bufferView" in image:
+				image["bufferView"] = views[image["bufferView"]]
+		# in the order the whole document has its keys
+		w.json = {k: doc[k] for k in self.json if k in doc}
+		w.json.update((k, v) for k, v in doc.items() if k not in w.json)
+		return w
 
 	def glb(self, location="."):
 		"""
