@@ -31,6 +31,7 @@ import struct
 from io import BytesIO
 
 from .export import OBJMesh
+from .mapdata import scene_colors
 
 FLOAT = 5126
 UNSIGNED_BYTE = 5121
@@ -53,6 +54,10 @@ MESH_FILTER = 33
 ANIMATION = 111
 TERRAIN_COLLIDER = 154
 SKINNED_MESH_RENDERER = 137
+LIGHT = 108
+RENDER_SETTINGS = 104
+# Unity's Light.m_Type
+LIGHT_TYPES = {0: "spot", 1: "directional", 2: "point"}
 
 
 def mirror_position(p):
@@ -475,15 +480,53 @@ class GLTFWriter:
 		node.update(extra)
 		return self._add("nodes", node)
 
+	def add_light(self, light):
+		"""
+		A Light as a KHR_lights_punctual light, or None for a disabled one
+		(glTF lights can't be off). Intensity is Unity's, which has no unit.
+		"""
+		f = _fields(light)
+		kind = LIGHT_TYPES.get(f["m_Type"])
+		if kind is None or not f.get("m_Enabled", True):
+			if kind is None:
+				self.warnings.append("light type %r has no glTF form" % (f["m_Type"],))
+			return None
+		gltf_light = {"type": kind, "color": _color(f["m_Color"])[:3], "intensity": float(f["m_Intensity"])}
+		if kind != "directional":
+			gltf_light["range"] = float(f["m_Range"])
+		if kind == "spot":
+			gltf_light["spot"] = {"outerConeAngle": math.radians(float(f["m_SpotAngle"])) / 2}
+		self.json.setdefault("extensionsUsed", [])
+		if "KHR_lights_punctual" not in self.json["extensionsUsed"]:
+			self.json["extensionsUsed"].append("KHR_lights_punctual")
+		lights = self.json.setdefault("extensions", {}).setdefault("KHR_lights_punctual", {}).setdefault("lights", [])
+		lights.append(gltf_light)
+		return len(lights) - 1
+
 	def add_root(self, node):
 		self.json["scenes"][0]["nodes"].append(node)
 
 	def add_scene(self, asset, skins=True, animations=True, sample_rate=None, inactive=False):
 		"""
 		Every root GameObject of a scene file (BuildPlayer-...): props,
-		terrain, skinned and animated objects. Inactive GameObjects are left
-		out unless inactive is true. Returns the root nodes.
+		terrain, skinned and animated objects, lights. Inactive GameObjects
+		are left out unless inactive is true. The scene's extras get its
+		RenderSettings (fog, ambient light) and FusionFall's DongColorSetup
+		colours (fog depth, fog, sky, light). Returns the root nodes.
 		"""
+		extras = self.json["scenes"][0].setdefault("extras", {})
+		settings = next((o.read() for o in asset.objects.values() if o.type_id == RENDER_SETTINGS), None)
+		if settings is not None:
+			f = _fields(settings)
+			extras["render_settings"] = {
+				"fog": bool(f["m_Fog"]), "fog_color": _color(f["m_FogColor"]),
+				"fog_density": float(f["m_FogDensity"]), "ambient": _color(f["m_AmbientLight"]),
+			}
+		colors = scene_colors(asset)
+		if colors is not None:
+			extras["colors"] = {k: list(v) if isinstance(v, tuple) else v for k, v in colors.items()}
+		if not extras:
+			del self.json["scenes"][0]["extras"]
 		roots = []
 		for obj in sorted(asset.objects.values(), key=lambda o: o.path_id):
 			if obj.type_id != TRANSFORM:
@@ -623,6 +666,7 @@ class GameObjectExport:
 
 		mesh = None
 		skinned = None
+		light = None
 		renderer = next((w.resolve(p) for cid, p in comps if cid == MESH_RENDERER), None)
 		for cid, ptr in comps:
 			if cid == MESH_FILTER and renderer is not None:
@@ -640,6 +684,10 @@ class GameObjectExport:
 				animation = w.resolve(ptr)
 				if animation is not None:
 					self.animations.append((path, animation))
+			elif cid == LIGHT:
+				component = w.resolve(ptr)
+				if component is not None:
+					light = w.add_light(component)
 
 		children = []
 		for child_ptr in _fields(transform)["m_Children"]:
@@ -648,6 +696,10 @@ class GameObjectExport:
 			if child_go is not None and (self.inactive or child_go._obj.get("m_IsActive", True)):
 				children.append(self.visit(child_go, "%s/%s" % (path, child_go.name) if path else child_go.name))
 
+		if light is not None:
+			# Unity lights shine along their +z, glTF's along -z: turn around y
+			children.append(w.add_node(gameobject.name + " (light)", rotation=(0, 1, 0, 0),
+				extensions={"KHR_lights_punctual": {"light": light}}))
 		t, q, sc = _vec(transform.position), _unit_quaternion(_vec(transform.rotation, "xyzw")), _vec(transform.scale)
 		node = w.add_node(gameobject.name, mesh=mesh, translation=t, rotation=q, scale=sc, children=children)
 		self.nodes[transform_ptr.path_id] = node

@@ -576,6 +576,47 @@ def test_scene():
 	assert len(w.add_scene(asset, inactive=True)) == 2
 
 
+def test_scene_extras():
+	# RenderSettings and FusionFall's DongColorSetup (a script object) go into the scene's extras
+	settings = fdict(m_Fog=1, m_FogColor=color(0.5, 0.5, 0.5), m_FogDensity=0.25, m_AmbientLight=color(0.2, 0.2, 0.2))
+	dong = fdict(fogDepth=0.75, fogColor=color(0, 0, 1), skyColor=color(0, 1, 0), lightColor=color(1, 1, 1))
+	asset = type("Asset", (), {"objects": {1: FakeObject(1, 104, settings), 2: FakeObject(2, -1, dong)}})()
+	extras = GLB(export_scene(asset))["scenes"][0]["extras"]
+	assert extras["render_settings"] == {"fog": True, "fog_color": [0.5, 0.5, 0.5, 1.0], "fog_density": 0.25, "ambient": pytest.approx([0.2, 0.2, 0.2, 1.0])}
+	assert extras["colors"] == {"fog_depth": 0.75, "fog": [0, 0, 1, 1], "sky": [0, 1, 0, 1], "light": [1, 1, 1, 1]}
+	# a scene without them has no extras
+	assert "extras" not in GLB(export_scene(type("Asset", (), {"objects": {}})()))["scenes"][0]
+
+
+def lit_gameobject(**light):
+	go = GameObject(fdict(m_Name="lamp", m_Component=[]))
+	tr = Transform(fdict(m_GameObject=Pointer(go, 2), m_LocalPosition=vec(0, 0, 0), m_LocalRotation=fdict(x=0, y=0, z=0, w=1),
+		m_LocalScale=vec(1, 1, 1), m_Children=[], m_Father=None))
+	fields = dict(m_Enabled=True, m_Type=1, m_Color=color(1.0, 0.5, 0.25), m_Intensity=0.75, m_Range=10.0, m_SpotAngle=60.0)
+	fields.update(light)
+	go._obj["m_Component"] = [(4, Pointer(tr, 1)), (108, Pointer(fdict(**fields), 3))]
+	return go
+
+
+def test_light():
+	g = GLB(export_gameobject(lit_gameobject()))
+	assert g["extensionsUsed"] == ["KHR_lights_punctual"]
+	[light] = g["extensions"]["KHR_lights_punctual"]["lights"]
+	assert light == {"type": "directional", "color": [1.0, 0.5, 0.25], "intensity": 0.75}
+	[root] = g["scenes"][0]["nodes"]
+	[child] = g["nodes"][root]["children"]
+	# on a child turned around y: glTF lights shine along -z, Unity's along +z
+	assert g["nodes"][child]["extensions"] == {"KHR_lights_punctual": {"light": 0}}
+	assert [abs(c) for c in g["nodes"][child]["rotation"]] == [0, 1, 0, 0]
+
+
+def test_spot_and_disabled_lights():
+	spot = GLB(export_gameobject(lit_gameobject(m_Type=0)))["extensions"]["KHR_lights_punctual"]["lights"][0]
+	assert spot["range"] == 10.0 and spot["spot"]["outerConeAngle"] == pytest.approx(math.radians(30))
+	off = GLB(export_gameobject(lit_gameobject(m_Enabled=False)))
+	assert "extensions" not in off.json and "children" not in off["nodes"][0]
+
+
 def test_normals_are_made_unit_length():
 	m = mesh(QUAD["vertices"], [(0, 0, 2), (1, 1, 1), (0, 0, 0), (0, 0, 1)], QUAD["uvs"], [0, 1, 2])
 	g = GLB(export_mesh(m))
