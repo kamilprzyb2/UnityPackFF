@@ -142,6 +142,37 @@ def test_export_gltf_wearables(build, bundle, unpacked, expected, tmp_path):
 	expected.check("gltf-wear/" + bundle, got)
 
 
+@pytest.mark.bundles("CharacterSelection.resourceFile", "CharacterSelection_wear_head.resourceFile", "CharacterSelection_wear_hat.resourceFile")
+def test_export_gltf_as_worn(build, bundle, unpacked, tmp_path):
+	"""
+	Hair and hats with --as-worn and without: hair m_head_001_type02 loses
+	the 53 Biped helper boxes beside its skinned mesh, and every other file,
+	hats included (hung on the body whole), comes out the same.
+	"""
+	from tests.glb import GLB
+
+	env = CuratedEnvironment(build)
+	try:
+		path = build.inner_files(bundle)[0]
+		wanted = ("wear/m_head_001_type02", "wear/hat_")
+		worn = run_script("export_gltf.py", path, *wanted, "-o", tmp_path / "worn", "--env", env.dir, "--as-worn")
+		run_script("export_gltf.py", path, *wanted, "-o", tmp_path / "all", "--env", env.dir)
+	finally:
+		env.close()
+
+	files = sorted(f.name for f in (tmp_path / "worn").glob("*.glb"))
+	if not files:
+		pytest.skip("no hair or hats in this archive")  # 1013's CharacterSelection
+	assert files == sorted(f.name for f in (tmp_path / "all").glob("*.glb"))
+	changed = {f for f in files if (tmp_path / "worn" / f).read_bytes() != (tmp_path / "all" / f).read_bytes()}
+	hair = "wear_m_head_001_type02.nif.glb"
+	assert changed == ({hair} & set(files))
+	if hair in files:
+		assert len(GLB((tmp_path / "worn" / hair).read_bytes())["meshes"]) == 1
+		assert len(GLB((tmp_path / "all" / hair).read_bytes())["meshes"]) == 54
+		assert "53 plain meshes left out of what players wear" in worn
+
+
 @pytest.mark.bundles("Map_04_02.unity3d")
 def test_external_files(build, bundle, unpacked, tmp_path):
 	"""

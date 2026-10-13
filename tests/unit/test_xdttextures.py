@@ -7,7 +7,7 @@ Each table pairs data rows with mesh rows through m_iMesh; a mesh row names
 the prefab's model and up to two textures, "null" for none.
 """
 
-from unitypack.xdttextures import FIRST, VEHICLE, WORN, Swap, prefab_key, texture_swaps
+from unitypack.xdttextures import FIRST, VEHICLE, WORN, Swap, prefab_key, texture_swaps, worn_prefabs
 
 
 def mesh(model, tex1="null", tex2="null"):
@@ -52,9 +52,10 @@ XDT = {
 			item("m_shirt_easy", "m_easy_b", "f_shirt_easy", "f_easy_b")],
 	},
 	"m_pBackItemTable": {
-		"m_pItemData": [{"m_iMesh": 1, "m_iEquipType": 1}, {"m_iMesh": 2, "m_iEquipType": 0}],
+		"m_pItemData": [{"m_iMesh": 1, "m_iEquipType": 1}, {"m_iMesh": 2, "m_iEquipType": 0}, {"m_iMesh": 3, "m_iEquipType": 1}],
 		"m_pItemMeshData": [EMPTY, item("back_cape", "cape", "back_cape", "cape", "cape_lining"),
-			item("back_wings", "wings", "back_wings", "wings", "wings_glow")],
+			item("back_wings", "wings", "back_wings", "wings", "wings_glow"),
+			item("back_cloak", "null", "back_cloak", "null")],  # a cape that keeps its own textures
 	},
 	"m_pHatItemTable": {"m_pItemData": [{"m_iMesh": 1}], "m_pItemMeshData": [EMPTY, item("hat_cap", "cap", "hat_cap", "cap", "cap_logo")]},
 	"m_pFaceItemTable": {"m_pItemData": [{"m_iMesh": 1}], "m_pItemMeshData": [EMPTY, item("m_face_001", "m_face_001", "f_face_001", "f_face_001")]},
@@ -149,3 +150,15 @@ def test_worn_rule():
 	assert swap.texture_for("m_shirt_easy-cloth", 1) == "m_easy_a"
 	assert Swap("hair_a", None, WORN).texture_for("hair-sub", 0) is None  # no second texture: keeps its own
 
+
+
+def test_worn_prefabs():
+	# what the client skins into the character, textures named or not
+	worn = worn_prefabs(XDT)
+	assert {("wear", "m_shirt_easy"), ("wear", "f_shirt_easy"), ("wear", "back_cape"), ("wear", "back_cloak")} <= worn
+	assert ("wear", "back_cloak") not in texture_swaps(XDT)
+	assert {("wear", "m_face_001_type01"), ("wear", "f_face_001_type02"), ("wear", "m_head_001_type02")} <= worn
+	# hung on the body whole, or not worn at all
+	for key in (("wear", "back_wings"), ("wear", "hat_cap"), ("wear", "vehicle_board"), ("nano", "nano_eduardo")):
+		assert key not in worn
+	assert worn_prefabs({}) == set()

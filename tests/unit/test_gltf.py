@@ -385,6 +385,62 @@ def test_without_skins():
 	assert len(w.json["scenes"][0]["nodes"]) == 1
 
 
+def plain_child(parent_tr, name, ids, tex=None):
+	"A child GameObject of a Transform, with a MeshFilter + MeshRenderer; returns its Transform pointer"
+	go = GameObject(fdict(m_Name=name, m_Component=[]))
+	tr = Pointer(Transform(fdict(m_GameObject=Pointer(go, next(ids)), m_LocalPosition=vec(0, 0, 0),
+		m_LocalRotation=fdict(x=0, y=0, z=0, w=1), m_LocalScale=vec(1, 1, 1), m_Children=[], m_Father=None)), next(ids))
+	add_plain_mesh(go, tr, name, ids, tex)
+	parent_tr.target._obj["m_Children"].append(tr)
+	return tr
+
+
+def add_plain_mesh(go, tr, name, ids, tex=None):
+	filt = fdict(m_GameObject=None, m_Mesh=Pointer(mesh(**QUAD, indices=[0, 1, 2], name=name), next(ids)))
+	renderer = fdict(m_GameObject=None, m_Materials=[Pointer(material(name, tex), next(ids))])
+	go._obj["m_Component"] = [(4, tr), (33, Pointer(filt, next(ids))), (23, Pointer(renderer, next(ids)))]
+
+
+def worn_item():
+	"""
+	A worn item, as some hair is: the rig's skinned mesh, and plain meshes
+	beside it: on the bone (a joint of the skin), under the bone, and under
+	the root (a textured one)
+	"""
+	ids = iter(range(500, 600))
+	root = rig()
+	root_tr = root.component[0][1]
+	bone_tr = root_tr.target._obj["m_Children"][0]
+	add_plain_mesh(bone_tr.target.game_object.resolve(), bone_tr, "on the bone", ids)
+	plain_child(bone_tr, "Biped Object", ids)
+	plain_child(root_tr, "Biped Object@#0", ids, tex=Pointer(texture("hat"), next(ids)))
+	return root
+
+
+def test_skinned_only():
+	w = GLTFWriter()
+	w.add_gameobject(worn_item(), skinned_only=True)
+	g = GLB(w.glb())
+	[m] = g["meshes"]
+	assert "skin" in g["nodes"][g["scenes"][0]["nodes"][1]]
+	# the bone stays, a joint; the nodes that only carried a plain mesh go
+	assert sorted(n["name"] for n in g["nodes"]) == ["bone", "rig", "rig (skinned)"]
+	assert [n.get("mesh") for n in g["nodes"] if n["name"] != "rig (skinned)"] == [None, None]
+	assert "materials" not in g.json and "images" not in g.json
+	assert w.left_out == ["bone", "bone/Biped Object", "Biped Object@#0"]
+	[warning] = w.warnings
+	assert "'Biped Object@#0'" in warning and "textured" in warning
+
+
+def test_skinned_only_is_off_by_default():
+	w = GLTFWriter()
+	w.add_gameobject(worn_item())
+	g = GLB(w.glb())
+	assert len(g["meshes"]) == 4
+	assert sorted(n["name"] for n in g["nodes"]) == ["Biped Object", "Biped Object@#0", "bone", "rig", "rig (skinned)"]
+	assert w.left_out == [] and w.warnings == []
+
+
 def test_clip():
 	move = clip(position_curves=[curve_on("bone", key(0.0, vec(1, 0, 0), vec(1, 0, 0)), key(1.0, vec(2, 0, 0), vec(1, 0, 0)))])
 	g = GLB(export_gameobject(rig(clips=[move])))

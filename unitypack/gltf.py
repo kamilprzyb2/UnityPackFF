@@ -226,6 +226,7 @@ class GLTFWriter:
 		self._buffers = []  # external buffers: the document's buffers after the BIN chunk's
 		self._geometry_data = None  # with external, where a mesh's views go while it's added
 		self._geometry_views = None
+		self.left_out = []  # with skinned_only, the plain meshes left out (see add_gameobject())
 
 	def _add(self, key, item):
 		return self._add_to(self.json, key, item)
@@ -672,7 +673,8 @@ class GLTFWriter:
 			roots.append(self.add_gameobject(gameobject, skins, animations, sample_rate, inactive, colliders))
 		return roots
 
-	def add_gameobject(self, gameobject, skins=True, animations=True, sample_rate=None, inactive=True, colliders=False):
+	def add_gameobject(self, gameobject, skins=True, animations=True, sample_rate=None, inactive=True, colliders=False,
+			skinned_only=False):
 		"""
 		A GameObject and everything under it: one node per Transform, with
 		the meshes of MeshFilter + MeshRenderer and SkinnedMeshRenderer
@@ -681,8 +683,16 @@ class GLTFWriter:
 		colliders, each node's colliders (add_collider()) and Rigidbody go
 		into its extras. Returns the root node; it and the skinned mesh
 		nodes are added to the scene.
+
+		skinned_only exports what the client takes from a worn item (see
+		unitypack.xdttextures.worn_prefabs()): ActorSkinCombiner combines
+		its SkinnedMeshRenderers into the character and nothing else, so
+		its MeshFilter + MeshRenderer meshes are left out (some hair has 3ds
+		Max Biped helper boxes there), and so are the nodes that only
+		carried one. Each is listed in left_out, as its node's path; a
+		textured one also gets a warning, as it may be more than a helper.
 		"""
-		export = GameObjectExport(self, gameobject, skins, animations, sample_rate, inactive, colliders)
+		export = GameObjectExport(self, gameobject, skins, animations, sample_rate, inactive, colliders, skinned_only)
 		self.add_root(export.root)
 		for node in export.extra_roots:
 			self.add_root(node)
@@ -778,10 +788,14 @@ class GameObjectExport:
 	clips of its Animation components.
 	"""
 
-	def __init__(self, writer, gameobject, skins=True, animations=True, sample_rate=None, inactive=True, colliders=False):
+	def __init__(self, writer, gameobject, skins=True, animations=True, sample_rate=None, inactive=True, colliders=False,
+			skinned_only=False):
 		self.writer = writer
 		self.inactive = inactive
 		self.colliders = colliders
+		self.skinned_only = skinned_only
+		# with skinned_only, the Transforms the skins use: kept whatever they carry
+		self.joints = self.bones(gameobject) if skinned_only else set()
 		self.nodes = {}  # Transform path ID -> node index
 		self.paths = {}  # path from the root ("" for the root) -> node index
 		self.local = {}  # node index -> local matrix, in Unity's coordinates
@@ -805,7 +819,40 @@ class GameObjectExport:
 						clips[(path, clip.name)] = clip
 						self.add_clip(path, clip)
 
+	def bones(self, gameobject):
+		"The path IDs of the Transforms the SkinnedMeshRenderers under a GameObject use as bones"
+		w = self.writer
+		ret = set()
+		comps = list(components(gameobject))
+		for cid, ptr in comps:
+			if cid == SKINNED_MESH_RENDERER:
+				smr = w.resolve(ptr)
+				if smr is not None:
+					ret.update(b.path_id for b in _fields(smr)["m_Bones"] if b)
+		transform = w.resolve(next(p for cid, p in comps if cid == TRANSFORM))
+		for child_ptr in _fields(transform)["m_Children"] if transform is not None else ():
+			child = w.resolve(child_ptr)
+			child_go = w.resolve(_fields(child)["m_GameObject"]) if child is not None else None
+			if child_go is not None:
+				ret |= self.bones(child_go)
+		return ret
+
+	def leave_out(self, path, mesh_ptr, renderer):
+		"Note a plain mesh skinned_only leaves out"
+		w = self.writer
+		w.left_out.append(path)
+		textured = False
+		for ptr in _fields(renderer)["m_Materials"]:
+			material = w.resolve(ptr)
+			main = material.saved_properties.get("m_TexEnvs", {}).get("_MainTex") if material is not None else None
+			textured = textured or bool(main and main["m_Texture"])
+		if textured:
+			mesh = w.resolve(mesh_ptr)
+			w.warnings.append("left out %r on %r, which is textured: the game doesn't draw plain meshes on worn items" % (
+				mesh.name if mesh is not None else mesh_ptr, path))
+
 	def visit(self, gameobject, path):
+		"The node of a GameObject and what's under it, or None for one skinned_only leaves out"
 		w = self.writer
 		comps = list(components(gameobject))
 		transform_ptr = next(p for cid, p in comps if cid == TRANSFORM)
@@ -815,12 +862,17 @@ class GameObjectExport:
 		skinned = None
 		light = None
 		extras = {}
+		left_out = animated = False
 		renderer = next((w.resolve(p) for cid, p in comps if cid == MESH_RENDERER), None)
 		for cid, ptr in comps:
 			if cid == MESH_FILTER and renderer is not None:
 				filt = w.resolve(ptr)
 				if filt is not None and _fields(filt)["m_Mesh"]:
-					mesh = w.add_mesh_pointer(_fields(filt)["m_Mesh"], _fields(renderer)["m_Materials"])
+					if self.skinned_only:
+						self.leave_out(path or gameobject.name, _fields(filt)["m_Mesh"], renderer)
+						left_out = True
+					else:
+						mesh = w.add_mesh_pointer(_fields(filt)["m_Mesh"], _fields(renderer)["m_Materials"])
 			elif cid == TERRAIN_COLLIDER:
 				collider = w.resolve(ptr)
 				terrain = w.resolve(_fields(collider)["m_TerrainData"]) if collider is not None else None
@@ -832,6 +884,7 @@ class GameObjectExport:
 				animation = w.resolve(ptr)
 				if animation is not None:
 					self.animations.append((path, animation))
+					animated = True
 			elif cid == LIGHT:
 				component = w.resolve(ptr)
 				if component is not None:
@@ -852,7 +905,13 @@ class GameObjectExport:
 			child = w.resolve(child_ptr)
 			child_go = w.resolve(_fields(child)["m_GameObject"]) if child is not None else None
 			if child_go is not None and (self.inactive or child_go._obj.get("m_IsActive", True)):
-				children.append(self.visit(child_go, "%s/%s" % (path, child_go.name) if path else child_go.name))
+				node = self.visit(child_go, "%s/%s" % (path, child_go.name) if path else child_go.name)
+				if node is not None:
+					children.append(node)
+
+		if (left_out and path and not children and skinned is None and light is None and not extras and not animated
+				and transform_ptr.path_id not in self.joints):
+			return None  # it only carried what was left out
 
 		if light is not None:
 			# Unity lights shine along their +z, glTF's along -z: turn around y

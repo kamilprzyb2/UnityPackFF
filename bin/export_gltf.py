@@ -22,6 +22,12 @@ the XDT uses with several sets of textures (car colours, hoverboard
 designs, a face's eye colours) is written once per set, as
 <path>@<texture>.glb.
 
+With --as-worn, what players wear skinned into the character (clothes,
+capes, faces, hair: the XDT says which) exports as the game uses it: only
+its skinned meshes. The game never draws the plain meshes beside them
+(some hair carries 3ds Max Biped helper boxes there), so they are left out,
+with a warning for any that is textured. It needs the XDT.
+
 With --external DIR, images and mesh data go to DIR instead of into each
 .glb, as files named by their content that every .glb using them points to
 (by a path relative to the output directory). Exports into the same DIR
@@ -37,7 +43,7 @@ import sys
 from unitypack.asset import Asset
 from unitypack.environment import UnityEnvironment
 from unitypack.gltf import ExternalFiles, GLTFWriter
-from unitypack.xdttextures import prefab_key, texture_swaps
+from unitypack.xdttextures import prefab_key, texture_swaps, worn_prefabs
 
 GAME_OBJECT = 1
 ASSET_BUNDLE = 142
@@ -199,8 +205,11 @@ def main():
 	p.add_argument('--external', metavar='DIR', help='write images and mesh data to DIR, named by their content and shared by every export into it')
 	xdt_group = p.add_mutually_exclusive_group()
 	xdt_group.add_argument('--xdt', metavar='TABLEDATA', help='the TableData file whose XDT names the game\'s textures (default: the one in the environment)')
-	xdt_group.add_argument('--no-xdt', action='store_true', help='keep the prefabs\' own textures')
+	xdt_group.add_argument('--no-xdt', action='store_true', help='keep the prefabs\' own textures (no XDT: not with --as-worn)')
+	p.add_argument('--as-worn', action='store_true', help='export what players wear (clothes, capes, faces, hair) with its skinned meshes only, as the game combines it; needs the XDT')
 	args = p.parse_args()
+	if args.as_worn and args.no_xdt:
+		p.error('--as-worn needs the XDT to know what is worn: drop --no-xdt')
 
 	env = UnityEnvironment(base_path=args.env or os.path.dirname(os.path.abspath(args.file)))
 	external = ExternalFiles(args.external) if args.external else None
@@ -222,36 +231,43 @@ def main():
 			report_external(external)
 			return
 
-		swaps = {}
+		swaps, worn = {}, set()
 		if not args.no_xdt:
 			try:
 				xdt = load_xdt(env, args.xdt)
 			except (KeyError, ValueError) as e:
 				p.error('{} has no XDT ({}): give --xdt the TableData file, or use --no-xdt'.format(args.xdt, e))
 			if xdt is None:
+				if args.as_worn:
+					p.error('no TableData in {}: --as-worn needs the XDT, give --xdt the TableData file'.format(env.base_path))
 				print('no TableData in {}: exporting the prefabs\' own textures (use --xdt or --no-xdt)'.format(env.base_path), file=sys.stderr)
 			else:
 				swaps = texture_swaps(xdt)
+				worn = worn_prefabs(xdt) if args.as_worn else set()
 		textures = Textures(env)
 
-		count = swapped = exported = 0
+		count = swapped = exported = left_out = 0
 		for path, ptr in prefabs(asset):
 			if args.paths and not any(want.lower() in path.lower() for want in args.paths):
 				continue
-			sets = swaps.get(prefab_key(path), [None])
+			key = prefab_key(path)
+			sets = swaps.get(key, [None])
 			for swap in sets:
 				missing = set()
 				w = GLTFWriter(texture_override=override(swap, textures, missing) if swap else None, external=external)
-				w.add_gameobject(ptr.resolve(), colliders=args.colliders)
+				w.add_gameobject(ptr.resolve(), colliders=args.colliders, skinned_only=key in worn)
 				name = variant_name(path, swap, sets) if swap else path
-				print('{} -> {}'.format(name, write(w, args.outdir, name)))
+				note = ' ({} plain meshes left out)'.format(len(w.left_out)) if w.left_out else ''
+				print('{} -> {}{}'.format(name, write(w, args.outdir, name), note))
 				for t in sorted(missing):
 					print('  warning: no texture/{}.dds in the environment; kept the prefab\'s own'.format(t), file=sys.stderr)
 				count += 1
+				left_out += len(w.left_out)
 			exported += 1
 			swapped += sets != [None]
 	report_external(external)
-	print('{} files exported ({} prefabs, {} with the XDT\'s textures)'.format(count, exported, swapped))
+	worn_note = ', {} plain meshes left out of what players wear'.format(left_out) if args.as_worn else ''
+	print('{} files exported ({} prefabs, {} with the XDT\'s textures{})'.format(count, exported, swapped, worn_note))
 
 
 if __name__ == '__main__':

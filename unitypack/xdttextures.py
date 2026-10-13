@@ -26,7 +26,9 @@ hair colour).
 NPCs of type 100 and up and human NPCs (built from player parts) keep the
 prefab's own textures. A prefab can be used with several sets of textures
 (car colours, hoverboard designs, a face's eye colours): texture_swaps()
-lists each distinct set once, in table order.
+lists each distinct set once, in table order. worn_prefabs() lists the
+prefabs under WORN, textures or not: the client combines only their
+skinned meshes into the character.
 """
 
 from collections import namedtuple
@@ -77,20 +79,12 @@ def prefab_key(container_path):
 	return None
 
 
-def texture_swaps(xdt):
-	"{(folder, model): [Swap, ...]} for every prefab the XDT re-textures; xdt is the read xdtdatas object"
-	swaps = {}
+def _uses(xdt):
+	"(folder, model, Swap) for every prefab use the XDT names, in table order; model and textures may be None"
 
-	def put(folder, model, swap):
-		if model is None or (swap.main is None and swap.sub is None):
-			return
-		found = swaps.setdefault((folder, model.lower()), [])
-		if swap not in found:
-			found.append(swap)
-
-	def add(folder, mesh, rule=FIRST):
-		put(folder, _name(mesh["m_pstrMMeshModelString"]),
-			Swap(_name(mesh["m_pstrMTextureString"]), _name(mesh["m_pstrMTextureString2"]), rule))
+	def use(folder, mesh, rule=FIRST):
+		return folder, _name(mesh["m_pstrMMeshModelString"]), Swap(
+			_name(mesh["m_pstrMTextureString"]), _name(mesh["m_pstrMTextureString2"]), rule)
 
 	def genders(mesh):
 		"(model, texture, texture 2, skin) for the boy's and the girl's model"
@@ -107,37 +101,57 @@ def texture_swaps(xdt):
 				yield row, mesh_rows[i]
 
 	for row, mesh in rows("m_pNanoTable", "m_pNanoData", "m_pNanoMeshData"):
-		add("nano", mesh)
+		yield use("nano", mesh)
 	for row, mesh in rows("m_pNpcTable", "m_pNpcData", "m_pNpcMeshData"):
 		if row.get("m_iHNpc") != 1 and row["m_iNpcType"] < 100:
-			add("mob", mesh)
+			yield use("mob", mesh)
 	for row, mesh in rows("m_pShinyTable", "m_pShinyData", "m_pShinyMeshData"):
-		add("mob", mesh)
+		yield use("mob", mesh)
 	for row, mesh in rows("m_pTransportationTable", "m_pTransportationData", "m_pTransportationMeshData"):
-		add("mob", mesh)
+		yield use("mob", mesh)
 	for row, mesh in rows("m_pVehicleItemTable", "m_pItemData", "m_pItemMeshData"):
-		add("wear", mesh, VEHICLE)
+		yield use("wear", mesh, VEHICLE)
 
 	# what a player wears: the client's SetBody, SetBackFack, AttachGO, SetFace, SetHead
 	for table in CLOTHES:
 		for row, mesh in rows(table, "m_pItemData", "m_pItemMeshData"):
 			for model, tex, tex2, skin in genders(mesh):
-				put("wear", model, Swap(tex, skin, WORN))
+				yield "wear", model, Swap(tex, skin, WORN)
 	for row, mesh in rows("m_pBackItemTable", "m_pItemData", "m_pItemMeshData"):
 		cape = row.get("m_iEquipType") == 1
 		for model, tex, tex2, skin in genders(mesh):
-			put("wear", model, Swap(tex, tex2, WORN if cape else FIRST))
+			yield "wear", model, Swap(tex, tex2, WORN if cape else FIRST)
 	for table in ATTACHED:
 		for row, mesh in rows(table, "m_pItemData", "m_pItemMeshData"):
 			for model, tex, tex2, skin in genders(mesh):
-				put("wear", model, Swap(tex, tex2, FIRST))
+				yield "wear", model, Swap(tex, tex2, FIRST)
 	for row, mesh in rows("m_pFaceItemTable", "m_pItemData", "m_pItemMeshData"):
 		for model, tex, tex2, skin in genders(mesh):
 			for cut in ("_type01", "_type02"):
 				for eye in EYE_COLORS:
-					put("wear", model and model + cut, Swap(tex and "%s_%s" % (tex, eye), skin, WORN))
+					yield "wear", model and model + cut, Swap(tex and "%s_%s" % (tex, eye), skin, WORN)
 	for row, mesh in rows("m_pHeadItemTable", "m_pItemData", "m_pItemMeshData"):
 		for model, tex, tex2, skin in genders(mesh):
 			for cut in ("_type01", "_type02"):
-				put("wear", model and model + cut, Swap(tex and tex + "_a", None, WORN))
+				yield "wear", model and model + cut, Swap(tex and tex + "_a", None, WORN)
+
+
+def texture_swaps(xdt):
+	"{(folder, model): [Swap, ...]} for every prefab the XDT re-textures; xdt is the read xdtdatas object"
+	swaps = {}
+	for folder, model, swap in _uses(xdt):
+		if model is None or (swap.main is None and swap.sub is None):
+			continue
+		found = swaps.setdefault((folder, model.lower()), [])
+		if swap not in found:
+			found.append(swap)
 	return swaps
+
+
+def worn_prefabs(xdt):
+	"""
+	The (folder, model) of every prefab the client skins into the character
+	(rule WORN: clothes, capes, faces, hair), whether or not the XDT names
+	textures for it
+	"""
+	return {(folder, model.lower()) for folder, model, swap in _uses(xdt) if model is not None and swap.rule == WORN}
