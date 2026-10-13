@@ -19,9 +19,11 @@ exports whole (add_scene()), terrain included: its surface with the
 shifts applied and its splat textures blended into one base map.
 
 Material render state (alphaMode, doubleSided) comes from the shader's
-name, see alpha_state(). Clips that only animate material properties
-(texture scrolling, colour pulses) have no glTF equivalent and are left
-out; a clip's material curves are listed in its animation's extras.
+name, see alpha_state(). glTF can't animate material properties, so a
+clip's material curves (a character's build, texture scrolling, colour
+pulses) are sampled into its animation's extras; a clip that animates
+nothing else goes into the document's extras instead (see
+GameObjectExport.add_clip()).
 
 Images and mesh data can go to files of their own instead (see
 ExternalFiles), for exports that share them: every map tile uses the same
@@ -1058,8 +1060,15 @@ class GameObjectExport:
 		"""
 		One clip as a glTF animation: every transform curve sampled at the
 		clip's rate (or self.sample_rate), linearly interpolated. Curves on
-		other properties (material colours, say) and the clip's events go
-		into the animation's extras.
+		other properties (material colours, say) are sampled the same way
+		into the animation's extras, as float_curves: {"<path>:<attribute>":
+		{"times": [...], "values": [...], "node": n}}, with the path from
+		the exported root (as node names go) and the node it names, if
+		there is one; a curve that doesn't change has one sample. The
+		clip's events go there too. A clip with no transform curve isn't a
+		glTF animation (one needs a channel): it goes into the document's
+		extras.material_clips, as {"name": ..., "float_curves": ...,
+		"events": ...}.
 		"""
 		w = self.writer
 		rate = self.sample_rate or clip.sample_rate or 30.0
@@ -1106,8 +1115,21 @@ class GameObjectExport:
 				anim["channels"].append({"sampler": sampler(values, type_), "target": {"node": node, "path": target}})
 
 		extras = {}
-		if clip.float_curves:
-			extras["float_curves"] = sorted({"%s:%s" % (f.path, f.attribute) for f in clip.float_curves})
+		floats = {}
+		for f in clip.float_curves:
+			if not f.curve.keys:
+				continue
+			values = [float(f.curve.evaluate(t)) for t in times]
+			values = [v if math.isfinite(v) else None for v in values]
+			if all(v == values[0] for v in values):
+				values = values[:1]
+			track = {"times": times[:len(values)] if len(values) > 1 else [0.0], "values": values}
+			node = self.paths.get(full_path(f.path))
+			if node is not None:
+				track["node"] = node
+			floats["%s:%s" % (full_path(f.path), f.attribute)] = track
+		if floats:
+			extras["float_curves"] = dict(sorted(floats.items()))
 		if clip.events:
 			extras["events"] = [{"time": float(e["time"]), "function": e["functionName"]} for e in clip.events]
 		if extras:
@@ -1116,6 +1138,8 @@ class GameObjectExport:
 			w.warnings.append("clip %r: no node for %d curve paths, such as %r" % (clip.name, len(missing), sorted(missing)[0]))
 		if anim["channels"]:
 			w._add("animations", anim)
+		elif floats:
+			w.json.setdefault("extras", {}).setdefault("material_clips", []).append(dict(name=clip.name, **extras))
 
 
 def _rotation_samples(values):

@@ -571,9 +571,45 @@ def test_clip_extras_and_missing_paths():
 	w = GLTFWriter()
 	w.add_gameobject(rig(clips=[c]))
 	anim = w.json["animations"][0]
-	assert anim["extras"] == {"float_curves": [":_Color.r"], "events": [{"time": 0.75, "function": "end"}]}
+	assert anim["extras"]["events"] == [{"time": 0.75, "function": "end"}]
+	assert anim["extras"]["float_curves"] == {":_Color.r": {"times": [0.0], "values": [0.0], "node": w.json["scenes"][0]["nodes"][0]}}
 	assert len(anim["channels"]) == 1
 	assert "no node for 1 curve paths, such as 'gone'" in w.warnings[0]
+
+
+def float_curve(attribute, *keys, path=""):
+	return fdict(curve=serialized_curve(list(keys)), attribute=attribute, path=path, classID=21, script=None)
+
+
+def test_clip_float_curve_values():
+	# a character's build: _FatFactor 0.0075 -> 0 -> -0.0078, sampled at the clip's rate as transforms are
+	shape = clip("shape", position_curves=[curve_on("bone", key(0.0, vec(1, 0, 0), vec(0, 0, 0)), key(1.0, vec(1, 0, 0), vec(0, 0, 0)))],
+		float_curves=[
+			float_curve("[0]._FatFactor", key(0.0, 0.0075, -0.015), key(0.5, 0.0, -0.0153), key(1.0, -0.0078, -0.0156)),
+			float_curve("_Color.r", key(0.0, 0.5, 0.0), key(1.0, 0.5, 0.0), path="bone"),
+		])
+	g = GLB(export_gameobject(rig(clips=[shape])))
+	curves = g["animations"][0]["extras"]["float_curves"]
+	assert list(curves) == [":[0]._FatFactor", "bone:_Color.r"]
+	fat = curves[":[0]._FatFactor"]
+	assert fat["times"] == [0, 0.5, 1]
+	assert fat["values"] == pytest.approx([0.0075, 0.0, -0.0078])
+	assert g["nodes"][fat["node"]]["name"] == "rig"
+	# a constant curve: one sample, as for transforms
+	assert curves["bone:_Color.r"]["values"] == [0.5] and curves["bone:_Color.r"]["times"] == [0]
+	assert g["nodes"][curves["bone:_Color.r"]["node"]]["name"] == "bone"
+
+
+def test_material_only_clip():
+	# no transform curve, so no glTF animation: the document's extras keep it
+	scroll = clip("nif-default", float_curves=[float_curve("_MainTex.offset.x", key(0.0, 0.0, 1.0), key(1.0, 1.0, 1.0))],
+		events=[fdict(time=0.5, functionName="half", data="", messageOptions=1)])
+	g = GLB(export_gameobject(rig(clips=[scroll])))
+	assert "animations" not in g.json
+	[c] = g["extras"]["material_clips"]
+	assert c["name"] == "nif-default"
+	assert c["float_curves"][":_MainTex.offset.x"]["values"] == pytest.approx([0, 0.5, 1])
+	assert c["events"] == [{"time": 0.5, "function": "half"}]
 
 
 def test_clip_without_channels_is_left_out():

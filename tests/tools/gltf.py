@@ -142,6 +142,8 @@ def summary(glb_bytes, base=None):
 		h.update(json.dumps([anim["name"], anim["channels"], anim.get("extras")], sort_keys=True).encode())
 		for s in anim["samplers"]:
 			h.update(("%r;%r;" % (g.accessor(s["input"]), g.accessor(s["output"]))).encode())
+	if "extras" in g.json:  # clips that only animate materials
+		h.update(json.dumps(g["extras"], sort_keys=True).encode())
 	images = [list(Image.open(io.BytesIO(g.image(i))).size) for i in range(len(g.get("images", [])))]
 	return {
 		"nodes": len(g.get("nodes", [])),

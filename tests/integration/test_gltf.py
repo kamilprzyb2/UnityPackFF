@@ -213,6 +213,32 @@ def test_export_gltf_actor_bones(build, bundle, unpacked, expected, tmp_path):
 	expected.check("gltf-actor-bones/" + bundle, got)
 
 
+@pytest.mark.bundles("CharacterSelection.resourceFile", "CharacterCreation.resourceFile")
+def test_export_gltf_float_curves(build, bundle, unpacked, tmp_path):
+	"""
+	The boy's build: the shape clip moves the materials' _FatFactor from
+	0.0075 through 0 to -0.0078, the height clip keeps it at 0; both are
+	sampled into the animations' extras
+	"""
+	from tests.glb import GLB
+
+	env = CuratedEnvironment(build)
+	try:
+		run_script("export_gltf.py", build.inner_files(bundle)[0], "actor/m.kfm", "-o", tmp_path, "--env", env.dir)
+	finally:
+		env.close()
+	f = tmp_path / "actor_m.kfm.glb"
+	if not f.exists():
+		pytest.skip("no actors in this archive")
+	anims = {a["name"]: a for a in GLB(f.read_bytes())["animations"]}
+	shape, height = anims["shape"]["extras"]["float_curves"], anims["height"]["extras"]["float_curves"]
+	assert sorted(shape) == sorted(height) == sorted(":[%d]._FatFactor" % i for i in range(10))
+	for track in shape.values():
+		at = dict(zip(track["times"], track["values"]))
+		assert [at[0.0], at[0.5], at[1.0]] == pytest.approx([0.0075, 0.0, -0.0078])
+	assert all(track["values"] == [0.0] for track in height.values())
+
+
 @pytest.mark.bundles("Map_04_02.unity3d")
 def test_external_files(build, bundle, unpacked, tmp_path):
 	"""
