@@ -140,3 +140,50 @@ def test_export_gltf_wearables(build, bundle, unpacked, expected, tmp_path):
 	if faces:
 		assert len(faces) == 5  # eye colours a to e
 	expected.check("gltf-wear/" + bundle, got)
+
+
+@pytest.mark.bundles("Map_04_02.unity3d")
+def test_external_files(build, bundle, unpacked, tmp_path):
+	"""
+	Two neighbouring map tiles exported with --external into one folder:
+	they share files, so the folder holds fewer than the two reference, and
+	each holds what the embedded export does.
+	"""
+	import os
+
+	from tests.tools.gltf import summary
+
+	from tests.glb import GLB
+
+	neighbour = "Map_04_03.unity3d"
+	if neighbour not in build.bundles:
+		pytest.skip("no %s in this build" % neighbour)
+	env = CuratedEnvironment(build)
+	try:
+		scenes = []
+		for name in (bundle, neighbour):
+			env.add_references(name)
+			scenes += [p for p in build.inner_files(name) if p.name.startswith("BuildPlayer-") and not p.name.endswith(".sharedAssets")]
+		for path in scenes:
+			run_script("export_gltf.py", path, "-o", tmp_path / "tiles", "--env", env.dir, "--external", tmp_path / "shared")
+			run_script("export_gltf.py", path, "-o", tmp_path / "embedded", "--env", env.dir)
+	finally:
+		env.close()
+
+	files = sorted((tmp_path / "tiles").glob("*.glb"))
+	assert len(files) == 2
+	referenced = []
+	for f in files:
+		g = GLB(f.read_bytes(), base=f.parent)
+		uris = [x["uri"] for k in ("images", "buffers") for x in g.get(k, []) if "uri" in x]
+		assert uris and all(u.startswith("../shared/") for u in uris)
+		assert not any("bufferView" in i for i in g.get("images", []))
+		referenced.append({os.path.basename(u) for u in uris})
+		assert summary(f.read_bytes(), f.parent) == summary((tmp_path / "embedded" / f.name).read_bytes())
+	shared = {p.name for p in (tmp_path / "shared").iterdir()}
+	assert shared == referenced[0] | referenced[1]
+	assert len(shared) < len(referenced[0]) + len(referenced[1])
+
+	if have_validator():
+		issues = validate(files)
+		assert {f: r for f, r in issues.items() if r["errors"] or r["warnings"]} == {}

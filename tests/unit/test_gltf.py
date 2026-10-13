@@ -9,8 +9,11 @@ left-handed, glTF right-handed), so positions and normals get -x, rotations
 embedded as upright PNGs.
 """
 
+import hashlib
 import io
 import math
+import os
+import re
 
 import pytest
 from PIL import Image
@@ -20,7 +23,7 @@ from tests.unit.test_export import QUAD, compressed_mesh, fdict, mesh, packed, s
 from unitypack.engine.component import Transform
 from unitypack.engine.object import GameObject
 from unitypack.engine.texture import Material, Texture2D, TextureFormat
-from unitypack.gltf import GLTFWriter, export_gameobject, export_mesh, mirror_matrix
+from unitypack.gltf import ExternalFiles, GLTFWriter, export_gameobject, export_mesh, mirror_matrix
 
 
 def color(r, g, b, a=1.0):
@@ -691,3 +694,115 @@ def test_node_rotations_are_unit_length():
 	assert nodes[zero] == {"name": "zero"}
 	assert nodes[long] == {"name": "long"}
 	assert nodes[half]["rotation"] == pytest.approx([0, -math.sqrt(0.5), 0, math.sqrt(0.5)])
+
+
+# External files: images and each mesh's data in a shared folder, named by
+# their content, and the .glb pointing at them by relative URI.
+
+def external_export(shared, out, *meshes):
+	"A .glb in out with (mesh, materials) on a node each, its images and mesh data in shared; its GLB"
+	w = GLTFWriter(external=ExternalFiles(str(shared)))
+	for m, materials in meshes:
+		w.add_root(w.add_node(m.name, mesh=w.add_mesh(m, materials)))
+	out.mkdir(exist_ok=True)
+	(out / "x.glb").write_bytes(w.glb(str(out)))
+	return GLB((out / "x.glb").read_bytes(), base=out)
+
+
+def test_external_files_are_shared(tmp_path):
+	shared = tmp_path / "shared"
+	quad = mesh(**QUAD, indices=[0, 1, 2, 0, 2, 3], name="quad")
+	tri = mesh(**QUAD, indices=[0, 1, 2], name="tri")
+	a = external_export(shared, tmp_path / "a", (quad, [material("one", tex=Pointer(texture(), 5))]))
+	# the same mesh and pixels, read again, with another material and texture name
+	quad_again = mesh(**QUAD, indices=[0, 1, 2, 0, 2, 3], name="quad")
+	b = external_export(shared, tmp_path / "b", (tri, []), (quad_again, [material("two", tex=Pointer(texture("other"), 6))]))
+
+	assert len(list(shared.glob("*.png"))) == 1
+	assert len(list(shared.glob("*.bin"))) == 2  # the quad once, and the triangle
+	[png] = shared.glob("*.png")
+	for g in (a, b):
+		[image] = g["images"]
+		assert image["uri"] == "../shared/" + png.name and "bufferView" not in image
+		assert image["mimeType"] == "image/png"
+		assert g.image(0) == png.read_bytes()
+		# nothing left for a BIN chunk: every buffer is a file
+		assert g.bin == b"" and all("uri" in buf for buf in g["buffers"])
+	assert a["images"][0]["name"] == "tex" and b["images"][0]["name"] == "other"
+	quad_uri = a["buffers"][0]["uri"]
+	assert quad_uri in [buf["uri"] for buf in b["buffers"]]
+	# and the data reads back through them
+	p = b["meshes"][1]["primitives"][0]
+	assert b.accessor(p["attributes"]["POSITION"]) == approx([(0, 0, 0), (-1, 0, 0), (-1, 1, 0), (0, 1, 0)])
+	assert b.accessor(p["indices"]) == [0, 2, 1, 0, 3, 2]
+
+
+def test_external_mesh_data_does_not_depend_on_its_material(tmp_path):
+	shared = tmp_path / "shared"
+	no_uvs = dict(QUAD, uvs=[])
+	# a textured material on a mesh without UVs becomes an untextured copy: the mesh's data is the same
+	external_export(shared, tmp_path / "a", (mesh(**no_uvs, indices=[0, 1, 2]), [material(tex=Pointer(texture(), 5))]))
+	external_export(shared, tmp_path / "b", (mesh(**no_uvs, indices=[0, 1, 2]), []))
+	assert len(list(shared.glob("*.bin"))) == 1
+
+
+def test_external_same_mesh_twice_in_one_file(tmp_path):
+	"Added once per set of materials, the mesh's data is one buffer"
+	quad = mesh(**QUAD, indices=[0, 1, 2], name="quad")
+	g = external_export(tmp_path / "shared", tmp_path / "a", (quad, [material("one")]), (quad, [material("two")]))
+	assert len(g["meshes"]) == 2 and len(g["buffers"]) == 1
+
+
+def test_external_skin_and_clips_stay_in_the_glb(tmp_path):
+	shared = tmp_path / "shared"
+	w = GLTFWriter(external=ExternalFiles(str(shared)))
+	w.add_gameobject(rig(clips=[clip(position_curves=[curve_on("bone", key(0.0, vec(1, 0, 0), vec(1, 0, 0)), key(1.0, vec(2, 0, 0), vec(1, 0, 0)))])]))
+	g = GLB(w.glb(str(tmp_path)), base=tmp_path)
+	assert len(g["buffers"]) == 2 and "uri" not in g["buffers"][0]
+
+	def buffer(accessor):
+		return g["bufferViews"][g["accessors"][accessor]["bufferView"]]["buffer"]
+
+	mesh_accessors = [a for m in g["meshes"] for p in m["primitives"] for a in [*p["attributes"].values(), p["indices"]]]
+	assert {buffer(a) for a in mesh_accessors} == {1}  # skin weights included
+	assert buffer(g["skins"][0]["inverseBindMatrices"]) == 0
+	samplers = g["animations"][0]["samplers"]
+	assert {buffer(s[k]) for s in samplers for k in ("input", "output")} == {0}
+	assert g.accessor(g["meshes"][0]["primitives"][0]["attributes"]["WEIGHTS_0"])[1] == approx([(1, 0, 0, 0)])[0]
+
+
+def test_external_terrain(tmp_path):
+	shared = tmp_path / "shared"
+	w = GLTFWriter(external=ExternalFiles(str(shared)))
+	w.add_root(w.add_node("t", mesh=w.add_terrain(terrain_data())))
+	g = GLB(w.glb(str(tmp_path)), base=tmp_path)
+	[p] = g["meshes"][0]["primitives"]
+	assert len(g.accessor(p["attributes"]["POSITION"])) == 33 * 33
+	assert g.bin == b"" and len(g["buffers"]) == 1
+	# the base map, the splat, the control map and the lightmap
+	assert len(g["images"]) == 4 and all(i["uri"].startswith("shared/") for i in g["images"])
+	assert len(list(shared.glob("*.png"))) == 4
+
+
+def test_external_uris(tmp_path):
+	w = GLTFWriter(external=ExternalFiles(str(tmp_path / "shared files")))
+	w.add_root(w.add_node("m", mesh=w.add_mesh(mesh(**QUAD, indices=[0, 1, 2]))))
+	name = GLB(w.glb(str(tmp_path / "shared files")), base=tmp_path / "shared files")["buffers"][0]["uri"]
+	assert re.fullmatch(r"[0-9a-f]{16}\.bin", name)
+	tiles = tmp_path / "tiles" / "x"
+	tiles.mkdir(parents=True)
+	assert GLB(w.glb(str(tiles)), base=tiles)["buffers"][0]["uri"] == "../../shared%20files/" + name
+
+
+def test_external_files_put(tmp_path):
+	store = ExternalFiles(str(tmp_path / "d"))
+	name = store.put(b"data", "bin")
+	assert name == hashlib.sha256(b"data").hexdigest()[:16] + ".bin"
+	assert store.put(b"data", "bin") == name
+	assert store.written == {name} and store.names == {name}
+	assert os.listdir(tmp_path / "d") == [name]  # no temporary file left
+	# another export's file of that name is not written again
+	other = ExternalFiles(str(tmp_path / "d"))
+	(tmp_path / "d" / name).write_bytes(b"kept")
+	assert other.put(b"data", "bin") == name and other.written == set()
+	assert (tmp_path / "d" / name).read_bytes() == b"kept"

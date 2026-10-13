@@ -22,13 +22,21 @@ Material render state (alphaMode, doubleSided) comes from the shader's
 name, see alpha_state(). Clips that only animate material properties
 (texture scrolling, colour pulses) have no glTF equivalent and are left
 out; a clip's material curves are listed in its animation's extras.
+
+Images and mesh data can go to files of their own instead (see
+ExternalFiles), for exports that share them: every map tile uses the same
+grass and the same fences.
 """
 
+import hashlib
 import json
 import math
+import os
 import re
 import struct
+from contextlib import contextmanager
 from io import BytesIO
+from urllib.parse import quote
 
 from .export import OBJMesh
 from .mapdata import scene_colors
@@ -155,6 +163,41 @@ def _color(c):
 	return [float(c[k]) for k in "rgba"]
 
 
+class ExternalFiles:
+	"""
+	A folder of files named by their content (the first 16 hex digits of
+	their SHA-256, and an extension), for images and mesh data that several
+	.glb files share: each is written once, however many exports use it.
+	A file is written under a temporary name and then renamed, so exports
+	running side by side can share the folder.
+	"""
+
+	def __init__(self, directory):
+		self.directory = directory
+		self.names = set()  # every file put() was given
+		self.written = set()  # those it had to write
+
+	def put(self, data, ext):
+		"The file name for data, written unless the folder has it already"
+		name = "%s.%s" % (hashlib.sha256(data).hexdigest()[:16], ext)
+		self.names.add(name)
+		path = os.path.join(self.directory, name)
+		if os.path.exists(path):
+			return name
+		os.makedirs(self.directory, exist_ok=True)
+		tmp = os.path.join(self.directory, ".%s.%d.%s.tmp" % (name, os.getpid(), os.urandom(4).hex()))
+		try:
+			with open(tmp, "xb") as f:
+				f.write(data)
+			os.replace(tmp, path)
+		except BaseException:
+			if os.path.exists(tmp):
+				os.unlink(tmp)
+			raise
+		self.written.add(name)
+		return name
+
+
 class GLTFWriter:
 	"""
 	Builds one glTF document with a single binary buffer. Add meshes,
@@ -165,14 +208,24 @@ class GLTFWriter:
 	and returns a Texture2D to use instead, or None to keep the material's
 	own. FusionFall's client does this when it spawns nanos, NPCs and
 	vehicles (see unitypack.xdttextures).
+
+	With external (an ExternalFiles), every image is a PNG file there, and
+	each mesh's vertex data and indices are a .bin file of their own; the
+	document's own buffer keeps what belongs to this file alone (inverse
+	bind matrices, animations). The same pixels make the same PNG, and the
+	same mesh the same bytes, whatever file and order they're exported in.
 	"""
 
-	def __init__(self, generator="unitypack", texture_override=None):
+	def __init__(self, generator="unitypack", texture_override=None, external=None):
 		self.json = {"asset": {"version": "2.0", "generator": generator}, "scene": 0, "scenes": [{"nodes": []}]}
 		self.bin = bytearray()
 		self.warnings = []
 		self.texture_override = texture_override
+		self.external = external
 		self._cache = {}
+		self._buffers = []  # external buffers: the document's buffers after the BIN chunk's
+		self._geometry_data = None  # with external, where a mesh's views go while it's added
+		self._geometry_views = None
 
 	def _add(self, key, item):
 		return self._add_to(self.json, key, item)
@@ -204,12 +257,37 @@ class GLTFWriter:
 			return None
 
 	def buffer_view(self, data, target=None):
-		self.bin += b"\0" * (-len(self.bin) % 4)
-		view = {"buffer": 0, "byteOffset": len(self.bin), "byteLength": len(data)}
+		buf = self.bin if self._geometry_data is None else self._geometry_data
+		buf += b"\0" * (-len(buf) % 4)
+		view = {"buffer": 0, "byteOffset": len(buf), "byteLength": len(data)}
 		if target:
 			view["target"] = target
-		self.bin += data
-		return self._add("bufferViews", view)
+		buf += data
+		index = self._add("bufferViews", view)
+		if self._geometry_views is not None:
+			self._geometry_views.append(index)
+		return index
+
+	@contextmanager
+	def _geometry(self):
+		"With external, the views added inside go to a .bin file of their own"
+		if self.external is None or self._geometry_data is not None:
+			yield
+			return
+		self._geometry_data, self._geometry_views = bytearray(), []
+		try:
+			yield
+			data, views = bytes(self._geometry_data), self._geometry_views
+		finally:
+			self._geometry_data = self._geometry_views = None
+		if not views:
+			return
+		name = self.external.put(data, "bin")
+		if ("buffer", name) not in self._cache:  # else the same mesh again, with other materials
+			self._buffers.append({"byteLength": len(data), "uri": name})
+			self._cache[("buffer", name)] = len(self._buffers)
+		for view in views:
+			self.json["bufferViews"][view]["buffer"] = self._cache[("buffer", name)]
 
 	def accessor(self, values, type_, component_type=FLOAT, target=None, minmax=False):
 		"values: flat; type_: SCALAR, VEC2, VEC3, VEC4 or MAT4"
@@ -266,7 +344,10 @@ class GLTFWriter:
 
 		png = BytesIO()
 		ImageOps.flip(image).save(png, format="png")
-		image_index = self._add("images", {"name": name, "mimeType": "image/png", "bufferView": self.buffer_view(png.getvalue())})
+		if self.external is not None:
+			image_index = self._add("images", {"name": name, "mimeType": "image/png", "uri": self.external.put(png.getvalue(), "png")})
+		else:
+			image_index = self._add("images", {"name": name, "mimeType": "image/png", "bufferView": self.buffer_view(png.getvalue())})
 		wrap = CLAMP_TO_EDGE if clamp else REPEAT
 		if ("sampler", wrap) not in self._cache:
 			self._cache[("sampler", wrap)] = self._add("samplers", {
@@ -357,6 +438,10 @@ class GLTFWriter:
 		None if it has no triangles. attributes adds vertex attributes to
 		every primitive (skinning, see add_skinned_mesh()).
 		"""
+		with self._geometry():
+			return self._make_mesh(mesh, materials, attributes)
+
+	def _make_mesh(self, mesh, materials, attributes):
 		data = OBJMesh(mesh).mesh_data
 		n = len(data.vertices)
 		attrs = None
@@ -435,13 +520,14 @@ class GLTFWriter:
 			length = math.sqrt(float_sum(c * c for c in v))
 			v[:] = [c / length for c in v] if length else [0.0, 1.0, 0.0]
 
-		attrs = {
-			"POSITION": self.accessor([c for p in mirrored for c in p], "VEC3", target=ARRAY_BUFFER, minmax=True),
-			"NORMAL": self.accessor([c for v in normals for c in v], "VEC3", target=ARRAY_BUFFER),
-			"TEXCOORD_0": self.accessor([c for u, v in uvs for c in (u, 1 - v)], "VEC2", target=ARRAY_BUFFER),
-		}
-		ctype = UNSIGNED_SHORT if n < 65535 else UNSIGNED_INT
-		primitive = {"attributes": attrs, "indices": self.accessor(indices, "SCALAR", ctype, ELEMENT_ARRAY_BUFFER)}
+		with self._geometry():
+			attrs = {
+				"POSITION": self.accessor([c for p in mirrored for c in p], "VEC3", target=ARRAY_BUFFER, minmax=True),
+				"NORMAL": self.accessor([c for v in normals for c in v], "VEC3", target=ARRAY_BUFFER),
+				"TEXCOORD_0": self.accessor([c for u, v in uvs for c in (u, 1 - v)], "VEC2", target=ARRAY_BUFFER),
+			}
+			ctype = UNSIGNED_SHORT if n < 65535 else UNSIGNED_INT
+			primitive = {"attributes": attrs, "indices": self.accessor(indices, "SCALAR", ctype, ELEMENT_ARRAY_BUFFER)}
 
 		splat_db = _fields(terrain.splat_database)
 		size = (terrain.scale[0] * (terrain.width - 1), terrain.scale[2] * (terrain.height - 1))
@@ -602,12 +688,24 @@ class GLTFWriter:
 			self.add_root(node)
 		return export.root
 
-	def glb(self):
-		"The document as a .glb file"
+	def glb(self, location="."):
+		"""
+		The document as a .glb file. With external files, their URIs are
+		relative to location, the folder the .glb goes in.
+		"""
 		doc = dict(self.json)
 		self.bin += b"\0" * (-len(self.bin) % 4)
 		if self.bin:
 			doc["buffers"] = [{"byteLength": len(self.bin)}]
+		if self.external is not None:
+			prefix = os.path.relpath(self.external.directory, location).replace(os.sep, "/")
+			prefix = "" if prefix == "." else quote(prefix) + "/"
+			if "images" in doc:
+				doc["images"] = [dict(i, uri=prefix + i["uri"]) if "uri" in i else i for i in doc["images"]]
+			if self._buffers:
+				if not self.bin:  # no BIN chunk, so no buffer 0
+					doc["bufferViews"] = [dict(v, buffer=v["buffer"] - 1) for v in doc["bufferViews"]]
+				doc["buffers"] = doc.get("buffers", []) + [dict(b, uri=prefix + b["uri"]) for b in self._buffers]
 		js = json.dumps(doc, separators=(",", ":")).encode()
 		js += b" " * (-len(js) % 4)
 		out = struct.pack("<III", 0x46546C67, 2, 12 + 8 + len(js) + (8 + len(self.bin) if self.bin else 0))

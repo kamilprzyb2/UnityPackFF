@@ -39,11 +39,14 @@ ASSET_BUNDLE = 142
 
 VALIDATOR_SCRIPT = r"""
 const fs = require("fs");
+const path = require("path");
 const v = require(require.resolve("gltf-validator", {paths: [process.env.UNITYPACKFF_GLTF_VALIDATOR]}));
 (async () => {
   const out = {};
   for (const f of process.argv.slice(1)) {
-    const r = await v.validateBytes(new Uint8Array(fs.readFileSync(f)));
+    // buffers and images in files of their own are next to the .glb, by relative URI
+    const external = uri => fs.promises.readFile(path.resolve(path.dirname(f), decodeURIComponent(uri))).then(b => new Uint8Array(b));
+    const r = await v.validateBytes(new Uint8Array(fs.readFileSync(f)), {uri: f, externalResourceFunction: external});
     out[f] = {errors: r.issues.numErrors, warnings: r.issues.numWarnings,
       messages: r.issues.messages.filter(m => m.severity <= 1).slice(0, 5).map(m => m.code + " " + (m.pointer || ""))};
   }
@@ -116,15 +119,16 @@ class CuratedEnvironment:
 		shutil.rmtree(self.dir, ignore_errors=True)
 
 
-def summary(glb_bytes):
+def summary(glb_bytes, base=None):
 	"""
 	What the document holds, independent of how Pillow happens to compress
 	the PNGs: nodes, meshes with a digest of every accessor's values,
-	materials, and each image's size.
+	materials, and each image's size. base: the folder external files'
+	URIs are relative to.
 	"""
 	from PIL import Image
 
-	g = GLB(glb_bytes)
+	g = GLB(glb_bytes, base)
 	h = hashlib.sha256()
 	h.update(json.dumps(g.get("nodes", []), sort_keys=True).encode())
 	for mesh in g.get("meshes", []):

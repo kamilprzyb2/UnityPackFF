@@ -21,6 +21,11 @@ environment, or --xdt; --no-xdt keeps the prefabs' own textures. A prefab
 the XDT uses with several sets of textures (car colours, hoverboard
 designs, a face's eye colours) is written once per set, as
 <path>@<texture>.glb.
+
+With --external DIR, images and mesh data go to DIR instead of into each
+.glb, as files named by their content that every .glb using them points to
+(by a path relative to the output directory). Exports into the same DIR
+share them: map tiles their textures and props, prefabs their skins.
 """
 
 import argparse
@@ -31,7 +36,7 @@ import struct
 import sys
 from unitypack.asset import Asset
 from unitypack.environment import UnityEnvironment
-from unitypack.gltf import GLTFWriter
+from unitypack.gltf import ExternalFiles, GLTFWriter
 from unitypack.xdttextures import prefab_key, texture_swaps
 
 GAME_OBJECT = 1
@@ -62,10 +67,15 @@ def write(writer, outdir, name):
 	out = os.path.join(outdir, re.sub(r'[^\w.@-]', '_', name) + '.glb')
 	os.makedirs(outdir, exist_ok=True)
 	with open(out, 'wb') as o:
-		o.write(writer.glb())
+		o.write(writer.glb(outdir))
 	for warning in writer.warnings:
 		print('  warning: ' + warning, file=sys.stderr)
 	return out
+
+
+def report_external(external):
+	if external is not None:
+		print('{} files in {} ({} new)'.format(len(external.names), external.directory, len(external.written)))
 
 
 def load_xdt(env, path):
@@ -186,12 +196,14 @@ def main():
 	p.add_argument('-o', '--outdir', default='.', help='output directory')
 	p.add_argument('--env', help='folder with the other extracted files (default: the input file\'s folder)')
 	p.add_argument('--colliders', action='store_true', help='add colliders and rigidbodies to the nodes\' extras, with collision meshes no node draws')
+	p.add_argument('--external', metavar='DIR', help='write images and mesh data to DIR, named by their content and shared by every export into it')
 	xdt_group = p.add_mutually_exclusive_group()
 	xdt_group.add_argument('--xdt', metavar='TABLEDATA', help='the TableData file whose XDT names the game\'s textures (default: the one in the environment)')
 	xdt_group.add_argument('--no-xdt', action='store_true', help='keep the prefabs\' own textures')
 	args = p.parse_args()
 
 	env = UnityEnvironment(base_path=args.env or os.path.dirname(os.path.abspath(args.file)))
+	external = ExternalFiles(args.external) if args.external else None
 	with open(args.file, 'rb') as f:
 		asset = Asset.from_file(f, environment=env)
 		env.assets[os.path.basename(args.file).lower()] = asset
@@ -204,9 +216,10 @@ def main():
 				'point to aren\'t in any known build either.'.format(os.path.basename(args.file)))
 
 		if not any(o.type_id == ASSET_BUNDLE for o in asset.objects.values()):
-			w = GLTFWriter()
+			w = GLTFWriter(external=external)
 			w.add_scene(asset, colliders=args.colliders)
 			print('scene -> {}'.format(write(w, args.outdir, os.path.basename(args.file))))
+			report_external(external)
 			return
 
 		swaps = {}
@@ -228,7 +241,7 @@ def main():
 			sets = swaps.get(prefab_key(path), [None])
 			for swap in sets:
 				missing = set()
-				w = GLTFWriter(texture_override=override(swap, textures, missing) if swap else None)
+				w = GLTFWriter(texture_override=override(swap, textures, missing) if swap else None, external=external)
 				w.add_gameobject(ptr.resolve(), colliders=args.colliders)
 				name = variant_name(path, swap, sets) if swap else path
 				print('{} -> {}'.format(name, write(w, args.outdir, name)))
@@ -237,6 +250,7 @@ def main():
 				count += 1
 			exported += 1
 			swapped += sets != [None]
+	report_external(external)
 	print('{} files exported ({} prefabs, {} with the XDT\'s textures)'.format(count, exported, swapped))
 
 
