@@ -12,13 +12,15 @@ Pointers into other files resolve when those files are in the same folder
 as the input, or one folder down (as extracted archives are laid out); use
 --env to look elsewhere.
 
-Nanos, NPCs and mobs, shinies, the bus and vehicles get the textures the
-game puts on them: the XDT's mesh rows name them, and they're taken from
+Nanos, NPCs and mobs, shinies, the bus, vehicles and what players wear
+(clothes, hats, glasses, weapons, back items, faces, hair) get the textures
+the game puts on them: the XDT's mesh rows name them, and they're taken from
 the "texture/<name>.dds" entries of the files in the environment (see
 unitypack.xdttextures). The XDT comes from the TableData file in the
 environment, or --xdt; --no-xdt keeps the prefabs' own textures. A prefab
 the XDT uses with several sets of textures (car colours, hoverboard
-designs) is written once per set, as <path>@<texture>.glb.
+designs, a face's eye colours) is written once per set, as
+<path>@<texture>.glb.
 """
 
 import argparse
@@ -131,8 +133,11 @@ class Textures:
 					continue
 				for cpath, info in bundle.read()['m_Container']:
 					ptr = info['asset']
-					if cpath.lower().startswith('texture/') and ptr is not None and ptr.file_id == 0:
-						self.index.setdefault(cpath.lower(), (os.path.basename(path), ptr.path_id))
+					if not cpath.lower().startswith('texture/') or ptr is None:
+						continue
+					# an entry can point into another file (728's CharTexture does)
+					where = os.path.basename(path) if ptr.file_id == 0 else os.path.basename(asset.asset_refs[ptr.file_id].file_path)
+					self.index.setdefault(cpath.lower(), (where, ptr.path_id))
 
 	def get(self, name):
 		"The Texture2D the game loads as texture/<name>.dds, or None"
@@ -143,8 +148,11 @@ class Textures:
 			found = self.index.get(key)
 			texture = None
 			if found is not None:
-				obj = self.env.get_asset_by_filename(found[0]).objects[found[1]]
-				texture = obj.read() if obj.type_id == TEXTURE_2D else None
+				try:
+					obj = self.env.get_asset_by_filename(found[0]).objects[found[1]]
+				except KeyError:  # in a file the environment doesn't have
+					obj = None
+				texture = obj.read() if obj is not None and obj.type_id == TEXTURE_2D else None
 			self.loaded[key] = texture
 		return self.loaded[key]
 
@@ -162,9 +170,12 @@ def override(swap, textures, missing):
 	return choose
 
 
-def variant_name(path, swap, several):
-	if not several:
+def variant_name(path, swap, sets):
+	"The prefab's name for one of its texture sets: by its first texture, or both when that's not enough"
+	if len(sets) == 1:
 		return path
+	if len({s.main for s in sets}) == len(sets):
+		return '{}@{}'.format(path, swap.main)
 	return '{}@{}'.format(path, '+'.join(t for t in (swap.main, swap.sub) if t))
 
 
@@ -218,7 +229,7 @@ def main():
 				missing = set()
 				w = GLTFWriter(texture_override=override(swap, textures, missing) if swap else None)
 				w.add_gameobject(ptr.resolve())
-				name = variant_name(path, swap, len(sets) > 1) if swap else path
+				name = variant_name(path, swap, sets) if swap else path
 				print('{} -> {}'.format(name, write(w, args.outdir, name)))
 				for t in sorted(missing):
 					print('  warning: no texture/{}.dds in the environment; kept the prefab\'s own'.format(t), file=sys.stderr)

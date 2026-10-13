@@ -101,3 +101,42 @@ def test_export_gltf_xdt_textures(build, bundle, unpacked, expected, env_dir, tm
 		assert dict(own[eduardo])[face] == "nano_eduardo"
 		assert dict(xdt[eduardo])[face] == "nano_eduardo_face"
 	expected.check("gltf-xdt/" + bundle, xdt)
+
+
+# 1013 keeps its wearables in CharacterSelection_wear_* archives
+@pytest.mark.bundles("CharacterSelection.resourceFile", "CharacterSelection_wear_face.resourceFile")
+def test_export_gltf_wearables(build, bundle, unpacked, expected, tmp_path):
+	"""
+	A shirt, a face and a hat with the textures the game gives them: the
+	XDT's item, face and hair tables, the textures from the character texture
+	archives. A shirt's
+	"sub" materials take the skin; a face comes once per eye colour.
+	"""
+	from tests.glb import GLB
+
+	env = CuratedEnvironment(build)
+	try:
+		# where the clothes' textures are: one archive, or one per kind in 1013
+		for name in build.bundles:
+			if name.startswith(("CharTexture", "Character_Texture_")):
+				env.link(name)
+		path = build.inner_files(bundle)[0]
+		run_script("export_gltf.py", path, "wear/m_shirt_easy", "wear/m_face_001_type01", "wear/hat_", "-o", tmp_path, "--env", env.dir)
+	finally:
+		env.close()
+
+	def images(f):
+		g = GLB(f.read_bytes())
+		pairs = []
+		for m in g.get("materials", []):
+			t = m["pbrMetallicRoughness"].get("baseColorTexture")
+			pairs.append([m["name"], g["images"][g["textures"][t["index"]]["source"]]["name"] if t else None])
+		return pairs
+
+	got = {f.name: images(f) for f in sorted(tmp_path.glob("*.glb"))}
+	if not got:
+		pytest.skip("no wearables in this archive")  # 1013's CharacterSelection
+	faces = [n for n in got if n.startswith("wear_m_face_001_type01.nif@m_face_001_")]
+	if faces:
+		assert len(faces) == 5  # eye colours a to e
+	expected.check("gltf-wear/" + bundle, got)
