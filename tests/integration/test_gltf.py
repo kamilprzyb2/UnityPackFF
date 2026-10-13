@@ -173,6 +173,46 @@ def test_export_gltf_as_worn(build, bundle, unpacked, tmp_path):
 		assert "53 plain meshes left out of what players wear" in worn
 
 
+# 1013 keeps its actors in CharacterCreation and its shirts in CharacterSelection_wear_shirts
+@pytest.mark.bundles("CharacterSelection.resourceFile", "CharacterCreation.resourceFile", "CharacterSelection_wear_shirts.resourceFile")
+def test_export_gltf_actor_bones(build, bundle, unpacked, expected, tmp_path):
+	"""
+	--actor-bones: the actors' bone lists (133 for boys, 159 for girls),
+	every entry a node, and each shirt's skins bound to them, one index per
+	joint and within the actor's list
+	"""
+	from tests.digest import object_digest as digest
+	from tests.glb import GLB
+
+	env = CuratedEnvironment(build)
+	try:
+		path = build.inner_files(bundle)[0]
+		out = run_script("export_gltf.py", path, "actor/m.kfm", "actor/w.kfm", "wear/m_shirt_easy", "wear/f_shirt_easy", "-o", tmp_path,
+			"--env", env.dir, "--actor-bones")
+	finally:
+		env.close()
+	got = {}
+	for f in sorted(tmp_path.glob("*.glb")):
+		g = GLB(f.read_bytes())
+		if f.name.startswith("actor_"):
+			bones = g["nodes"][g["scenes"][0]["nodes"][0]]["extras"]["actor_bones"]
+			assert len(bones) == {"actor_m.kfm.glb": 133, "actor_w.kfm.glb": 159}[f.name]
+			assert all(0 <= b < len(g["nodes"]) for b in bones)
+			got[f.name] = digest(bones)
+			continue
+		skins = g["skins"]
+		assert skins
+		for skin in skins:
+			bound = skin["extras"]["actor_bones"]
+			assert len(bound["m"]) == len(bound["f"]) == len(skin["joints"])
+			assert all(0 <= i < 133 for i in bound["m"]) and all(0 <= i < 159 for i in bound["f"])
+		got[f.name] = digest([s["extras"]["actor_bones"] for s in skins])
+	if not got:
+		pytest.skip("no actors or shirts in this archive")
+	assert "ActorWearIndexTable" not in out
+	expected.check("gltf-actor-bones/" + bundle, got)
+
+
 @pytest.mark.bundles("Map_04_02.unity3d")
 def test_external_files(build, bundle, unpacked, tmp_path):
 	"""

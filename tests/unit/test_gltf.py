@@ -441,6 +441,81 @@ def test_skinned_only_is_off_by_default():
 	assert w.left_out == [] and w.warnings == []
 
 
+# What binds a worn item to the character: the actor's ActorSkinCombiner
+# (actorBones, a list of Transforms) and an ActorWearIndexTable beside each
+# worn SkinnedMeshRenderer (for each bone, an index into the boy's and the
+# girl's actorBones)
+
+def script(**fields):
+	"A MonoBehaviour's fields, as read"
+	return fdict(m_GameObject=None, m_Enabled=1, m_Script=Pointer(None, 0), m_Name="", **fields)
+
+
+def actor():
+	"The rig as an actor: actorBones lists the bone, a Transform elsewhere (-1) and the rig"
+	root = rig()
+	root_tr = root.component[0][1]
+	bone_tr = root_tr.target._obj["m_Children"][0]
+	stranger = Pointer(None, 999)
+	combiner = script(actorBones=[bone_tr, stranger, root_tr, Pointer(None, 0)])
+	root._obj["m_Component"].append((114, Pointer(combiner, 700)))
+	return root
+
+
+def worn(m=(5, 0), f=(7, -1), bones=None):
+	"The rig as a worn item: its skin's two bones map to actor bones m and f"
+	root = rig(bones=bones)
+	table = script(transformIndicesM=list(m), transformIndicesF=list(f))
+	root._obj["m_Component"].append((114, Pointer(table, 701)))
+	return root
+
+
+def test_actor_bones_of_the_actor():
+	g = GLB(export_gameobject_with(actor(), actor_bones=True))
+	root = g["nodes"][g["scenes"][0]["nodes"][0]]
+	names = {i: n["name"] for i, n in enumerate(g["nodes"])}
+	bones = root["extras"]["actor_bones"]
+	assert [names.get(b) for b in bones] == ["bone", None, "rig", None]
+	assert bones[1] == bones[3] == -1
+
+
+def test_actor_bones_of_a_worn_item():
+	w = GLTFWriter()
+	w.add_gameobject(worn(), actor_bones=True)
+	g = GLB(w.glb())
+	[skin] = g["skins"]
+	# one entry per joint, in the skin's joint order; none is -1
+	assert skin["extras"]["actor_bones"] == {"m": [5, 0], "f": [7, -1]}
+	assert w.unbound_skins == [] and w.warnings == []
+
+
+def test_actor_bones_are_off_by_default():
+	g = GLB(export_gameobject(worn()))
+	assert "extras" not in g["skins"][0]
+	g = GLB(export_gameobject(actor()))
+	assert "extras" not in g["nodes"][g["scenes"][0]["nodes"][0]]
+
+
+def test_skin_without_index_table():
+	w = GLTFWriter()
+	w.add_gameobject(rig(), actor_bones=True)
+	assert w.unbound_skins == ["c"]  # the mesh's name
+	assert "extras" not in w.json["skins"][0]
+
+
+def test_index_table_of_the_wrong_length():
+	w = GLTFWriter()
+	w.add_gameobject(worn(m=(1, 2, 3), f=(4,)), actor_bones=True)
+	assert w.json["skins"][0]["extras"]["actor_bones"] == {"m": [1, 2], "f": [4, -1]}
+	assert len(w.warnings) == 2 and "transformIndicesM has 3 entries for 2 bones" in w.warnings[0]
+
+
+def export_gameobject_with(gameobject, **options):
+	w = GLTFWriter()
+	w.add_gameobject(gameobject, **options)
+	return w.glb()
+
+
 def test_clip():
 	move = clip(position_curves=[curve_on("bone", key(0.0, vec(1, 0, 0), vec(1, 0, 0)), key(1.0, vec(2, 0, 0), vec(1, 0, 0)))])
 	g = GLB(export_gameobject(rig(clips=[move])))

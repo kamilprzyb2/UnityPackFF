@@ -28,6 +28,12 @@ its skinned meshes. The game never draws the plain meshes beside them
 (some hair carries 3ds Max Biped helper boxes there), so they are left out,
 with a warning for any that is textured. It needs the XDT.
 
+With --actor-bones, the scripts the game binds worn items to the character
+with go into the extras: the actor's (actor/m.kfm, w.kfm) list of bones,
+as node indices, on its root; and on each worn item's skin, the index into
+that list of each joint, for boys and for girls (see
+unitypack.gltf.GLTFWriter.add_gameobject()).
+
 With --external DIR, images and mesh data go to DIR instead of into each
 .glb, as files named by their content that every .glb using them points to
 (by a path relative to the output directory). Exports into the same DIR
@@ -206,6 +212,7 @@ def main():
 	xdt_group = p.add_mutually_exclusive_group()
 	xdt_group.add_argument('--xdt', metavar='TABLEDATA', help='the TableData file whose XDT names the game\'s textures (default: the one in the environment)')
 	xdt_group.add_argument('--no-xdt', action='store_true', help='keep the prefabs\' own textures (no XDT: not with --as-worn)')
+	p.add_argument('--actor-bones', action='store_true', help='add the bone lists that bind worn items to the character (ActorSkinCombiner, ActorWearIndexTable) to the extras')
 	p.add_argument('--as-worn', action='store_true', help='export what players wear (clothes, capes, faces, hair) with its skinned meshes only, as the game combines it; needs the XDT')
 	args = p.parse_args()
 	if args.as_worn and args.no_xdt:
@@ -231,7 +238,7 @@ def main():
 			report_external(external)
 			return
 
-		swaps, worn = {}, set()
+		swaps, worn, worn_all = {}, set(), set()
 		if not args.no_xdt:
 			try:
 				xdt = load_xdt(env, args.xdt)
@@ -243,7 +250,8 @@ def main():
 				print('no TableData in {}: exporting the prefabs\' own textures (use --xdt or --no-xdt)'.format(env.base_path), file=sys.stderr)
 			else:
 				swaps = texture_swaps(xdt)
-				worn = worn_prefabs(xdt) if args.as_worn else set()
+				worn_all = worn_prefabs(xdt)
+				worn = worn_all if args.as_worn else set()
 		textures = Textures(env)
 
 		count = swapped = exported = left_out = 0
@@ -255,12 +263,15 @@ def main():
 			for swap in sets:
 				missing = set()
 				w = GLTFWriter(texture_override=override(swap, textures, missing) if swap else None, external=external)
-				w.add_gameobject(ptr.resolve(), colliders=args.colliders, skinned_only=key in worn)
+				w.add_gameobject(ptr.resolve(), colliders=args.colliders, skinned_only=key in worn, actor_bones=args.actor_bones)
 				name = variant_name(path, swap, sets) if swap else path
 				note = ' ({} plain meshes left out)'.format(len(w.left_out)) if w.left_out else ''
 				print('{} -> {}{}'.format(name, write(w, args.outdir, name), note))
 				for t in sorted(missing):
 					print('  warning: no texture/{}.dds in the environment; kept the prefab\'s own'.format(t), file=sys.stderr)
+				if key in worn_all:
+					for mesh in w.unbound_skins:
+						print('  warning: {} has no ActorWearIndexTable: it can\'t be bound to the character'.format(mesh), file=sys.stderr)
 				count += 1
 				left_out += len(w.left_out)
 			exported += 1

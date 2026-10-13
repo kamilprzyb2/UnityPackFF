@@ -63,6 +63,7 @@ MESH_FILTER = 33
 ANIMATION = 111
 TERRAIN_COLLIDER = 154
 SKINNED_MESH_RENDERER = 137
+MONO_BEHAVIOUR = 114
 LIGHT = 108
 RIGIDBODY = 54
 MESH_COLLIDER = 64
@@ -227,6 +228,7 @@ class GLTFWriter:
 		self._geometry_data = None  # with external, where a mesh's views go while it's added
 		self._geometry_views = None
 		self.left_out = []  # with skinned_only, the plain meshes left out (see add_gameobject())
+		self.unbound_skins = []  # with actor_bones, the skins without an ActorWearIndexTable
 
 	def _add(self, key, item):
 		return self._add_to(self.json, key, item)
@@ -674,7 +676,7 @@ class GLTFWriter:
 		return roots
 
 	def add_gameobject(self, gameobject, skins=True, animations=True, sample_rate=None, inactive=True, colliders=False,
-			skinned_only=False):
+			skinned_only=False, actor_bones=False):
 		"""
 		A GameObject and everything under it: one node per Transform, with
 		the meshes of MeshFilter + MeshRenderer and SkinnedMeshRenderer
@@ -691,8 +693,21 @@ class GLTFWriter:
 		Max Biped helper boxes there), and so are the nodes that only
 		carried one. Each is listed in left_out, as its node's path; a
 		textured one also gets a warning, as it may be more than a helper.
+
+		actor_bones writes what FusionFall's client binds a worn item to the
+		character with. Bone names don't do it: they aren't unique, and a
+		worn item's bones are a stand-in rig. The actor (actor/m.kfm and
+		w.kfm) has an ActorSkinCombiner whose actorBones lists Transforms;
+		that list, as node indices, goes into its node's extras.actor_bones.
+		A worn item has an ActorWearIndexTable beside each
+		SkinnedMeshRenderer, whose transformIndicesM and transformIndicesF
+		give for each bone the index into the boy's or the girl's
+		actorBones; they go into the skin's extras.actor_bones as {"m": [...],
+		"f": [...]}, one entry per joint (-1 for none). A skinned mesh
+		without one is listed in unbound_skins, by name.
 		"""
-		export = GameObjectExport(self, gameobject, skins, animations, sample_rate, inactive, colliders, skinned_only)
+		export = GameObjectExport(self, gameobject, skins, animations, sample_rate, inactive, colliders, skinned_only,
+			actor_bones)
 		self.add_root(export.root)
 		for node in export.extra_roots:
 			self.add_root(node)
@@ -789,11 +804,14 @@ class GameObjectExport:
 	"""
 
 	def __init__(self, writer, gameobject, skins=True, animations=True, sample_rate=None, inactive=True, colliders=False,
-			skinned_only=False):
+			skinned_only=False, actor_bones=False):
 		self.writer = writer
 		self.inactive = inactive
 		self.colliders = colliders
 		self.skinned_only = skinned_only
+		self.actor_bones = actor_bones
+		self.actor_tables = []  # (node, actorBones)
+		self.index_tables = {}  # node -> ActorWearIndexTable fields
 		# with skinned_only, the Transforms the skins use: kept whatever they carry
 		self.joints = self.bones(gameobject) if skinned_only else set()
 		self.nodes = {}  # Transform path ID -> node index
@@ -805,6 +823,9 @@ class GameObjectExport:
 		self.sample_rate = sample_rate
 		self.extra_roots = []
 		self.root = self.visit(gameobject, "")
+		for node, bones in self.actor_tables:
+			extras = writer.json["nodes"][node].setdefault("extras", {})
+			extras["actor_bones"] = [self.nodes.get(b.path_id, -1) if b else -1 for b in bones]
 		for node, smr in self.skinned:
 			if skins:
 				self.add_skin(node, smr)
@@ -863,6 +884,7 @@ class GameObjectExport:
 		light = None
 		extras = {}
 		left_out = animated = False
+		actor_bones = index_table = None
 		renderer = next((w.resolve(p) for cid, p in comps if cid == MESH_RENDERER), None)
 		for cid, ptr in comps:
 			if cid == MESH_FILTER and renderer is not None:
@@ -885,6 +907,13 @@ class GameObjectExport:
 				if animation is not None:
 					self.animations.append((path, animation))
 					animated = True
+			elif self.actor_bones and (cid == MONO_BEHAVIOUR or cid < 0):
+				script = w.resolve(ptr)
+				fields = _fields(script) if script is not None else {}
+				if "actorBones" in fields:
+					actor_bones = fields["actorBones"]
+				elif "transformIndicesM" in fields and "transformIndicesF" in fields:
+					index_table = fields
 			elif cid == LIGHT:
 				component = w.resolve(ptr)
 				if component is not None:
@@ -910,7 +939,7 @@ class GameObjectExport:
 					children.append(node)
 
 		if (left_out and path and not children and skinned is None and light is None and not extras and not animated
-				and transform_ptr.path_id not in self.joints):
+				and actor_bones is None and transform_ptr.path_id not in self.joints):
 			return None  # it only carried what was left out
 
 		if light is not None:
@@ -922,6 +951,10 @@ class GameObjectExport:
 			**({"extras": extras} if extras else {}))
 		self.nodes[transform_ptr.path_id] = node
 		self.paths.setdefault(path, node)
+		if actor_bones is not None:
+			self.actor_tables.append((node, actor_bones))
+		if index_table is not None:
+			self.index_tables[node] = index_table
 		self.local[node] = trs_matrix(t, q, sc)
 		for child in children:
 			self.parent[child] = node
@@ -940,6 +973,8 @@ class GameObjectExport:
 	def add_unskinned(self, node, smr):
 		"A SkinnedMeshRenderer's mesh on its own node, as a plain mesh"
 		w = self.writer
+		if self.actor_bones and node in self.index_tables:
+			w.warnings.append("%r exported unskinned: its ActorWearIndexTable is left out" % (w.resolve(_fields(smr)["m_Mesh"]),))
 		m = w.resolve(_fields(smr)["m_Mesh"])
 		if m is None:
 			return
@@ -997,9 +1032,27 @@ class GameObjectExport:
 		if mesh is None:
 			return
 		skin = w._add("skins", {"joints": joints, "inverseBindMatrices": w.accessor(ibm, "MAT4")})
+		if self.actor_bones:
+			self.bind_to_actor(node, skin, m, len(joints))
 		# glTF ignores a skinned mesh node's own transform, so it goes at the top of the scene
 		name = w.json["nodes"][node].get("name", "")
 		self.extra_roots.append(w.add_node(name + " (skinned)", mesh=mesh, skin=skin))
+
+	def bind_to_actor(self, node, skin, mesh, count):
+		"A skin's extras.actor_bones, from the ActorWearIndexTable beside its renderer"
+		w = self.writer
+		table = self.index_tables.get(node)
+		if table is None:
+			w.unbound_skins.append(mesh.name)
+			return
+		bones = {}
+		for gender, key in (("m", "transformIndicesM"), ("f", "transformIndicesF")):
+			indices = [int(i) if i >= 0 else -1 for i in table[key]]
+			if len(indices) != count:
+				w.warnings.append("%r: %s has %d entries for %d bones" % (mesh, key, len(indices), count))
+				indices = (indices + [-1] * count)[:count]
+			bones[gender] = indices
+		w.json["skins"][skin]["extras"] = {"actor_bones": bones}
 
 	def add_clip(self, path, clip):
 		"""
