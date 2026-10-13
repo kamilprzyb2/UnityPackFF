@@ -1,0 +1,37 @@
+{
+ "TableData.resourceFile": {
+  "rows": 156,
+  "fields": [
+   "iHairColor",
+   "iHeight",
+   "iShape",
+   "iSkinColor",
+   "iType",
+   "strBackMesh",
+   "strBackTextureM",
+   "strBackTextureS",
+   "strFaceMesh",
+   "strFaceTexture",
+   "strGlassMesh",
+   "strGlassTextureM",
+   "strGlassTextureS",
+   "strHairMesh",
+   "strHairTexture",
+   "strHatMesh",
+   "strHatTextureM",
+   "strHatTextureS",
+   "strLHandWpnMesh",
+   "strLHandWpnTextureM",
+   "strLHandWpnTextureS",
+   "strPantsMesh",
+   "strPantsTexture",
+   "strRHandWpnMesh",
+   "strRHandWpnTextureM",
+   "strRHandWpnTextureS",
+   "strShirtMesh",
+   "strShirtTexture",
+   "strShoesMesh",
+   "strShoesTexture"
+  ]
+ }
+}
