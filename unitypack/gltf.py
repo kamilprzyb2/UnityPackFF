@@ -271,7 +271,8 @@ class GLTFWriter:
 		_MainTex (or main_texture, a Texture2D, in its place) as its texture.
 		Every saved property and the shader's name go into the material's
 		extras, since Unity shaders differ in what they do with them
-		(FusionFall's toon shaders double _Color, for one).
+		(FusionFall's toon shaders double _Color, for one); its other
+		textures are embedded too, each with its glTF texture index there.
 		"""
 		return self._cached(("material", main_texture), material, lambda m: self._make_material(m, main_texture))
 
@@ -302,6 +303,12 @@ class GLTFWriter:
 			tex = self.resolve(env["m_Texture"]) if env["m_Texture"] else None
 			textures[name] = {"texture": tex.name if tex is not None else None,
 				"scale": _vec(env["m_Scale"], "xy"), "offset": _vec(env["m_Offset"], "xy")}
+			if tex is not None and name != "_MainTex":
+				# the shader's other textures (toon and spec ramps, bump and
+				# reflection maps), embedded for an importer that rebuilds it
+				index = self.add_texture(env["m_Texture"])
+				if index is not None:
+					textures[name]["index"] = index
 		extras = {
 			"shader": shader_name(shader),
 			"colors": {k: _color(v) for k, v in colors.items()},

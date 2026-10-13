@@ -131,6 +131,19 @@ def test_material():
 	assert [img.getpixel((0, y)) for y in range(2)] == [(0, 0, 255, 255), (255, 0, 0, 255)]
 
 
+def test_material_other_textures_are_embedded():
+	ramp = Pointer(texture("ramp", pixels=((0, 0, 0, 255), (255, 255, 255, 255))), 6)
+	mat = material(tex=Pointer(texture(), 5))
+	mat._obj["m_SavedProperties"]["m_TexEnvs"].append(
+		(fdict(name="_ShaderMap"), fdict(m_Texture=ramp, m_Scale=fdict(x=1.0, y=1.0), m_Offset=fdict(x=0.0, y=0.0))))
+	g = GLB(export_mesh(mesh(**QUAD, indices=[0, 1, 2]), [mat]))
+	textures = g["materials"][0]["extras"]["textures"]
+	assert "index" not in textures["_MainTex"]  # that's baseColorTexture
+	ramp_texture = g["textures"][textures["_ShaderMap"]["index"]]
+	assert g["images"][ramp_texture["source"]]["name"] == "ramp"
+	assert len(g["images"]) == 2
+
+
 def test_colour_factor_is_clamped():
 	g = GLB(export_mesh(mesh(**QUAD, indices=[0, 1, 2]), [material(rgba=(2.0, -1.0, 0.5, 1.0))]))
 	assert g["materials"][0]["pbrMetallicRoughness"]["baseColorFactor"] == [1.0, 0.0, 0.5, 1.0]
