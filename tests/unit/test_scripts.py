@@ -32,6 +32,18 @@ def test_index_bundles(tmp_path):
 	]
 
 
+def test_unityextract_shaders(tmp_path):
+	# FusionFall's shaders have an empty m_Name: the file is named from the source
+	shader = synth.Node("Shader", "Base", children=[synth.string_node("m_Name"), synth.string_node("m_Script")])
+	sources = ['Shader "normal_blendOneOne" {\n SubShader {}\n}', 'Shader "SkinnedToonShading" {}', "no name here"]
+	objects = [(i + 1, 48, 48, synth.pack_string("") + synth.pack_string(src)) for i, src in enumerate(sources)]
+	(tmp_path / "X.resourceFile").write_bytes(synth.unityweb([("CustomAssetBundle-x", synth.serialized_file({48: shader}, objects))]))
+	run("unityextract.py", "--shaders", "-o", tmp_path / "out", tmp_path / "X.resourceFile")
+	out = tmp_path / "out"
+	assert sorted(p.name for p in out.iterdir()) == ["SkinnedToonShading.shader", "normal_blendOneOne.shader", "shader_3.shader"]
+	assert (out / "normal_blendOneOne.shader").read_text() == sources[0]
+
+
 # dump_terrain.py / replace_terrain.py on a made-up 33 x 33 heightmap
 
 def terrain_heights(f):
