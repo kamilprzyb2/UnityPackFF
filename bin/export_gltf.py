@@ -185,6 +185,7 @@ def main():
 	p.add_argument('paths', nargs='*', help='container paths to export (default: every prefab)')
 	p.add_argument('-o', '--outdir', default='.', help='output directory')
 	p.add_argument('--env', help='folder with the other extracted files (default: the input file\'s folder)')
+	p.add_argument('--colliders', action='store_true', help='add colliders and rigidbodies to the nodes\' extras, with collision meshes no node draws')
 	xdt_group = p.add_mutually_exclusive_group()
 	xdt_group.add_argument('--xdt', metavar='TABLEDATA', help='the TableData file whose XDT names the game\'s textures (default: the one in the environment)')
 	xdt_group.add_argument('--no-xdt', action='store_true', help='keep the prefabs\' own textures')
@@ -197,7 +198,7 @@ def main():
 
 		if not any(o.type_id == ASSET_BUNDLE for o in asset.objects.values()):
 			w = GLTFWriter()
-			w.add_scene(asset)
+			w.add_scene(asset, colliders=args.colliders)
 			print('scene -> {}'.format(write(w, args.outdir, os.path.basename(args.file))))
 			return
 
@@ -221,7 +222,7 @@ def main():
 			for swap in sets:
 				missing = set()
 				w = GLTFWriter(texture_override=override(swap, textures, missing) if swap else None)
-				w.add_gameobject(ptr.resolve())
+				w.add_gameobject(ptr.resolve(), colliders=args.colliders)
 				name = variant_name(path, swap, sets) if swap else path
 				print('{} -> {}'.format(name, write(w, args.outdir, name)))
 				for t in sorted(missing):

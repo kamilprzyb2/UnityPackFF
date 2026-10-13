@@ -630,6 +630,40 @@ def test_spot_and_disabled_lights():
 	assert "extensions" not in off.json and "children" not in off["nodes"][0]
 
 
+def collided_gameobject():
+	"A GameObject with no renderer, a mesh collider, a sphere trigger and a kinematic rigidbody"
+	go = GameObject(fdict(m_Name="wall", m_Component=[]))
+	tr = Transform(fdict(m_GameObject=Pointer(go, 2), m_LocalPosition=vec(0, 0, 0), m_LocalRotation=fdict(x=0, y=0, z=0, w=1),
+		m_LocalScale=vec(1, 1, 1), m_Children=[], m_Father=None))
+	quad = Pointer(mesh(**QUAD, indices=[0, 1, 2], name="collision"), 3)
+	go._obj["m_Component"] = [
+		(4, Pointer(tr, 1)),
+		(64, Pointer(fdict(m_Material=None, m_IsTrigger=False, m_Convex=True, m_SmoothSphereCollisions=False, m_Mesh=quad), 4)),
+		(135, Pointer(fdict(m_Material=None, m_IsTrigger=True, m_Radius=1.5, m_Center=vec(1, 2, 3)), 5)),
+		(54, Pointer(fdict(m_Mass=2.0, m_Drag=0.0, m_AngularDrag=0.05, m_UseGravity=True, m_IsKinematic=True), 6)),
+	]
+	return go
+
+
+def test_colliders():
+	w = GLTFWriter()
+	w.add_root(w.add_gameobject(collided_gameobject(), colliders=True))
+	g = GLB(w.glb())
+	[node] = g["nodes"]
+	mesh_collider, sphere = node["extras"]["colliders"]
+	assert mesh_collider == {"trigger": False, "type": "mesh", "mesh": 0, "convex": True}
+	assert sphere == {"trigger": True, "center": [-1, 2, 3], "type": "sphere", "radius": 1.5}  # x mirrored
+	assert node["extras"]["rigidbody"] == {"mass": 2.0, "kinematic": True, "gravity": True}
+	# the collision mesh is in the file, but no node draws it
+	assert "mesh" not in node and g["meshes"][0]["name"] == "collision"
+	assert "material" not in g["meshes"][0]["primitives"][0]
+
+
+def test_colliders_are_off_by_default():
+	g = GLB(export_gameobject(collided_gameobject()))
+	assert "extras" not in g["nodes"][0] and "meshes" not in g.json
+
+
 def test_normals_are_made_unit_length():
 	m = mesh(QUAD["vertices"], [(0, 0, 2), (1, 1, 1), (0, 0, 0), (0, 0, 1)], QUAD["uvs"], [0, 1, 2])
 	g = GLB(export_mesh(m))
