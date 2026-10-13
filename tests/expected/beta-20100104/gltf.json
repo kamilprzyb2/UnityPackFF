@@ -1157,9 +1157,13 @@
     [
      256,
      256
+    ],
+    [
+     64,
+     64
     ]
    ],
-   "sha256": "89cdc447ecd357dd",
+   "sha256": "0e65a394a7a3fb31",
    "warnings": 1
   },
   "map/wharf/dt_obwh_fishing.nif": {
