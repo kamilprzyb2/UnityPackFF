@@ -4112,6 +4112,672 @@
    "warnings": 0
   }
  },
+ "gltf-wear/CharacterSelection.resourceFile": {
+  "wear_hat_apacheshield.nif@hat_apacheshield_a.glb": [
+   [
+    "hat_apacheshield-main-link_a.dds",
+    "hat_apacheshield_a"
+   ]
+  ],
+  "wear_hat_apacheshield.nif@hat_apacheshield_b.glb": [
+   [
+    "hat_apacheshield-main-link_a.dds",
+    "hat_apacheshield_b"
+   ]
+  ],
+  "wear_hat_apacheshield.nif@hat_apacheshield_c.glb": [
+   [
+    "hat_apacheshield-main-link_a.dds",
+    "hat_apacheshield_c"
+   ]
+  ],
+  "wear_hat_apacheshield.nif@hat_apacheshield_d.glb": [
+   [
+    "hat_apacheshield-main-link_a.dds",
+    "hat_apacheshield_d"
+   ]
+  ],
+  "wear_hat_apacheshield.nif@pistol_poisongun.glb": [
+   [
+    "hat_apacheshield-main-link_a.dds",
+    "pistol_poisongun"
+   ]
+  ],
+  "wear_hat_artisticberet.nif.glb": [
+   [
+    "hat_artisticberet-main-link_a.dds",
+    "hat_artisticberet"
+   ]
+  ],
+  "wear_hat_barbarianhelmet.nif.glb": [
+   [
+    "hat_barbarianhelmet-main-link_a.dds",
+    "sword_campoar"
+   ]
+  ],
+  "wear_hat_baseball.nif.glb": [
+   [
+    "hat_baseball-main-link_a.dds",
+    "hat_felt"
+   ]
+  ],
+  "wear_hat_beanscouthat.nif.glb": [
+   [
+    "hat_beanscouthat-main-link_a.dds",
+    "hat_beanscouthat"
+   ]
+  ],
+  "wear_hat_bearhat.nif.glb": [
+   [
+    "hat_bearhat-main-link_a.dds",
+    "hat_bearhat"
+   ]
+  ],
+  "wear_hat_beret.nif.glb": [
+   [
+    "hat_beret-main-link_a.dds",
+    "hat_navel"
+   ]
+  ],
+  "wear_hat_bini.nif.glb": [
+   [
+    "hat_bini-main-link_a.dds",
+    "hat_felt"
+   ]
+  ],
+  "wear_hat_blooarmorset.nif.glb": [
+   [
+    "hat_blooarmorset-main-link_a.dds",
+    null
+   ]
+  ],
+  "wear_hat_bloodgnat.nif.glb": [
+   [
+    "hat_bloodgnat-main-link_a.dds",
+    "hat_bloodgnat"
+   ]
+  ],
+  "wear_hat_brainstorm.nif.glb": [
+   [
+    "hat_brainstorm-main-link_a.dds",
+    "helmet_tutankhamen"
+   ]
+  ],
+  "wear_hat_candypirate.nif.glb": [
+   [
+    "hat_candypirate-main-link_a.dds",
+    "hat_wizard"
+   ]
+  ],
+  "wear_hat_chefhat.nif.glb": [
+   [
+    "hat_chefhat-main-link_a.dds",
+    "hat_chefhat"
+   ]
+  ],
+  "wear_hat_chowderhat.nif@hat_chowderhat.glb": [
+   [
+    "hat_chowderhat-main-link_a.dds",
+    "hat_chowderhat"
+   ]
+  ],
+  "wear_hat_chowderhat.nif@head_chowderwinterhat.glb": [
+   [
+    "hat_chowderhat-main-link_a.dds",
+    "head_chowderwinterhat"
+   ]
+  ],
+  "wear_hat_constructionhelmet.nif.glb": [
+   [
+    "hat_constructionhelmet-main-link_a.dds",
+    "hat_constructionhelmet"
+   ]
+  ],
+  "wear_hat_cowboyrobe.nif@hat_cowboyrobe.glb": [
+   [
+    "hat_cowboyrobe-main-link_a.dds",
+    "hat_cowboyrobe"
+   ]
+  ],
+  "wear_hat_cowboyrobe.nif@hat_cowboyrobe_a.glb": [
+   [
+    "hat_cowboyrobe-main-link_a.dds",
+    "hat_cowboyrobe_a"
+   ]
+  ],
+  "wear_hat_cowboyrobe.nif@hat_cowboyrobe_b.glb": [
+   [
+    "hat_cowboyrobe-main-link_a.dds",
+    "hat_cowboyrobe_b"
+   ]
+  ],
+  "wear_hat_cowboyrobe.nif@hat_cowboyrobe_c.glb": [
+   [
+    "hat_cowboyrobe-main-link_a.dds",
+    "hat_cowboyrobe_c"
+   ]
+  ],
+  "wear_hat_cowboyrobe.nif@hat_cowboyrobe_d.glb": [
+   [
+    "hat_cowboyrobe-main-link_a.dds",
+    "hat_cowboyrobe_d"
+   ]
+  ],
+  "wear_hat_eduardoarmorset.nif.glb": [
+   [
+    "hat_eduardoarmorset-main-link_a.dds",
+    "hat_eduardoarmorset"
+   ]
+  ],
+  "wear_hat_felt.nif.glb": [
+   [
+    "hat_felt-main-link_a.dds",
+    "hat_felt"
+   ]
+  ],
+  "wear_hat_froghat.nif.glb": [
+   [
+    "hat_froghat-main-link_a.dds",
+    "shoes_genisshoes"
+   ]
+  ],
+  "wear_hat_goodidea.nif.glb": [
+   [
+    "hat_goodidea-main-link_a.dds",
+    "hat_goodidea"
+   ],
+   [
+    "hat_goodidea-p-hat_goodidea_glass.dds",
+    "hat_goodidea_glass.dds (additive)"
+   ]
+  ],
+  "wear_hat_hector.nif.glb": [
+   [
+    "hat_hector-main-link_a.dds",
+    "helmet_scurvyday"
+   ],
+   [
+    "hat_hector-p-helmet_scurvyday_glass.dds",
+    "helmet_scurvyday_glass.dds"
+   ]
+  ],
+  "wear_hat_knuckleshat.nif.glb": [
+   [
+    "hat_knuckleshat-main-link_a.dds",
+    "hat_knuckleshat"
+   ]
+  ],
+  "wear_hat_maskedmumblerhelmet.nif.glb": [
+   [
+    "hat_maskedmumblerhelmet-main-link_a.dds",
+    "rifle_autogatlingun"
+   ],
+   [
+    "hat_maskedmumblerhelmet-p-hat_maskedmumblerhelme_glass.dds",
+    "hat_maskedmumblerhelme_glass.dds"
+   ]
+  ],
+  "wear_hat_militaryberet.nif@hat_militaryberet.glb": [
+   [
+    "hat_militaryberet-main-link_a.dds",
+    "hat_militaryberet"
+   ]
+  ],
+  "wear_hat_militaryberet.nif@hat_militaryberet_a.glb": [
+   [
+    "hat_militaryberet-main-link_a.dds",
+    "hat_militaryberet_a"
+   ]
+  ],
+  "wear_hat_militaryberet01.nif.glb": [
+   [
+    "hat_militaryberet01-main-link_a.dds",
+    null
+   ]
+  ],
+  "wear_hat_monkeykingscrown.nif.glb": [
+   [
+    "hat_monkeykingscrown-main-link_a.dds",
+    "glass_orlandoblooface"
+   ]
+  ],
+  "wear_hat_mushroom.nif.glb": [
+   [
+    "hat_mushroom-main-link_a.dds",
+    "galss_thiefmask"
+   ]
+  ],
+  "wear_hat_navel.nif.glb": [
+   [
+    "hat_navel-main-link_a.dds",
+    "hat_navel"
+   ]
+  ],
+  "wear_hat_numbuhtow.nif.glb": [
+   [
+    "hat_numbuhtow-main-link_a.dds",
+    "NPC_Numbuh Two"
+   ]
+  ],
+  "wear_hat_photogoggles.nif.glb": [
+   [
+    "hat_photogoggles-main-link_a.dds",
+    "hat_photogoggles"
+   ]
+  ],
+  "wear_hat_pirate.nif.glb": [
+   [
+    "hat_pirate-main-link_a.dds",
+    "helmet_skull"
+   ]
+  ],
+  "wear_hat_pressfedora.nif.glb": [
+   [
+    "hat_pressfedora-main-link_a.dds",
+    "hat_pressfedora"
+   ]
+  ],
+  "wear_hat_princess.nif.glb": [
+   [
+    "hat_princess-main-link_a.dds",
+    "npc_princess"
+   ],
+   [
+    "hat_princess-sub-glass_princess_glass.dds",
+    "glass_princess_glass.dds"
+   ]
+  ],
+  "wear_hat_questhat.nif.glb": [
+   [
+    "hat_questhat-main-link_a.dds",
+    "hat_questhat"
+   ]
+  ],
+  "wear_hat_rainbowmonkey.nif.glb": [
+   [
+    "hat_rainbowmonkey-20 - default-link_a.dds",
+    null
+   ]
+  ],
+  "wear_hat_rainbowmonkeyrainbow.nif@face_lovestruckglasses.glb": [
+   [
+    "hat_rainbowmonkeyrainbow-main-link_a.dds",
+    "face_lovestruckglasses"
+   ]
+  ],
+  "wear_hat_rainbowmonkeyrainbow.nif@hat_rainbowmonkeyrainbow.glb": [
+   [
+    "hat_rainbowmonkeyrainbow-main-link_a.dds",
+    "hat_rainbowmonkeyrainbow"
+   ]
+  ],
+  "wear_hat_roundribbon.nif.glb": [
+   [
+    "hat_roundribbon-main-link_a.dds",
+    "helmet_divinghelmet"
+   ]
+  ],
+  "wear_hat_set_coco.nif.glb": [
+   [
+    "hat_set_coco-main-link_a.dds",
+    "helmet_set_coco"
+   ]
+  ],
+  "wear_hat_skicap.nif@hat_skicap.glb": [
+   [
+    "hat_skicap-main-link_a.dds",
+    "hat_skicap"
+   ]
+  ],
+  "wear_hat_skicap.nif@hat_skicap_a.glb": [
+   [
+    "hat_skicap-main-link_a.dds",
+    "hat_skicap_a"
+   ]
+  ],
+  "wear_hat_sombrerc.nif.glb": [
+   [
+    "hat_sombrerc-main-link_a.dds",
+    "glass_luckygirlmask"
+   ]
+  ],
+  "wear_hat_sumoslammer.nif.glb": [
+   [
+    "hat_sumoslammer-main-link_a.dds",
+    "hat_chowderhat"
+   ]
+  ],
+  "wear_hat_suncap.nif.glb": [
+   [
+    "hat_suncap-main-link_a.dds",
+    "m_hat_suncap"
+   ]
+  ],
+  "wear_hat_tongelocolander.nif.glb": [
+   [
+    "hat_tongelocolander-main-link_a.dds",
+    "glass_eustacesfrightmask"
+   ]
+  ],
+  "wear_hat_urbanrange.nif.glb": [
+   [
+    "hat_urbanrange-main-link_a.dds",
+    "back_urbanrange"
+   ]
+  ],
+  "wear_hat_wizard.nif.glb": [
+   [
+    "hat_wizard-main-link_a.dds",
+    "hat_wizard"
+   ]
+  ],
+  "wear_hat_wooden.nif.glb": [
+   [
+    "hat_wooden-main-link_a.dds",
+    "hat_wooden"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_001_a.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_001_a"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_001_b.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_001_b"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_001_c.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_001_c"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_001_d.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_001_d"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_001_e.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_001_e"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_002_a.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_002_a"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_002_b.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_002_b"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_002_c.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_002_c"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_002_d.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_002_d"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_002_e.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_002_e"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_003_a.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_003_a"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_003_b.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_003_b"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_003_c.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_003_c"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_003_d.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_003_d"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_003_e.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_003_e"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_004_a.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_004_a"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_004_b.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_004_b"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_004_c.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_004_c"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_004_d.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_004_d"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_004_e.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_004_e"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_005_a.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_005_a"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_005_b.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_005_b"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_005_c.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_005_c"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_005_d.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_005_d"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_005_e.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_005_e"
+   ]
+  ],
+  "wear_m_shirt_easy.nif@boysrollertee_a.glb": [
+   [
+    "m_shirt_easy-main-link_a.dds",
+    "boysrollertee_a"
+   ],
+   [
+    "m_shirt_easy-sub-link_b.dds",
+    "m_skin"
+   ]
+  ],
+  "wear_m_shirt_easy.nif@boysrollertee_b.glb": [
+   [
+    "m_shirt_easy-main-link_a.dds",
+    "boysrollertee_b"
+   ],
+   [
+    "m_shirt_easy-sub-link_b.dds",
+    "m_skin"
+   ]
+  ],
+  "wear_m_shirt_easy.nif@m_easy_a.glb": [
+   [
+    "m_shirt_easy-main-link_a.dds",
+    "m_easy_a"
+   ],
+   [
+    "m_shirt_easy-sub-link_b.dds",
+    "m_skin"
+   ]
+  ],
+  "wear_m_shirt_easy.nif@m_easy_b.glb": [
+   [
+    "m_shirt_easy-main-link_a.dds",
+    "m_easy_b"
+   ],
+   [
+    "m_shirt_easy-sub-link_b.dds",
+    "m_skin"
+   ]
+  ],
+  "wear_m_shirt_easy.nif@m_easy_c.glb": [
+   [
+    "m_shirt_easy-main-link_a.dds",
+    "m_easy_c"
+   ],
+   [
+    "m_shirt_easy-sub-link_b.dds",
+    "m_skin"
+   ]
+  ]
+ },
  "gltf-xdt/FutureNano.resourceFile": {
   "nano_nano_eddy.kfm.glb": [
    [

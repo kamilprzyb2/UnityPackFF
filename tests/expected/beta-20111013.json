@@ -2608,6 +2608,258 @@
    "warnings": 0
   }
  },
+ "gltf-wear/CharacterSelection_wear_face.resourceFile": {
+  "wear_m_face_001_type01.nif@m_face_001_a.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_001_a"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_001_b.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_001_b"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_001_c.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_001_c"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_001_d.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_001_d"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_001_e.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_001_e"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_002_a.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_002_a"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_002_b.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_002_b"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_002_c.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_002_c"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_002_d.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_002_d"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_002_e.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_002_e"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_003_a.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_003_a"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_003_b.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_003_b"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_003_c.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_003_c"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_003_d.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_003_d"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_003_e.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_003_e"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_004_a.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_004_a"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_004_b.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_004_b"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_004_c.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_004_c"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_004_d.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_004_d"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_004_e.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_004_e"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_005_a.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_005_a"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_005_b.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_005_b"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_005_c.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_005_c"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_005_d.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_005_d"
+   ]
+  ],
+  "wear_m_face_001_type01.nif@m_face_005_e.glb": [
+   [
+    "m_face_001_type01-sub-link_b.dds",
+    "m_skin"
+   ],
+   [
+    "m_face_001_type01-main-link_a.dds",
+    "m_face_005_e"
+   ]
+  ]
+ },
  "gltf/CharacterSelection_wear_face.resourceFile": {
   "wear/f_face_001_type01.nif": {
    "nodes": 158,
