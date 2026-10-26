@@ -84,6 +84,7 @@ All the remaining asset bundles (CharTexture, CharacterCreation, CharacterSelect
 
 This library is meant to operate on the CustomAssetBundles after they've already been extracted from their respective `.unity3d` archives.
 You can either copy out your cache directory after having played the game (and gone to the Past zone) or you can extract the asset files from their `.unity3d` archives yourself using a tool like `quickbms`.
+[`fetch_bundles.py`](#fetch_bundlespy) does the latter for you: it downloads archives from a game server's CDN and unpacks them.
 This can be automated for every asset bundle with a shell one-liner or any similar means.
 
 ## Usage
@@ -182,6 +183,24 @@ Some objects contain `ObjectPointer`s that point to any other object in either t
 If the `base_path` in your asset's `UnityEnvironment` is set up correctly, the `resolve()` method can automatically dereference these asset pointers.
 
 ### Scripts
+
+#### `fetch_bundles.py`
+
+---
+
+Downloads archives and unpacks the asset files inside them, laid out so the other scripts find the files one archive refers to in another.
+Give it a launcher manifest, the `.json` of a game version that lists every archive with its SHA-256 (the OpenFusion launcher ships them in `resources/defaults/versions/`, and servers running ofapi serve them at `/versions/<uuid>.json`), by path or URL, and the archives you want:
+
+```
+/path/to/fetch_bundles.py beta-20100104.json --list
+/path/to/fetch_bundles.py beta-20100104.json TableData.resourceFile FutureNano.resourceFile NpcTexture.resourceFile --unpack -o ff
+/path/to/export_gltf.py ff/unpacked/FutureNano.resourceFile/CustomAssetBundle-... --env ff/unpacked
+```
+
+Names can be patterns (`'Map_04_*'`, case doesn't matter), and `--all` takes the whole build.
+Every download is checked against the manifest's hash, and with `--unpack` so is every file inside it; an archive already in the output directory with the right hash isn't downloaded again.
+Archives go to the output directory (`-o`), their files to `unpacked/<archive>/` under it.
+The script also takes the URL of a single archive, which it downloads without a check, or an archive on disk, to unpack it.
 
 #### `unityextract.py`
 

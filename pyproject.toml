@@ -45,6 +45,7 @@ script-files = [
     "bin/additem.py",
     "bin/dump_terrain.py",
     "bin/dumpxdt.py",
+    "bin/fetch_bundles.py",
     "bin/ffextract.py",
     "bin/index_bundles.py",
     "bin/list_ab_alt.py",
