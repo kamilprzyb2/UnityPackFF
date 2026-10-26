@@ -67,3 +67,9 @@ unitypack = ["classes.json", "strings.dat", "structs.dat"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = "-m 'not integration'"
+markers = [
+    "integration: downloads pinned client archives (run with -m integration, or --sweep for every archive)",
+    "bundles(*names): run an integration test on these archives instead of the curated set",
+    "ffbuildtool: calls the ffbuildtool CLI; skipped when it isn't installed",
+]

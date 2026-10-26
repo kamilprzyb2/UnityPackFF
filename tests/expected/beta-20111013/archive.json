@@ -1,0 +1,328 @@
+{
+ "CharacterSelection.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 2537113,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     2537049,
+     15598916
+    ]
+   ],
+   "bundle_size": 2537113
+  },
+  "files": [
+   "CustomAssetBundle-CharacterSelection"
+  ]
+ },
+ "CharacterSelection_wear_face.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 86982,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     86918,
+     390996
+    ]
+   ],
+   "bundle_size": 86982
+  },
+  "files": [
+   "CustomAssetBundle-CharacterSelection_wear_face"
+  ]
+ },
+ "Character_Texture_npc3.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 250250,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     250186,
+     1200940
+    ]
+   ],
+   "bundle_size": 250250
+  },
+  "files": [
+   "CustomAssetBundle-Character_Texture_npc3"
+  ]
+ },
+ "DongResources_04_02.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 11558724,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     11558660,
+     44670700
+    ]
+   ],
+   "bundle_size": 11558724
+  },
+  "files": [
+   "CustomAssetBundle-DongResources_04_02"
+  ]
+ },
+ "FUSound.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 3411996,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     3411932,
+     3813664
+    ]
+   ],
+   "bundle_size": 3411996
+  },
+  "files": [
+   "CustomAssetBundle-FUSound"
+  ]
+ },
+ "Icons.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 6054910,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     6054846,
+     18976072
+    ]
+   ],
+   "bundle_size": 6054910
+  },
+  "files": [
+   "CustomAssetBundle-Icons"
+  ]
+ },
+ "LobbyMusic.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 1044760,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     1044696,
+     1055396
+    ]
+   ],
+   "bundle_size": 1044760
+  },
+  "files": [
+   "CustomAssetBundle-LobbyMusic"
+  ]
+ },
+ "Manifest.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 2016,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     1952,
+     22632
+    ]
+   ],
+   "bundle_size": 2016
+  },
+  "files": [
+   "CustomAssetBundle-8320bfa70e3f04727bfc405b1fd7efcc"
+  ]
+ },
+ "Map_00_00.unity3d": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 3356,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     3292,
+     38300
+    ]
+   ],
+   "bundle_size": 3356
+  },
+  "files": [
+   "BuildPlayer-Map_00_00",
+   "BuildPlayer-Map_00_00.sharedAssets"
+  ]
+ },
+ "Map_04_02.unity3d": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 202535,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     202471,
+     2151388
+    ]
+   ],
+   "bundle_size": 202535
+  },
+  "files": [
+   "BuildPlayer-Map_04_02",
+   "BuildPlayer-Map_04_02.sharedAssets"
+  ]
+ },
+ "Nano_001.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 663180,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     663116,
+     1844344
+    ]
+   ],
+   "bundle_size": 663180
+  },
+  "files": [
+   "CustomAssetBundle-Nano_001"
+  ]
+ },
+ "TableData.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 751481,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     751417,
+     7037104
+    ]
+   ],
+   "bundle_size": 751481
+  },
+  "files": [
+   "CustomAssetBundle-TableData"
+  ]
+ },
+ "UI_map.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 1192326,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     1192262,
+     15051692
+    ]
+   ],
+   "bundle_size": 1192326
+  },
+  "files": [
+   "CustomAssetBundle-UI_map"
+  ]
+ },
+ "main.unity3d": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 9977143,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     9977079,
+     58720820
+    ]
+   ],
+   "bundle_size": 9977143
+  },
+  "files": [
+   "Assembly - CSharp - first pass.dll",
+   "Assembly - CSharp.dll",
+   "Assembly - UnityScript - first pass.dll",
+   "Mono.Data.Tds.dll",
+   "Mono.Security.dll",
+   "System.Configuration.Install.dll",
+   "System.Configuration.dll",
+   "System.Data.dll",
+   "System.Drawing.dll",
+   "System.EnterpriseServices.dll",
+   "System.Security.dll",
+   "System.Transactions.dll",
+   "System.Xml.dll",
+   "System.dll",
+   "mainData",
+   "mysql.data.dll",
+   "sharedassets0.assets"
+  ]
+ }
+}

@@ -1,0 +1,54 @@
+{
+ "Icons.resourceFile": {
+  "CustomAssetBundle-Icons": {
+   "saved": "c6d139cea9af513c8bbfba5f06481ab89c77409efab45751faf26e85182b32d4",
+   "identical": false,
+   "save_error": null
+  }
+ },
+ "LobbyMusic.resourceFile": {
+  "CustomAssetBundle-LobbyMusic": {
+   "saved": "7daf78f74801276268129edfc8bbaf31eb8925ae58fbaa43027ff4a645467669",
+   "identical": true,
+   "save_error": null
+  }
+ },
+ "Map_00_00.unity3d": {
+  "BuildPlayer-Map_00_00": {
+   "saved": "b330b05de6ef60feb1e7db0fc5023ae57680f7a1a7de1813ae1be5562e8d6bb7",
+   "identical": false,
+   "save_error": null
+  },
+  "BuildPlayer-Map_00_00.sharedAssets": {
+   "saved": "8636d031b3af556970162123969f0f01e764a93cb8b62fdeebd39b5590eab9f9",
+   "identical": true,
+   "save_error": null
+  }
+ },
+ "Map_04_02.unity3d": {
+  "BuildPlayer-Map_04_02": {
+   "saved": "e04413ced6f49bbe72453844b6b9df69d1fe44238fda50d1b759751a0b38c41f",
+   "identical": false,
+   "save_error": null
+  },
+  "BuildPlayer-Map_04_02.sharedAssets": {
+   "saved": "4e26ed0ab4f30629f4ffaa5df8a2453034e0860c3cd0698df895b8c09d39855d",
+   "identical": true,
+   "save_error": null
+  }
+ },
+ "TableData.resourceFile": {
+  "CustomAssetBundle-TableData": {
+   "saved": "b2ec959c0a4e46d94c08a077246767aef7f1097812d27807c0b3a8dc243dc03c",
+   "identical": false,
+   "save_error": null
+  }
+ },
+ "UI_map.resourceFile": {
+  "CustomAssetBundle-UI_map": {
+   "saved": "6b5ed6914191355eb405875d083e58022a7f54eb99658f57242b2209f646ba36",
+   "identical": false,
+   "save_error": null
+  }
+ }
+}
