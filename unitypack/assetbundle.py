@@ -16,6 +16,9 @@ class AssetBundle:
 	def __init__(self, environment):
 		self.environment = environment
 		self.assets = []
+		# [(name, bytes)]: each file of a compressed archive as stored in
+		# it, in archive order (empty for other archives)
+		self.files = []
 
 	def __repr__(self):
 		if hasattr(self, "name"):
@@ -89,7 +92,8 @@ class AssetBundle:
 			name = table.read_string()
 			offset = table.read_uint()
 			size = table.read_uint()
-			self.assets.append(Asset.from_bundle_data(self, name, data[offset:offset + size]))
+			self.files.append((name, data[offset:offset + size]))
+			self.assets.append(Asset.from_bundle_data(self, name, self.files[-1][1]))
 
 	def read_compressed_data(self, buf, compression):
 		data = buf.read(self.ciblock_size)

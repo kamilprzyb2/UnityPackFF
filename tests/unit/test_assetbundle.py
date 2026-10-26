@@ -57,6 +57,12 @@ def test_two_files():
 	assert bundle.assets[1].objects[2].read().script == "first"
 
 
+def test_files_as_stored():
+	scene, shared = synth.sample_file(), synth.bundle_file()
+	bundle = load([("BuildPlayer-Map", scene), ("BuildPlayer-Map.sharedAssets", shared)], "Map.unity3d")
+	assert bundle.files == [("BuildPlayer-Map", scene), ("BuildPlayer-Map.sharedAssets", shared)]
+
+
 def test_streamed_signature():
 	# FusionFall Retro's archives say "streamed" where Unity writes "UnityWeb"
 	data = synth.unityweb([("CustomAssetBundle-x", synth.sample_file())])
