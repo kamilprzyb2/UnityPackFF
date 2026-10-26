@@ -16,6 +16,10 @@ The upstream readme has been renamed to [README.UP.md](README.UP.md).
 
 It currently supports working with all asset bundles from the original game, as well as all asset bundles from FusionFall Retro.
 
+The one exception is 32 map tiles of the beta-20100104 and beta-20100728 builds (`Map_16_12` to `Map_23_15`, the scene and its `.sharedAssets`), which were built without type trees.
+UnityPackFF falls back to the layouts in `structs.dat` for them, but those come from a later Unity version and don't fit, so reading any of their objects raises a `ValueError` (`ObjectInfo.uses_structs_dat` tells you beforehand).
+Correct layouts wouldn't help much: the scripts, meshes, materials and terrain these tiles point to are in `CustomAssetBundle-…` files that none of the known builds ship.
+
 Note that this repository is a loose collection of patches and scripts I had originally written for my own use and have only slightly cleaned up before publishing.
 Do read the scripts in `bin` before executing them to make sure you understand what they do.
 Tweaking them yourself is to be considered part of standard usage.
