@@ -64,6 +64,13 @@ def main():
 		asset = Asset.from_file(f, environment=env)
 		env.assets[os.path.basename(args.file).lower()] = asset
 
+		if asset.objects and not asset.tree.type_trees:
+			# Map_16..23_12..15 of beta-20100104 and beta-20100728; the
+			# layouts in structs.dat are from a later Unity and don't fit
+			sys.exit('{}: this file has no type trees, so its objects can\'t be read. '
+				'Some map tiles of the early builds are like this; the assets they '
+				'point to aren\'t in any known build either.'.format(os.path.basename(args.file)))
+
 		if not any(o.type_id == ASSET_BUNDLE for o in asset.objects.values()):
 			w = GLTFWriter()
 			w.add_scene(asset)

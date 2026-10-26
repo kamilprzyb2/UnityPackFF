@@ -170,6 +170,17 @@ def test_replace_terrain_rejects_old_usage(tmp_path):
 	assert "no longer takes an offset" in r.stderr
 
 
+def test_export_gltf_rejects_untyped_file(tmp_path):
+	# like the map tiles built without type trees: no traceback, a reason
+	(tmp_path / "BuildPlayer-Map").write_bytes(synth.serialized_file({}, [(1, 104, 104, bytes(8))]))
+	r = subprocess.run([sys.executable, str(ROOT / "bin" / "export_gltf.py"), str(tmp_path / "BuildPlayer-Map"), "-o", str(tmp_path)],
+		capture_output=True, text=True, env={"PYTHONPATH": str(ROOT)})
+	assert r.returncode != 0
+	assert "has no type trees" in r.stderr
+	assert "Traceback" not in r.stderr
+	assert not list(tmp_path.glob("*.glb"))
+
+
 # fetch_bundles.py on made-up archives, served from a folder (file://) or a
 # local web server, with launcher manifests written for them
 
