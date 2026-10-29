@@ -324,6 +324,32 @@ Shifts are kept unless `--shifts` gives a JSON file in `dump_terrain.py`'s forma
 Patches whose heights changed get new level-of-detail data, so an unedited image gives back the file byte for byte.
 8-bit images written by older versions of `dump_terrain.py` are still read.
 
+#### `dump_script.py`
+
+---
+
+Dumps script objects (MonoBehaviours: FusionFall's tables and settings) of an asset file as JSON.
+Without names it lists the file's script objects; a name picks one by its container path (`all_hnpc.asset`) or by its own name (`all_hnpc`, `male.bsd`), ignoring case.
+
+```
+/path/to/dump_script.py CustomAssetBundle-1dca92eecee4742d985b799d8226666d
+/path/to/dump_script.py CustomAssetBundle-1dca92eecee4742d985b799d8226666d all_hnpc.asset -o hnpc.json
+```
+
+Colours come out as `[r, g, b, a]`, pointers as `{"file_id": ..., "path_id": ...}`.
+The skin and hair colour palettes (`male.bsd`) are in TableData from beta-20100728 on, and in `main.unity3d`'s `sharedassets0.assets` before.
+
+#### `dump_mapdata.py`
+
+---
+
+Dumps FusionFall's per-map data as JSON, one `<file>.json` per input file that has any.
+From a map tile scene (`BuildPlayer-Map_XX_YY`) it writes the MapAttributeTable (rows of 129 flag bytes: poison, heal, item rules, roads), how many cells have each flag, and the tile's fog, sky and light colours; from `main.unity3d`'s `sharedassets0.assets`, the music and ambient zones (polygons on the map and the track each plays).
+
+```
+/path/to/dump_mapdata.py BuildPlayer-Map_04_02 sharedassets0.assets -o mapdata
+```
+
 #### `proto_extract.py`, `proto_mesh_extract.py`
 
 ---
