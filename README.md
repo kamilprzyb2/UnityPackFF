@@ -313,6 +313,17 @@ Each material keeps the Unity material it came from (shader name, colours, float
 
 Pointers into other files resolve when those files are in the same folder as the input, or one folder down, as `fetch_bundles.py --unpack` lays them out; `--env` points elsewhere.
 A map tile scene (`BuildPlayer-Map_XX_YY`, which has no container) is exported whole, as one `.glb` named after it: every active GameObject, the terrain with its shifts applied and its splat textures blended into a base map, and the scene's lights.
+Nanos, NPCs and mobs, shinies, the bus, vehicles and what players wear get the textures the game puts on them, which the XDT names (from the TableData file in the environment, or `--xdt`; `--no-xdt` keeps the prefabs' own).
+A prefab the game uses with several texture sets (car colours, hoverboard designs, a face's eye colours) is written once per set, as `<path>@<texture>.glb`.
+
+Options (`--help` has the details):
+
+* `--as-worn`: clothing, capes, faces and hair as the game combines them with the character, skinned meshes only
+* `--actor-bones`: the bone lists that bind worn items to the character, in the extras
+* `--split-clips`: the model without its clips, and each clip in a file of its own, `<name>@<clip>.glb`
+* `--colliders`: colliders and rigidbodies in the nodes' extras
+* `--external DIR`: images and mesh data as separate files in `DIR`, named by their content, so exports into the same folder share them
+
 `unityextract.py --glb` writes single meshes as glTF instead of OBJ.
 
 #### `dump_terrain.py`, `replace_terrain.py`
