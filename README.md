@@ -312,6 +312,7 @@ Each material keeps the Unity material it came from (shader name, colours, float
 ```
 
 Pointers into other files resolve when those files are in the same folder as the input, or one folder down, as `fetch_bundles.py --unpack` lays them out; `--env` points elsewhere.
+A map tile scene (`BuildPlayer-Map_XX_YY`, which has no container) is exported whole, as one `.glb` named after it: every active GameObject, the terrain with its shifts applied and its splat textures blended into a base map, and the scene's lights.
 `unityextract.py --glb` writes single meshes as glTF instead of OBJ.
 
 #### `dump_terrain.py`, `replace_terrain.py`
