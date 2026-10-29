@@ -303,21 +303,26 @@ You'll also want to change the Forward or Up axes in the file selection menu whe
 
 ---
 
-These are currently imperfect terrain modding scripts.
-`dump_terrain.py` was initially written by CPunch.
+Terrain modding scripts. `dump_terrain.py` was initially written by CPunch.
 
-You supply `dump_terrain.py` with a "dongresources" asset bundle and an output file name and it will print the hexadecimal offset of that map tile's terrain data and extract it as a grayscale PNG file.
-Note that the image will be rotated differently than in the game.
+`dump_terrain.py` takes a "DongResources" file and an output PNG name, and writes the map tile's heightmap as a 16-bit grayscale PNG, losslessly: the map seen from above, north up, pixel values 0 to 32766 for 0 to the terrain's height scale.
+Next to it (`out.png` -> `out.shifts.json`) it writes the terrain's scales and its shifted vertices, `[x, z, flags]` records that move a vertex half a cell (flags 1 = -x, 2 = +x, 4 = -z, 8 = +z).
 
-This image can be edited in any image editor. Darker shades result in lower, while brighter ones in higher terrain.
-You could also use them in Blender in a displacement modifier on a subdivided plane for more natural editing, and then bake it back to an image for export, but getting this to work in a pixel-perfect manner would be tricky.
+```
+/path/to/dump_terrain.py CustomAssetBundle-... heights.png
+```
 
-The modified image can be supplied to `replace_terrain.py` along with the offset that `dump_terrain.py` had printed; as well as the asset bundle to re-inject the terrain data into.
-The target asset bundle will be edited in-place, so make sure to make a backup beforehand.
+The PNG can be edited in any image editor that keeps 16 bits per pixel; brighter is higher.
+`replace_terrain.py` writes it back and saves the file:
 
-Unfortunately, the terrain data uses 16-bit integers for each pixel and this format doesn't seem to map cleanly to any well-supported pixel format.
-Currently, `dump_terrain.py` maps the 16-bit value range to a single byte (and stores it thrice, once for each byte of an RGB pixel), resulting in rounding errors which very clearly mangle the terrain even if no changes were manually introduced.
-For that reason, these scripts are only good for testing and goofing around until we can possibly write a custom blender import script to allow terrain modification without messing the entire map tile up.
+```
+/path/to/replace_terrain.py heights.png CustomAssetBundle-... [-o out] [--shifts heights.shifts.json]
+```
+
+Without `-o` the file is replaced in place, so keep a backup.
+Shifts are kept unless `--shifts` gives a JSON file in `dump_terrain.py`'s format.
+Patches whose heights changed get new level-of-detail data, so an unedited image gives back the file byte for byte.
+8-bit images written by older versions of `dump_terrain.py` are still read.
 
 #### `proto_extract.py`, `proto_mesh_extract.py`
 
