@@ -1,0 +1,73 @@
+name: Integration tests
+
+# The curated archives of each pinned build, one job per build. Archives
+# are downloaded from the builds' CDN only when the cache misses: its key
+# changes with the manifests and the curated list (tests/bundles.py).
+# A pull request reads the cache of its own branch and of master, so a run
+# on master fills it for every pull request after.
+on:
+  push:
+    branches: [master]
+    paths-ignore: ["**.md"]
+  pull_request:
+    paths-ignore: ["**.md"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: integration-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FFBUILDTOOL_VERSION: v5.1.0
+  GLTF_VALIDATOR_VERSION: 2.0.0-dev.3.10
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        build: ["104", "728", "1013"]
+    env:
+      UNITYPACKFF_REQUIRE_ARCHIVES: "1"  # a missing archive fails, it doesn't skip
+      UNITYPACKFF_GLTF_VALIDATOR: ${{ github.workspace }}/../gltf-validator
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.15"
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Restore ffbuildtool
+        id: ffbuildtool
+        uses: actions/cache@v5
+        with:
+          path: ~/.cargo/bin/ffbuildtool
+          key: ffbuildtool-${{ runner.os }}-${{ env.FFBUILDTOOL_VERSION }}
+      - name: Build ffbuildtool
+        if: steps.ffbuildtool.outputs.cache-hit != 'true'
+        run: cargo install --locked --git https://github.com/OpenFusionProject/ffbuildtool --tag "$FFBUILDTOOL_VERSION" ffbuildtool
+
+      - name: glTF validator
+        run: npm install --no-save --prefix "$UNITYPACKFF_GLTF_VALIDATOR" "gltf-validator@$GLTF_VALIDATOR_VERSION"
+
+      - name: Restore archives
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.cache/unitypackff-tests/*/*.unity3d
+            ~/.cache/unitypackff-tests/*/*.resourceFile
+          key: archives-${{ matrix.build }}-${{ hashFiles('tests/manifests/*.json', 'tests/bundles.py') }}
+
+      - run: pip install -e '.[test]'
+      - name: ImageMagick (for wand), if the runner lacks it
+        run: python -c "import wand.image" || (sudo apt-get update && sudo apt-get install -y --no-install-recommends libmagickwand-dev)
+      - name: Fetch the curated archives
+        run: python -m tests.tools.fetch --build ${{ matrix.build }}
+      - run: pytest -m integration --build ${{ matrix.build }} -rs

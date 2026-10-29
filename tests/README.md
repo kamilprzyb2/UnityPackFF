@@ -53,7 +53,7 @@ Not covered yet: cross-archive pointers (`UnityEnvironment`), `bin/` scripts, `A
 
 Archives are downloaded on first use into `~/.cache/unitypackff-tests/<build>/` (override with `UNITYPACKFF_CACHE`) and checked against the manifest. Unpacked files go to `<build>/unpacked/<archive>/`, also checked file by file. If you already have a build on disk, point `UNITYPACKFF_MIRROR` at the directory (several can be joined with `:`). Files whose hash matches are copied from it instead of downloaded.
 
-If an archive can't be fetched (a CDN moved, or no network), its tests skip with the reason.
+If an archive can't be fetched (a CDN moved, or no network), its tests skip with the reason; with `UNITYPACKFF_REQUIRE_ARCHIVES=1`, as in CI, they fail instead.
 
 These are official builds, whose archives on the CDN don't change. Servers that update their client in place (Retrobution, for one) serve only their current version, so they can't be pinned and aren't tested here.
 
@@ -63,15 +63,19 @@ These are official builds, whose archives on the CDN don't change. Servers that 
 
 Integration tests call `expected.check("area/name", value)`. Without `--record` it compares with `name` in `tests/expected/<build>/<area>.json`; with `--record` it stores the value. Each area has a file of its own, so tests of different features don't touch the same file. Keys that a run doesn't touch are kept. Review the diff of a re-record like code.
 
-## Running every archive (for CI, not done yet)
+## CI
 
-The integration tests cover the curated set (13–14 archives per build). Running them over every archive, as CI should, needs three changes first.
+GitHub Actions run the unit tests on every push to `master` and every pull request (`.github/workflows/unit.yml`, on the oldest and a current Python), and the integration tests on every pull request and push to `master` that changes more than Markdown files (`integration.yml`, one job per build, in parallel). The integration jobs cache the downloaded archives, keyed by `manifests/` and `bundles.py`, so the CDN is only asked again when those change, and the `ffbuildtool` binary. A missing archive fails the job instead of skipping its tests. Nothing is required to pass before merging.
+
+## Running every archive (not done yet)
+
+The integration tests cover the curated set (13–14 archives per build). Running them over every archive needs three changes first.
 
 1. **Make `--sweep` pass.** Recorded values exist only for the curated archives, so on any other archive the comparing tests fail with "no expected value" (`test_unpack_matches_manifest`, `test_survey`). The plan is to compare recorded values for the curated set only, and for every other archive check what must always hold: it unpacks to exactly the manifest's files, the metadata parses to the last byte, UnityPackFF opens every file and reads every object (apart from known bugs), and a round trip leaves objects unchanged. Recording everything instead would grow `expected/` from about 150 KB to about 5 MB, and every reader change would re-record it.
 2. **Make the suite safe to run in parallel** with pytest-xdist (`pytest -n 4`). Comparing is already safe. Two things are not:
    - Downloading and unpacking: two processes working on the same archive write the same `.part` file and the same unpacked files. Use per-process temporary names and atomic renames; in CI, also fill the cache first with `python3 -m tests.tools.fetch --build all --all`.
    - `--record`: each process saves the whole expected file with only its own results, so processes overwrite each other. Merge on save, or refuse `--record` together with `-n`.
-3. **The CI job:**
+3. **A CI job for it:**
    - cache the 2.2 GB of archives between runs, keyed by the hashes of `manifests/` (it fits GitHub's 10 GB cache limit);
    - install ffbuildtool for the round-trip tests;
    - expect reading every object of all 1,230 archives to take about 35 CPU-minutes, so 4 or more cores.

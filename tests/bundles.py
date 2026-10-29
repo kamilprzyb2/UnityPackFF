@@ -11,6 +11,9 @@ Environment:
   UNITYPACKFF_MIRROR  extra local directories (os.pathsep-separated) holding
                       archives by file name; a file is copied from a mirror
                       only if its hash matches the manifest
+  UNITYPACKFF_REQUIRE_ARCHIVES  set (to anything but 0) to fail tests whose
+                      archive can't be fetched instead of skipping them, as
+                      CI does
 
 The UnityWeb reader here is deliberately independent of unitypack, so the
 two can be checked against each other and against the manifest hashes.
@@ -69,6 +72,11 @@ USER_AGENT = "UnityPackFF-tests"
 
 class BundleUnavailable(Exception):
 	"The archive could not be fetched (gone from the CDN, or no network)."
+
+
+def archives_required():
+	"Whether a test whose archive can't be fetched fails instead of skipping (UNITYPACKFF_REQUIRE_ARCHIVES)"
+	return os.environ.get("UNITYPACKFF_REQUIRE_ARCHIVES", "") not in ("", "0")
 
 
 def cache_root():
