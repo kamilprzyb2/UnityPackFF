@@ -299,6 +299,21 @@ Tip: When importing the resulting `obj` files into Blender, you'll want to selec
 This fixes a shading issue. It's possible the normals aren't being ripped correctly.
 You'll also want to change the Forward or Up axes in the file selection menu when importing the `obj` file so the models are imported upright without you having to rotate them manually.
 
+#### `export_gltf.py`
+
+---
+
+Exports the prefabs (GameObjects) of an extracted asset file as glTF binaries (`.glb`), one per prefab: the Transform tree, meshes and materials with their textures embedded, skins, and the clips of the prefab's Animation components.
+Each material keeps the Unity material it came from (shader name, colours, floats, textures) in its `extras`.
+
+```
+/path/to/export_gltf.py CustomAssetBundle-50513e574023b4e259c6fd245ae5bc06 -o out
+/path/to/export_gltf.py CustomAssetBundle-50513e574023b4e259c6fd245ae5bc06 nano_eddy -o out    # only matching container paths
+```
+
+Pointers into other files resolve when those files are in the same folder as the input, or one folder down, as `fetch_bundles.py --unpack` lays them out; `--env` points elsewhere.
+`unityextract.py --glb` writes single meshes as glTF instead of OBJ.
+
 #### `dump_terrain.py`, `replace_terrain.py`
 
 ---
