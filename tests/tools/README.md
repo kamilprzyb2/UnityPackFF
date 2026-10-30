@@ -7,6 +7,7 @@ Command-line tools that run the same operations as the integration tests, but wr
 | `fetch.py` | Downloads archives of the pinned builds into the cache, checks their hashes, unpacks them | everything (the other scripts fetch what they need on their own too) |
 | `survey.py` | Describes every file: format, type trees, class IDs, what UnityPackFF can read | `integration/test_survey.py` |
 | `roundtrip.py` | ffbuildtool extract → UnityPackFF save → ffbuildtool pack → re-open and compare; optionally a whole playable build | `integration/test_roundtrip.py` |
+| `meshes.py` | Exports every mesh of an archive as OBJ, plus the skin weights of skinned meshes | `integration/test_meshes.py` |
 | `_common.py` | The options all the scripts share (not run directly) | |
 
 Run them from the repository root (`UnityPackFF/`) as modules of the `tests` package: `python3 -m tests.tools.<name>`, without `.py`.
@@ -95,3 +96,19 @@ python3 -m http.server 8000 -d out/client
 ```
 
 Then add `out/client/beta-20100104/manifest.json` to the launcher as a custom game version and play against an OpenFusion server built for that protocol (104 here).
+
+## meshes.py
+
+```sh
+python3 -m tests.tools.meshes --build 104 --bundle FutureNano.resourceFile
+python3 -m tests.tools.meshes --build 1013 --bundle Nano_001.resourceFile --bundle CharacterSelection_wear_face.resourceFile
+```
+
+Prints how many meshes each archive has and how many of them are skinned. Writes, per serialized file, into `out/meshes/<build>/<archive>/<file>/`:
+
+| File | Contents |
+| --- | --- |
+| `<path ID>_<name>.obj` | the mesh as `OBJMesh` exports it |
+| `<path ID>_<name>.skin.json` | skinned meshes only: per vertex, its `[bone index, weight]` pairs (1 to 4, adding up to 1). The bone index points into the `m_Bones` list of the mesh's SkinnedMeshRenderer |
+
+and `out/meshes/<build>.json` with the statistics the integration test checks (vertex and triangle counts, OBJ digest, how many vertices have how many weights).

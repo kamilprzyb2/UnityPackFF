@@ -1,6 +1,6 @@
 import math
 from io import BytesIO
-from .utils import BinaryReader, BitReader
+from .utils import BinaryReader, unpack_floats, unpack_ints
 
 
 class OBJVector2:
@@ -86,9 +86,11 @@ class MeshData:
 		self.uv3 = []
 		self.uv4 = []
 		self.tangents = []
+		self.skin = []
 
 		self.extract_indices()
 		self.simple_extract_vertices()
+		self.extract_skin()
 
 		#if mesh.asset.format == 6:
 		#	self.simple_extract_vertices()
@@ -104,6 +106,14 @@ class MeshData:
 
 		for v in self.mesh._obj['m_UV']:
 			self.uv1.append(OBJVector2(v['x'], v['y']))
+
+	def extract_skin(self):
+		"Per vertex, its [(bone index, weight)] from m_Skin, leaving out zero weights"
+		for influence in self.mesh._obj.get('m_Skin', []):
+			self.skin.append([
+				(influence['boneIndex[%d]' % i], influence['weight[%d]' % i])
+				for i in range(4) if influence['weight[%d]' % i]
+			])
 
 	def extract_indices(self):
 		for sub in self.mesh.submeshes:
@@ -181,39 +191,15 @@ class CompressedMeshData:
 		self.uv3 = []
 		self.uv4 = []
 		self.tangents = []
+		self.skin = []
 
 		self.extract_mesh()
 
 	def read_bits(self, pbv):
-		if pbv['m_NumItems'] == 0:
-			return []
-		if pbv['m_BitSize'] == 0:
-			# no bits to store: every item is 0
-			return [0] * pbv['m_NumItems']
-
-		reader = BitReader(pbv['m_Data'], pbv['m_BitSize'])
-
-		ret = []
-		for i in range(pbv['m_NumItems']):
-			ret.append(reader.read())
-
-		return ret
+		return unpack_ints(pbv)
 
 	def read_floats(self, pbv):
-		if pbv['m_NumItems'] == 0:
-			return []
-		if pbv['m_BitSize'] == 0:
-			return [float(pbv['m_Start'])] * pbv['m_NumItems']
-
-		items = self.read_bits(pbv)
-		maxvalue = (1 << pbv['m_BitSize']) - 1
-		_range = pbv['m_Range'] / maxvalue
-
-		floats = []
-		for i in range(len(items)):
-			floats.append(float(items[i] * _range + pbv['m_Start']))
-
-		return floats
+		return unpack_floats(pbv)
 
 	def read_normals(self, normals, normal_signs):
 		items = self.read_bits(normals)
@@ -249,6 +235,37 @@ class CompressedMeshData:
 
 		return list(floats.values())
 
+	def read_skin(self, weights, bone_indices):
+		"""
+		Per vertex, its [(bone index, weight)]. Weights are stored out of 31,
+		one after the other: a vertex ends once its weights add up to 31, or
+		after three, when a fourth weight (31 minus the sum) is implied. The
+		implied weight still has its own entry in bone_indices.
+		"""
+		weights = self.read_bits(weights)
+		bones = iter(self.read_bits(bone_indices))
+
+		skin = []
+		vertex = []
+		total = 0
+		try:
+			for w in weights:
+				vertex.append((next(bones), w))
+				total += w
+				if total < 31 and len(vertex) == 3:
+					vertex.append((next(bones), 31 - total))
+					total = 31
+				if total >= 31:
+					skin.append([(bone, w / 31) for bone, w in vertex])
+					vertex = []
+					total = 0
+		except StopIteration:
+			raise ValueError("%r: fewer bone indices than skin weights" % (self.mesh))
+		if vertex or next(bones, None) is not None:
+			raise ValueError("%r: skin weights and bone indices don't end together" % (self.mesh))
+
+		return skin
+
 	def extract_mesh(self):
 		cmesh = self.mesh._obj['m_CompressedMesh']
 
@@ -277,6 +294,10 @@ class CompressedMeshData:
 			sub_indices = indices[first:first + sub.index_count]
 			self.indices.append(sub_indices)
 			self.triangles.append(submesh_triangles(sub, sub_indices))
+
+		self.skin = self.read_skin(cmesh['m_Weights'], cmesh['m_BoneIndices'])
+		if self.skin and len(self.skin) != len(self.vertices):
+			raise ValueError("%r: skin weights for %d vertices, but %d vertices" % (self.mesh, len(self.skin), len(self.vertices)))
 
 
 class OBJMesh:

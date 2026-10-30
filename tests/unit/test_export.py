@@ -125,6 +125,9 @@ def compressed_mesh(normal_items=(0,) * 6, signs=(1,) * 3, triangles=(0, 1, 2), 
 			m_Normals=packed(normal_items, 4, 0.0, 1.0),
 			m_NormalSigns=packed(signs, 1),  # 1: z positive, 0: z negative
 			m_Triangles=packed(list(triangles), 2),
+			# not skinned
+			m_Weights=packed([], 5),
+			m_BoneIndices=packed([], 6),
 		),
 	))
 
@@ -196,3 +199,75 @@ def test_compressed_zero_bit_floats():
 	m = compressed_mesh()
 	m._obj["m_CompressedMesh"]["m_UV"] = packed([0] * 6, 0, 0.5, 0.0)
 	assert parse_obj(OBJMesh(m).export())["vt"] == approx([(0.5, 0.5)] * 3)
+
+
+# Skin weights. A compressed mesh stores them in m_Weights, 5 bits each, out
+# of 31, vertex after vertex: a vertex ends once its weights reach 31, or
+# after three, when a fourth weight (31 minus the sum) is implied. Every
+# weight, the implied one included, has its bone in m_BoneIndices.
+
+def skinned_mesh(weights, bones, bone_bits=6):
+	m = compressed_mesh()
+	cm = m._obj["m_CompressedMesh"]
+	cm["m_Weights"] = packed(weights, 5)
+	cm["m_BoneIndices"] = packed(bones, bone_bits)
+	return m
+
+
+def skin(m):
+	return OBJMesh(m).mesh_data.skin
+
+
+def test_skin_weights():
+	# one bone; two bones; three bones and an implied fourth
+	s = skin(skinned_mesh([31, 20, 11, 10, 10, 1], [5, 1, 2, 3, 4, 63, 6]))
+	assert s == [
+		[(5, 1.0)],
+		[(1, 20 / 31), (2, 11 / 31)],
+		[(3, 10 / 31), (4, 10 / 31), (63, 1 / 31), (6, 10 / 31)],
+	]
+
+
+def test_skin_three_weights_reaching_31_imply_nothing():
+	s = skin(skinned_mesh([31, 31, 10, 10, 11], [0, 0, 1, 2, 3]))
+	assert s[2] == [(1, 10 / 31), (2, 10 / 31), (3, 11 / 31)]
+
+
+def test_skin_zero_bit_bone_indices():
+	# a mesh skinned to a single bone stores its bone indices in 0 bits
+	assert skin(skinned_mesh([31, 31, 31], [0, 0, 0], bone_bits=0)) == [[(0, 1.0)]] * 3
+
+
+def test_unskinned_mesh_has_no_skin():
+	assert skin(compressed_mesh()) == []
+
+
+@pytest.mark.parametrize("weights,bones,error", [
+	([31, 31], [0, 0], "skin weights for 2 vertices, but 3 vertices"),
+	([31, 31, 31], [0, 0], "fewer bone indices than skin weights"),
+	([31, 31, 31], [0, 0, 0, 0], "don't end together"),
+	([31, 31, 20], [0, 0, 0], "don't end together"),
+])
+def test_skin_mismatch(weights, bones, error):
+	with pytest.raises(ValueError, match=error):
+		skin(skinned_mesh(weights, bones))
+
+
+def test_uncompressed_skin():
+	m = mesh(**QUAD, indices=[0, 1, 2])
+	m._obj["m_Skin"] = [
+		fdict(**{"weight[0]": 1.0, "weight[1]": 0.0, "weight[2]": 0.0, "weight[3]": 0.0,
+			"boneIndex[0]": 2, "boneIndex[1]": 0, "boneIndex[2]": 0, "boneIndex[3]": 0}),
+		fdict(**{"weight[0]": 0.5, "weight[1]": 0.25, "weight[2]": 0.0, "weight[3]": 0.25,
+			"boneIndex[0]": 1, "boneIndex[1]": 3, "boneIndex[2]": 0, "boneIndex[3]": 7}),
+	]
+	assert skin(m) == [[(2, 1.0)], [(1, 0.5), (3, 0.25), (7, 0.25)]]
+
+
+def test_compressed_mesh_without_uvs():
+	# a count of texture coordinates, 0 bits and an infinite start: none
+	m = compressed_mesh()
+	m._obj["m_CompressedMesh"]["m_UV"] = packed([0] * 6, 0, math.inf, -math.inf)
+	obj = parse_obj(OBJMesh(m).export())
+	assert obj["vt"] == []
+	assert len(obj["v"]) == 3
