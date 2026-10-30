@@ -4,7 +4,7 @@ from bisect import bisect_right
 from collections import namedtuple
 from enum import IntEnum
 from functools import cached_property
-from ..utils import unpack_floats, unpack_ints
+from ..utils import float_sum, unpack_floats, unpack_ints
 from .component import Behaviour, Component
 from .object import Object, field
 
@@ -146,7 +146,7 @@ def unpack_quaternions(pqv):
 			bits = 9 if i == (largest + 1) % 4 else 10
 			q[i] = (word & ((1 << bits) - 1)) / ((1 << bits) - 1) * 2 - 1
 			word >>= bits
-		w = math.sqrt(max(0.0, 1 - sum(c * c for c in q)))
+		w = math.sqrt(max(0.0, 1 - float_sum(c * c for c in q)))
 		q[largest] = -w if negative else w
 		ret.append(tuple(q))
 	return ret

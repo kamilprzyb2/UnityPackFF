@@ -107,6 +107,19 @@ def unpack_floats(pbv):
 	return [float(i * scale + pbv['m_Start']) for i in unpack_ints(pbv)]
 
 
+def float_sum(values):
+	"""
+	The sum of floats, added left to right. sum() rounds differently from
+	Python 3.12 on (it compensates for rounding errors), which would make
+	decoded values, and files written from them, depend on the Python
+	version; this gives the same bits on every version.
+	"""
+	total = 0.0
+	for v in values:
+		total += v
+	return total
+
+
 class NaN32(float):
 	"""
 	A 32-bit NaN read from a file, with its bit pattern (bits), so that it is

@@ -3,7 +3,7 @@ import math
 
 import pytest
 
-from unitypack.utils import BinaryReader, BinaryWriter, BitReader, unpack_floats, unpack_ints
+from unitypack.utils import BinaryReader, BinaryWriter, BitReader, float_sum, unpack_floats, unpack_ints
 
 VALUES = [
 	("boolean", True),
@@ -128,3 +128,11 @@ def test_unpack_floats_infinite_start():
 	# how a mesh without texture coordinates stores them
 	pbv = dict(m_NumItems=6, m_BitSize=0, m_Data=b"", m_Start=math.inf, m_Range=-math.inf)
 	assert unpack_floats(pbv) == []
+
+
+def test_float_sum_adds_left_to_right():
+	# 1e16 + 1 rounds back to 1e16, so plain addition gives 0; sum() on
+	# Python 3.12 and later compensates and gives 1
+	assert float_sum([1e16, 1.0, -1e16]) == 0.0
+	assert float_sum([]) == 0.0
+	assert float_sum(x * x for x in (0.1, 0.2, 0.3)) == 0.1 * 0.1 + 0.2 * 0.2 + 0.3 * 0.3
