@@ -1,3 +1,4 @@
+import math
 from io import BytesIO
 from .utils import BinaryReader, BitReader
 
@@ -51,32 +52,25 @@ class OBJVector4(OBJVector3):
 		return "%s %s %s %s" % (self.x, self.y, self.z, self.w)
 
 
-def handle_strip_topology(mesh):
-	tris = []
-
-	for i in range(len(mesh.indices[0])):
-		tris.append(mesh.indices[0][i])
-
-		if len(tris) < 3:
-			continue
-
-		t1 = tris[0]
-		t2 = tris[1]
-		t3 = tris[2]
-
-		del tris[0]
-
+def strip_to_triangles(indices):
+	"A triangle strip as a list of triangles: every other one flips, and degenerate ones are dropped"
+	triangles = []
+	for i in range(len(indices) - 2):
+		t1, t2, t3 = indices[i], indices[i + 1], indices[i + 2]
 		if t1 == t2 or t1 == t3 or t2 == t3:
 			continue
-
 		if i % 2 == 0:
-			mesh.triangles[0].append(t1)
-			mesh.triangles[0].append(t2)
-			mesh.triangles[0].append(t3)
+			triangles += [t1, t2, t3]
 		else:
-			mesh.triangles[0].append(t3)
-			mesh.triangles[0].append(t2)
-			mesh.triangles[0].append(t1)
+			triangles += [t3, t2, t1]
+	return triangles
+
+
+def submesh_triangles(sub, indices):
+	"The triangle list of one submesh, given its own indices"
+	if sub.is_tri_strip:
+		return strip_to_triangles(indices)
+	return indices[:len(indices) - len(indices) % 3]
 
 
 class MeshData:
@@ -96,10 +90,6 @@ class MeshData:
 		self.extract_indices()
 		self.simple_extract_vertices()
 
-		if len(self.mesh._obj['m_SubMeshes']) > 0:
-			if self.mesh._obj['m_SubMeshes'][0]._obj['isTriStrip'] > 0:
-				handle_strip_topology(self)
-
 		#if mesh.asset.format == 6:
 		#	self.simple_extract_vertices()
 		#else:
@@ -113,23 +103,19 @@ class MeshData:
 			self.normals.append(OBJVector3(-v['x'], v['y'], v['z']))
 
 		for v in self.mesh._obj['m_UV']:
-			self.uv1.append(OBJVector2(v['x'], 1-v['y']))
+			self.uv1.append(OBJVector2(v['x'], v['y']))
 
 	def extract_indices(self):
 		for sub in self.mesh.submeshes:
 			sub_indices = []
-			sub_triangles = []
 			buf = BinaryReader(BytesIO(self.mesh.index_buffer))
 			buf.seek(sub.first_byte)
 
 			for i in range(0, sub.index_count):
 				sub_indices.append(buf.read_uint16())
 
-			if sub._obj['isTriStrip'] == 0:
-				sub_triangles.extend(sub_indices)
-
 			self.indices.append(sub_indices)
-			self.triangles.append(sub_triangles)
+			self.triangles.append(submesh_triangles(sub, sub_indices))
 
 	def extract_vertices(self):
 		# unity 5+ has 8 channels (6 otherwise)
@@ -199,8 +185,11 @@ class CompressedMeshData:
 		self.extract_mesh()
 
 	def read_bits(self, pbv):
-		if pbv['m_NumItems'] == 0 or pbv['m_BitSize'] == 0:
+		if pbv['m_NumItems'] == 0:
 			return []
+		if pbv['m_BitSize'] == 0:
+			# no bits to store: every item is 0
+			return [0] * pbv['m_NumItems']
 
 		reader = BitReader(pbv['m_Data'], pbv['m_BitSize'])
 
@@ -211,8 +200,10 @@ class CompressedMeshData:
 		return ret
 
 	def read_floats(self, pbv):
-		if pbv['m_NumItems'] == 0 or pbv['m_BitSize'] == 0:
+		if pbv['m_NumItems'] == 0:
 			return []
+		if pbv['m_BitSize'] == 0:
+			return [float(pbv['m_Start'])] * pbv['m_NumItems']
 
 		items = self.read_bits(pbv)
 		maxvalue = (1 << pbv['m_BitSize']) - 1
@@ -242,7 +233,15 @@ class CompressedMeshData:
 		for i in range(len(signs)):
 			x = items[i * 2] * _range + normals['m_Start']
 			y = items[i * 2 + 1] * _range + normals['m_Start']
-			z = ((1 - x**2 - y**2) * signs[i])
+			zsqr = 1 - x**2 - y**2
+			if zsqr >= 0:
+				z = math.sqrt(zsqr) * signs[i]
+			else:
+				# quantized (x, y) a little outside the unit circle
+				z = 0
+				length = math.sqrt(x**2 + y**2)
+				x /= length
+				y /= length
 
 			floats[i * 3] = x
 			floats[i * 3 + 1] = y
@@ -261,23 +260,23 @@ class CompressedMeshData:
 		for i in range(0, len(normal_floats), 3):
 			self.normals.append(OBJVector3(-normal_floats[i], normal_floats[i+1], normal_floats[i+2]))
 
+		# both UV sets in one vector: the second (lightmap coordinates, for
+		# example) follows the first when there are two per vertex
 		uv_floats = self.read_floats(cmesh['m_UV'])
-		for i in range(0, len(uv_floats), 2):
-			self.uv1.append(OBJVector2(uv_floats[i], 1-uv_floats[i+1]))
+		uvs = [OBJVector2(uv_floats[i], uv_floats[i+1]) for i in range(0, len(uv_floats) - 1, 2)]
+		n = len(self.vertices)
+		if n and len(uvs) == 2 * n:
+			self.uv1, self.uv2 = uvs[:n], uvs[n:]
+		else:
+			self.uv1 = uvs
 
-		triangle_ints = self.read_bits(cmesh['m_Triangles'])
-		if len(triangle_ints) % 3 == 2:
-			triangle_ints.append(triangle_ints[-1])
-		elif len(triangle_ints) % 3 == 1:
-			triangle_ints.append(triangle_ints[-1])
-			triangle_ints.append(triangle_ints[-2])
-
-		self.triangles.append(triangle_ints)
-		self.indices.append(triangle_ints)
-
-		if len(self.mesh._obj['m_SubMeshes']) > 0:
-			if self.mesh._obj['m_SubMeshes'][0]._obj['isTriStrip'] > 0:
-				handle_strip_topology(self)
+		# one index list for all submeshes, as in an uncompressed index buffer
+		indices = self.read_bits(cmesh['m_Triangles'])
+		for sub in self.mesh.submeshes:
+			first = sub.first_byte // 2
+			sub_indices = indices[first:first + sub.index_count]
+			self.indices.append(sub_indices)
+			self.triangles.append(submesh_triangles(sub, sub_indices))
 
 
 class OBJMesh:

@@ -1,12 +1,13 @@
 """
 OBJ export: unitypack/export.py (OBJMesh, MeshData, CompressedMeshData,
-handle_strip_topology) on meshes built in memory, the way ObjectInfo.read()
+strip_to_triangles) on meshes built in memory, the way ObjectInfo.read()
 returns them.
 
 Conventions the exporter applies, checked below: x is negated (Unity is
 left-handed, OBJ right-handed), faces are written in reverse order to keep
-them facing outwards after that mirror, indices become 1-based, and v
-becomes 1 - v.
+them facing outwards after that mirror, and indices become 1-based. UVs are
+written as stored: OBJ and Unity both put v = 0 at the bottom of the image,
+and the bin/ scripts save textures upright.
 """
 
 import math
@@ -73,7 +74,7 @@ def test_uncompressed_quad():
 	obj = parse_obj(OBJMesh(mesh(indices=[0, 1, 2, 0, 2, 3], **QUAD)).export())
 	assert obj["v"] == [(-0.0, 0, 0), (-1, 0, 0), (-1, 1, 0), (-0.0, 1, 0)]  # x mirrored
 	assert obj["vn"] == [(-0.0, 0, 1)] * 4
-	assert obj["vt"] == [(0, 1), (1, 1), (1, 0), (0, 0.75)]  # v -> 1 - v
+	assert obj["vt"] == [(0, 0), (1, 0), (1, 1), (0, 0.25)]  # as stored
 	assert obj["f"] == [(3, 2, 1), (4, 3, 1)]  # reversed, 1-based
 	assert obj["usemtl"] == ["m"]
 
@@ -110,11 +111,11 @@ def packed(items, bits, start=None, range_=None):
 	return d
 
 
-def compressed_mesh(normal_items, signs):
+def compressed_mesh(normal_items=(0,) * 6, signs=(1,) * 3, triangles=(0, 1, 2), submeshes=None):
 	return Mesh(fdict(
 		m_Name="c",
 		m_MeshCompression=2,
-		m_SubMeshes=[submesh(0, 3)],
+		m_SubMeshes=submeshes or [submesh(0, len(triangles))],
 		m_CompressedMesh=fdict(
 			# 8 bits over [-1, 1]: items 0, 255 and 51 are -1, 1 and -0.6
 			m_Vertices=packed([0, 0, 0, 255, 255, 255, 51, 51, 51], 8, -1.0, 2.0),
@@ -123,7 +124,7 @@ def compressed_mesh(normal_items, signs):
 			# 4 bits over [0, 1]: items 0, 9 and 15 are 0, 0.6 and 1; two per vertex (x, y)
 			m_Normals=packed(normal_items, 4, 0.0, 1.0),
 			m_NormalSigns=packed(signs, 1),  # 1: z positive, 0: z negative
-			m_Triangles=packed([0, 1, 2], 2),
+			m_Triangles=packed(list(triangles), 2),
 		),
 	))
 
@@ -132,21 +133,66 @@ def approx(rows):
 	return [tuple(pytest.approx(x, abs=1e-6) for x in r) for r in rows]
 
 
+def test_compressed_triangle_strip():
+	# only the strip's own triangles: (0 1 2), then (1 2 0) flipped to (0 2 1)
+	obj = parse_obj(OBJMesh(compressed_mesh(triangles=[0, 1, 2, 0], submeshes=[submesh(0, 4, strip=True)])).export())
+	assert obj["f"] == [(3, 2, 1), (2, 3, 1)]
+
+
+def test_compressed_submeshes():
+	# one index list for all submeshes; firstByte counts 2 bytes per index
+	obj = parse_obj(OBJMesh(compressed_mesh(triangles=[0, 1, 2, 2, 1, 0], submeshes=[submesh(0, 3), submesh(6, 3)])).export())
+	assert obj["usemtl"] == ["c_0", "c_1"]
+	assert obj["f"] == [(3, 2, 1), (1, 2, 3)]
+
+
 def test_compressed_positions_uvs_triangles():
 	obj = parse_obj(OBJMesh(compressed_mesh([0, 0, 0, 0, 0, 0], [1, 1, 1])).export())
 	assert obj["v"] == approx([(1, -1, -1), (-1, 1, 1), (0.6, -0.6, -0.6)])
-	assert obj["vt"] == approx([(0, 1), (1, 0), (0.6, 0.4)])
+	assert obj["vt"] == approx([(0, 0), (1, 1), (0.6, 0.6)])
 	assert obj["f"] == [(3, 2, 1)]
 
 
-@pytest.mark.xfail(strict=True, reason="CompressedMeshData.read_normals computes z = 1 - x² - y² without the square root")
+def test_compressed_second_uv_set():
+	# six pairs for three vertices: the first three are UV set 1, the rest set 2
+	m = compressed_mesh()
+	m._obj["m_CompressedMesh"]["m_UV"] = packed([0, 0, 255, 255, 153, 153, 255, 0, 0, 255, 51, 51], 8, 0.0, 1.0)
+	data = OBJMesh(m).mesh_data
+	assert [(v.x, v.y) for v in data.uv1] == approx([(0, 0), (1, 1), (0.6, 0.6)])
+	assert [(v.x, v.y) for v in data.uv2] == approx([(1, 0), (0, 1), (0.2, 0.2)])
+	assert parse_obj(OBJMesh(m).export())["vt"] == approx([(0, 0), (1, 1), (0.6, 0.6)])
+
+
 def test_compressed_normals_are_unit_length():
 	obj = parse_obj(OBJMesh(compressed_mesh([9, 0, 0, 9, 0, 0], [1, 0, 1])).export())
 	assert obj["vn"] == approx([(-0.6, 0, 0.8), (-0.0, 0.6, -0.8), (-0.0, 0, 1)])
 
 
 def test_compressed_normal_signs():
-	# only the sign of z is checked here; its size is the bug above
 	vn = parse_obj(OBJMesh(compressed_mesh([9, 0, 0, 9, 0, 0], [1, 0, 1])).export())["vn"]
 	assert [math.copysign(1, n[2]) for n in vn] == [1, -1, 1]
 	assert [n[:2] for n in vn] == approx([(-0.6, 0), (0, 0.6), (0, 0)])
+
+
+def test_compressed_normal_outside_unit_circle():
+	# x = y = 1 after quantizing: z is 0 and (x, y) is scaled back to length 1
+	vn = parse_obj(OBJMesh(compressed_mesh([15, 15, 0, 0, 0, 0], [1, 1, 1])).export())["vn"]
+	h = math.sqrt(0.5)
+	assert vn[0] == approx([(-h, h, 0)])[0]
+
+
+# A vector with m_BitSize 0 has no data at all: every item is 0, so every
+# float is m_Start. Unity writes this when all values are equal, for example
+# the bone indices of a mesh skinned to a single bone.
+
+def test_compressed_zero_bit_normal_signs():
+	m = compressed_mesh([9, 0, 0, 9, 0, 0])
+	m._obj["m_CompressedMesh"]["m_NormalSigns"] = packed([0, 0, 0], 0)
+	vn = parse_obj(OBJMesh(m).export())["vn"]
+	assert vn == approx([(-0.6, 0, -0.8), (-0.0, 0.6, -0.8), (-0.0, 0, -1)])
+
+
+def test_compressed_zero_bit_floats():
+	m = compressed_mesh()
+	m._obj["m_CompressedMesh"]["m_UV"] = packed([0] * 6, 0, 0.5, 0.0)
+	assert parse_obj(OBJMesh(m).export())["vt"] == approx([(0.5, 0.5)] * 3)

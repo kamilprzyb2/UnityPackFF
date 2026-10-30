@@ -53,19 +53,19 @@ def test_decode(fmt, w, h, data, first):
 	assert len(set(px)) == (2 if fmt == TextureFormat.Alpha8 else 1)
 
 
-SWAPPED = "red and blue are swapped: UnityPackFF decodes with Pillow's '%s' mode"
-
-
 # RGB565 is a little-endian 16-bit word, red in the top 5 bits. CharTexture uses it for 6 textures.
-@pytest.mark.xfail(strict=True, reason=SWAPPED % "RGB;16")
 def test_decode_rgb565():
 	assert pixels(texture(TextureFormat.RGB565, 1, 1, struct.pack("<H", 0xF800))) == [(255, 0, 0, 255)]
 
 
 # ARGB4444: a little-endian 16-bit word, 4 bits each of A, R, G, B from the top
-@pytest.mark.xfail(strict=True, reason=SWAPPED % "RGBA;4B")
 def test_decode_argb4444():
 	assert pixels(texture(TextureFormat.ARGB4444, 1, 1, struct.pack("<H", 0xF842))) == [(0x88, 0x44, 0x22, 0xFF)]
+
+
+# RGBA4444: a little-endian 16-bit word, 4 bits each of R, G, B, A from the top
+def test_decode_rgba4444():
+	assert pixels(texture(TextureFormat.RGBA4444, 1, 1, struct.pack("<H", 0xF842))) == [(0xFF, 0x88, 0x44, 0x22)]
 
 
 def test_rows_are_not_flipped():
