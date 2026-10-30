@@ -23,6 +23,7 @@ import struct
 from io import BytesIO
 
 from .export import OBJMesh
+from .utils import float_sum
 
 FLOAT = 5126
 UNSIGNED_BYTE = 5121
@@ -331,7 +332,7 @@ def trs_matrix(t, q, s):
 
 
 def matmul(a, b):
-	return [sum(a[r * 4 + k] * b[k * 4 + c] for k in range(4)) for r in range(4) for c in range(4)]
+	return [float_sum(a[r * 4 + k] * b[k * 4 + c] for k in range(4)) for r in range(4) for c in range(4)]
 
 
 def affine_inverse(m):
@@ -487,7 +488,7 @@ class GameObjectExport:
 					if weight > 0:
 						merged[bone] = merged.get(bone, 0.0) + weight
 				top = sorted(merged.items(), key=lambda kv: -kv[1])[:4]
-				total = sum(wt for _, wt in top) or 1.0
+				total = float_sum(wt for _, wt in top) or 1.0
 				top += [(0, 0.0)] * (4 - len(top))
 				js += [b for b, _ in top]
 				ws += [wt / total for _, wt in top]
@@ -573,9 +574,9 @@ def _rotation_samples(values):
 	"Quaternions normalized, mirrored, and each on the same side as the one before"
 	out = []
 	for q in values:
-		n = math.sqrt(sum(c * c for c in q)) or 1.0
+		n = math.sqrt(float_sum(c * c for c in q)) or 1.0
 		q = mirror_rotation([c / n for c in q])
-		if out and sum(a * b for a, b in zip(out[-1], q)) < 0:
+		if out and float_sum(a * b for a, b in zip(out[-1], q)) < 0:
 			q = [-c for c in q]
 		out.append(q)
 	return out
