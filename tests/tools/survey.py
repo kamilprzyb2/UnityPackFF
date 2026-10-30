@@ -11,8 +11,6 @@ out/survey/summary.md (tables per build).
 """
 
 import collections
-import contextlib
-import io
 import json
 import logging
 import time
@@ -96,9 +94,7 @@ def archive_meta(build, bundle):
 		rec = {"header": read_unityweb_header(f.read(4096))}
 	with open(archive, "rb") as f:
 		try:
-			# it prints a warning when an archive holds more than one file
-			with contextlib.redirect_stdout(io.StringIO()):
-				rec["unitypack_load"] = [a.name for a in unitypack.load(f).assets]
+			rec["unitypack_load"] = [a.name for a in unitypack.load(f).assets]
 		except Exception as e:
 			rec["unitypack_load"] = "%s: %s" % (type(e).__name__, e)
 	return rec

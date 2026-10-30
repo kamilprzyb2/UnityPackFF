@@ -4,6 +4,26 @@ from .asset import Asset
 from .assetbundle import AssetBundle
 
 
+def find_file(directory, name):
+	"""
+	The path of name in directory, ignoring case if there's no exact match:
+	files refer to each other in lowercase ("customassetbundle-..."), while
+	the files on disk keep their case. None if there's no such file.
+	"""
+	path = os.path.join(directory, name)
+	if os.path.isfile(path):
+		return path
+	parent, base = os.path.split(path)
+	try:
+		entries = sorted(os.listdir(parent or "."))
+	except OSError:
+		return None
+	for ent in entries:
+		if ent.lower() == base.lower() and os.path.isfile(os.path.join(parent, ent)):
+			return os.path.join(parent, ent)
+	return None
+
+
 class UnityEnvironment:
 	def __init__(self, base_path=""):
 		self.bundles = {}
@@ -19,12 +39,15 @@ class UnityEnvironment:
 		return "%s(base_path=%r)" % (self.__class__.__name__, self.base_path)
 
 	def load(self, file):
+		name = getattr(file, "name", "")
 		for bundle in self.bundles.values():
-			if os.path.abspath(file.name) == os.path.abspath(bundle.path):
+			if name and os.path.abspath(name) == os.path.abspath(bundle.path):
 				return bundle
 		ret = AssetBundle(self)
 		ret.load(file)
-		self.bundles[ret.name.lower()] = ret
+		# unnamed (in-memory) archives get a key of their own each
+		key = ret.name.lower() or "<unnamed %d>" % len(self.bundles)
+		self.bundles[key] = ret
 		for asset in ret.assets:
 			self.assets[asset.name.lower()] = asset
 		return ret
@@ -44,24 +67,20 @@ class UnityEnvironment:
 		if short in self.assets:
 			return self.assets[short]
 
-		path = os.path.join(self.base_path, name)
-		if os.path.exists(path):
+		# in base_path, then one directory deep
+		path = find_file(self.base_path, name)
+		if path is None:
+			for d in sorted(os.listdir(self.base_path or ".")):
+				if os.path.isdir(os.path.join(self.base_path, d)):
+					path = find_file(os.path.join(self.base_path, d), name)
+					if path is not None:
+						break
+
+		if path is not None:
 			f = open(path, "rb")
 			self.files.append(f)
 			self.assets[short] = Asset.from_file(f, environment=self)
 			return self.assets[short]
-
-		# recurse one directory deep and search in there
-		for d in os.listdir(self.base_path):
-			if not os.path.isdir(os.path.join(self.base_path, d)):
-				continue
-
-			for ent in os.listdir(os.path.join(self.base_path, d)):
-				if ent.lower() == name.lower():
-					f = open(os.path.join(self.base_path, d, ent), "rb")
-					self.files.append(f)
-					self.assets[short] = Asset.from_file(f, environment=self)
-					return self.assets[short]
 
 		self.discover(name)
 		self.populate_assets()

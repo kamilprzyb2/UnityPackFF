@@ -451,7 +451,8 @@
    "bundle_size": 188401
   },
   "unitypack_load": [
-   "BuildPlayer-Map_00_00"
+   "BuildPlayer-Map_00_00",
+   "BuildPlayer-Map_00_00.sharedAssets"
   ],
   "files": {
    "BuildPlayer-Map_00_00": {
@@ -588,7 +589,8 @@
    "bundle_size": 11321669
   },
   "unitypack_load": [
-   "BuildPlayer-Map_04_02"
+   "BuildPlayer-Map_04_02",
+   "BuildPlayer-Map_04_02.sharedAssets"
   ],
   "files": {
    "BuildPlayer-Map_04_02": {
@@ -764,7 +766,8 @@
    "bundle_size": 32961
   },
   "unitypack_load": [
-   "BuildPlayer-Map_18_14"
+   "BuildPlayer-Map_18_14",
+   "BuildPlayer-Map_18_14.sharedAssets"
   ],
   "files": {
    "BuildPlayer-Map_18_14": {
@@ -1124,7 +1127,23 @@
    "bundle_size": 7548638
   },
   "unitypack_load": [
-   "Assembly - CSharp - first pass.dll"
+   "Assembly - CSharp - first pass.dll",
+   "Assembly - CSharp.dll",
+   "Assembly - UnityScript - first pass.dll",
+   "Mono.Data.Tds.dll",
+   "Mono.Security.dll",
+   "System.Configuration.Install.dll",
+   "System.Configuration.dll",
+   "System.Data.dll",
+   "System.Drawing.dll",
+   "System.EnterpriseServices.dll",
+   "System.Security.dll",
+   "System.Transactions.dll",
+   "System.Xml.dll",
+   "System.dll",
+   "mysql.data.dll",
+   "mainData",
+   "sharedassets0.assets"
   ],
   "files": {
    "Assembly - CSharp - first pass.dll": {

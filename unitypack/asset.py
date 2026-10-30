@@ -1,6 +1,5 @@
 import os
 import logging
-import lzma
 from binascii import hexlify
 from io import BytesIO
 from uuid import UUID
@@ -22,48 +21,35 @@ class Asset:
 			ret._buf_ofs = buf.tell()
 			return ret
 
-		if not bundle.compressed:
-			ret.name = buf.read_string()
-			header_size = buf.read_uint()
-			buf.read_uint()  # size
+		ret.name = buf.read_string()
+		header_size = buf.read_uint()
+		buf.read_uint()  # size
 
 		# FIXME: this offset needs to be explored more
-		ofs = buf.tell()
-		if bundle.compressed:
-			dec = lzma.LZMADecompressor()
-			data = dec.decompress(buf.read())
+		ret._buf_ofs = offset + header_size - 4
+		if ret.is_resource:
+			ret._buf_ofs -= len(ret.name)
 
-			assert len(data) == bundle.uncompressed_bundle_size
+		return ret
 
-			# parse header
-			header = BinaryReader(BytesIO(data), endian=">")
-			file_count = header.read_uint()
-
-			if file_count != 1:
-				print('WARNING: Bundle contains {} files. Reading only the first.'.format(file_count))
-
-			ret.name = header.read_string()
-			file_offset = header.read_uint()
-			size = header.read_uint()
-
-			# assign asset body
-			ret._buf = BinaryReader(BytesIO(data[file_offset:file_offset+size]), endian=">")
-			ret._buf_ofs = 0
-			buf.seek(ofs)
-		else:
-			ret._buf_ofs = offset + header_size - 4
-			if ret.is_resource:
-				ret._buf_ofs -= len(ret.name)
-
+	@classmethod
+	def from_bundle_data(cls, bundle, name, data):
+		"One file of a compressed archive, already decompressed"
+		ret = cls()
+		ret.bundle = bundle
+		ret.environment = bundle.environment
+		ret.name = name
+		ret._buf = BinaryReader(BytesIO(data), endian=">")
+		ret._buf_ofs = 0
 		return ret
 
 	@classmethod
 	def from_file(cls, file, environment=None):
 		ret = cls()
-		ret.name = file.name
+		ret.name = getattr(file, "name", "")  # in-memory files have none
 		ret._buf_ofs = file.tell()
 		ret._buf = BinaryReader(file)
-		base_path = os.path.abspath(os.path.dirname(file.name))
+		base_path = os.path.abspath(os.path.dirname(ret.name))
 		if environment is None:
 			from .environment import UnityEnvironment
 			environment = UnityEnvironment(base_path=base_path)
@@ -258,6 +244,21 @@ class Asset:
 		self._objects[obj.path_id] = obj
 
 		return obj
+
+	def get_object_by_path(self, path):
+		"""
+		The object this file's AssetBundle lists under a container path, such
+		as "xdtdatas.asset" in TableData. Paths compare case-insensitively;
+		if a path is listed more than once, the first entry wins. Prefer this
+		over a fixed path_id: IDs differ between builds.
+		"""
+		if 1 not in self.objects or self.objects[1].type != 'AssetBundle':
+			raise ValueError('AssetBundle object not found. Is this a Scene bundle?')
+
+		for name, info in self.objects[1].contents['m_Container']:
+			if name.lower() == path.lower() and info['asset'] is not None:
+				return info['asset'].object
+		raise KeyError('No %r in the AssetBundle of %r' % (path, self.name))
 
 	def add2ab(self, path, path_id, file_id=0, preloads=None):
 		"Add a path -> ObjectPointer connection into the AssetBundle object"

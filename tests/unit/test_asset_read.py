@@ -4,10 +4,13 @@ Reading serialized files: unitypack/asset.py (Asset.load), object.py
 on made-up files from tests/synth.py.
 """
 
+import io
+
 import pytest
 
 from tests import synth
 from tests.unit.support import open_asset
+from unitypack.asset import Asset
 
 
 @pytest.fixture(params=[6, 7], ids=["format6", "format7"])
@@ -53,6 +56,32 @@ def test_contents_is_memoized(asset):
 	obj = asset.objects[1]
 	assert obj.contents is obj.contents
 	assert obj.read() is obj.contents  # read() returns the memoized object once there is one
+
+
+def test_get_object_by_path():
+	asset = open_asset(synth.bundle_file())
+	assert asset.get_object_by_path("assets/a.txt") is asset.objects[2]
+	assert asset.get_object_by_path("Assets/A.TXT") is asset.objects[2]  # case doesn't matter
+	with pytest.raises(KeyError):
+		asset.get_object_by_path("assets/missing.txt")
+
+
+def test_get_object_by_path_skips_null_entries():
+	ab = synth.asset_bundle("b", [], [("x.txt", 0, 0, (0, 0)), ("x.txt", 0, 1, (0, 2))])
+	asset = open_asset(synth.serialized_file({142: synth.ASSET_BUNDLE, 49: synth.TEXT_ASSET},
+		[(1, 142, 142, ab), (2, 49, 49, synth.text_asset("a", "first"))]))
+	assert asset.get_object_by_path("x.txt") is asset.objects[2]
+
+
+def test_get_object_by_path_needs_an_asset_bundle():
+	with pytest.raises(ValueError):
+		open_asset(synth.sample_file(6)).get_object_by_path("assets/a.txt")
+
+
+def test_unnamed_file():
+	asset = Asset.from_file(io.BytesIO(synth.sample_file()))
+	assert asset.name == ""
+	assert asset.objects[1].read().script == "world"
 
 
 def test_no_type_trees_fall_back_to_structs_dat():

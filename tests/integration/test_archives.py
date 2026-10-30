@@ -3,9 +3,6 @@ Archives of the pinned builds: they unpack to exactly the files the manifest
 lists, and unitypack.load() sees the same files.
 """
 
-import contextlib
-import io
-
 import pytest
 
 import unitypack
@@ -23,15 +20,12 @@ def test_unpack_matches_manifest(build, bundle, unpacked, expected):
 	expected.check("archive/" + bundle, {"header": header, "files": names})
 
 
-def test_unitypack_load(build, bundle, unpacked, request):
+def test_unitypack_load(build, bundle, unpacked):
 	names = [p.name for p in build.inner_files(bundle)]
-	if len(names) > 1:
-		request.applymarker(pytest.mark.xfail(strict=True,
-			reason="unitypack.load() reads only the first file of an archive"))
-	with open(build.fetch(bundle), "rb") as f, contextlib.redirect_stdout(io.StringIO()):
+	with open(build.fetch(bundle), "rb") as f:
 		ab = unitypack.load(f)
 		assert sorted(a.name for a in ab.assets) == names
-		# the file it does read is byte for byte the first one in the archive
-		first = ab.assets[0]
-		first._buf.seek(0)
-		assert first._buf.read() == (unpacked / first.name).read_bytes()
+		# every file is byte for byte the one in the archive
+		for asset in ab.assets:
+			asset._buf.seek(0)
+			assert asset._buf.read() == (unpacked / asset.name).read_bytes()
