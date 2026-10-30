@@ -1,5 +1,12 @@
 # UnityPackFF
 
+> **This is a fork** of [dongresource/UnityPackFF](https://github.com/dongresource/UnityPackFF). It keeps everything UnityPackFF does and adds:
+> - **Tests**: unit tests on made-up data, and integration tests on three official builds (beta-20100104, beta-20100728, beta-20111013), downloaded and checked by hash.
+> - **Fixes**: `Asset.save()` leaves the asset readable and round trips byte for byte; archives with several files; Academy's format-7 files; texture colour channels; mesh normals, strips and UV sets.
+> - **Decoders**: mesh skin weights, AnimationClip curves, lossless 16-bit terrain with its shifts, per-map data (attribute grids, colours, music zones), script objects as JSON.
+> - **glTF export**: models with materials, skins and animations; map tiles with terrain and lights; the textures the game puts on nanos, NPCs, vehicles and player clothing.
+> - **Scripts**: `fetch_bundles.py` (download and unpack a build's archives), `export_gltf.py`, `index_bundles.py`, `dump_script.py`, `dump_mapdata.py`.
+
 UnityPackFF is a fork of [UnityPack](https://github.com/HearthSim/UnityPack/) specialized for working with FusionFall assets.
 It allows for extraction and limited manipulation of FusionFall assets and might become the basis of a more extensive modding toolkit in the future.
 
