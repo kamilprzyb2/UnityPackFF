@@ -1,0 +1,47 @@
+{
+ "Icons.resourceFile": {
+  "CustomAssetBundle-784fa24bcf2da4f5eabe9547958616eb": {
+   "saved": "4e1be8b681b3c806a5605cf9c8c56c2fac64a60e68a675850c499cac5e5a20bb",
+   "identical": false,
+   "save_error": null
+  }
+ },
+ "LobbyMusic.resourceFile": {
+  "CustomAssetBundle-ea18f90c57bb14624902c8501d46a1c8": {
+   "saved": "80ce3abcd356d5bac1e9b5316d87fd3213433c22e017358136af7d003c54792d",
+   "identical": true,
+   "save_error": null
+  }
+ },
+ "Map_00_00.unity3d": {
+  "BuildPlayer-Map_00_00": {
+   "saved": "ba6e91c6a1718cfd0c0a1d96e4748e98721af8ae96c113134515e0be742b4d14",
+   "identical": false,
+   "save_error": null
+  },
+  "BuildPlayer-Map_00_00.sharedAssets": {
+   "saved": "723e1c25fdfd7d4d1de47e828ac3ae2253905c6c3d7de8f27621043cecf26e62",
+   "identical": true,
+   "save_error": null
+  }
+ },
+ "Map_04_02.unity3d": {
+  "BuildPlayer-Map_04_02": {
+   "saved": "f42852bcdb1c20968c0c9819f5d1ad0e3b2a48c949e914600f6486a5fedff634",
+   "identical": false,
+   "save_error": null
+  },
+  "BuildPlayer-Map_04_02.sharedAssets": {
+   "saved": "64c658527cac39ddf5190cd3866255d6740336f22d29dc311817458502f0df21",
+   "identical": true,
+   "save_error": null
+  }
+ },
+ "TableData.resourceFile": {
+  "CustomAssetBundle-1dca92eecee4742d985b799d8226666d": {
+   "saved": "2446d637cd88ae8c995fcdad9e5d03127c42af5fc354c5082027533b0fc40983",
+   "identical": false,
+   "save_error": null
+  }
+ }
+}

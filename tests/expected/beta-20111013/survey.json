@@ -1,0 +1,1447 @@
+{
+ "CharacterSelection.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 2537113,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     2537049,
+     15598916
+    ]
+   ],
+   "bundle_size": 2537113
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-CharacterSelection"
+  ],
+  "files": {
+   "CustomAssetBundle-CharacterSelection": {
+    "size": 15598862,
+    "sha256": "2167435fa0d4ddbe782e9edce5feabb4f5186b487179a606b66a9c192c9b1df9",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 12,
+    "tree_class_ids": [
+     -2,
+     -1,
+     1,
+     4,
+     33,
+     43,
+     74,
+     83,
+     111,
+     115,
+     137,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 2475,
+    "destroyed": 0,
+    "script_objects": 6,
+    "classes": {
+     "1": 584,
+     "4": 584,
+     "33": 306,
+     "43": 306,
+     "74": 458,
+     "83": 220,
+     "111": 4,
+     "114": 6,
+     "115": 2,
+     "137": 4,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 2475,
+     "no_struct": [],
+     "read_ok": 2475,
+     "errors": {},
+     "first_error": null,
+     "digest": "91b4aa33585ed17b4da280cb27d216854ca6607d3dd3106094e71668545e5f09"
+    }
+   }
+  }
+ },
+ "CharacterSelection_wear_face.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 86982,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     86918,
+     390996
+    ]
+   ],
+   "bundle_size": 86982
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-CharacterSelection_wear_face"
+  ],
+  "files": {
+   "CustomAssetBundle-CharacterSelection_wear_face": {
+    "size": 390933,
+    "sha256": "e431b59fc1f370d41cfef09266f338066fa7baf7b3282ecd91e0bcb097718c35",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 10,
+    "tree_class_ids": [
+     -2,
+     -1,
+     1,
+     4,
+     21,
+     33,
+     43,
+     111,
+     137,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 1713,
+    "destroyed": 0,
+    "script_objects": 12,
+    "classes": {
+     "1": 568,
+     "4": 568,
+     "21": 8,
+     "33": 268,
+     "43": 276,
+     "111": 4,
+     "114": 12,
+     "137": 8,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "customassetbundle-characterselection_wear_head"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 1713,
+     "no_struct": [],
+     "read_ok": 1713,
+     "errors": {},
+     "first_error": null,
+     "digest": "72ae5f4978062dbb4ef874963dfcfffecb1a2293978435619bf46c5cdd42659b"
+    }
+   }
+  }
+ },
+ "Character_Texture_npc3.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 250250,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     250186,
+     1200940
+    ]
+   ],
+   "bundle_size": 250250
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-Character_Texture_npc3"
+  ],
+  "files": {
+   "CustomAssetBundle-Character_Texture_npc3": {
+    "size": 1200883,
+    "sha256": "0f0ab236d2e6838581bc8d752037cd97debdd21cc1802765d6aacc102ed6f358",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 2,
+    "tree_class_ids": [
+     28,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 25,
+    "destroyed": 0,
+    "script_objects": 0,
+    "classes": {
+     "28": 24,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "customassetbundle-character_texture_head",
+     "customassetbundle-character_texture_hat",
+     "customassetbundle-character_texture_pants",
+     "customassetbundle-character_texture_shoes",
+     "customassetbundle-character_texture_shirts",
+     "customassetbundle-character_texture_back",
+     "customassetbundle-character_texture_face",
+     "customassetbundle-character_texture_npc1",
+     "customassetbundle-character_texture_glass",
+     "customassetbundle-character_texture_weapon"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 25,
+     "no_struct": [],
+     "read_ok": 25,
+     "errors": {},
+     "first_error": null,
+     "digest": "a01a985e0cf5ca20831aa3efe922c427c8c3c30d84899a2c28e34de3d21d02a2"
+    }
+   }
+  }
+ },
+ "DongResources_04_02.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 11558724,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     11558660,
+     44670700
+    ]
+   ],
+   "bundle_size": 11558724
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-DongResources_04_02"
+  ],
+  "files": {
+   "CustomAssetBundle-DongResources_04_02": {
+    "size": 44670648,
+    "sha256": "a2953b034ec8328dbf95661b1ca080cabc3d8c6da24a8e16e6c0007d0f22d0d0",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 26,
+    "tree_class_ids": [
+     -9,
+     -8,
+     -7,
+     -6,
+     -5,
+     -4,
+     -3,
+     -2,
+     -1,
+     1,
+     4,
+     21,
+     23,
+     28,
+     33,
+     43,
+     54,
+     64,
+     74,
+     83,
+     111,
+     115,
+     135,
+     137,
+     142,
+     156
+    ],
+    "big_ids": 1,
+    "objects": 5179,
+    "destroyed": 0,
+    "script_objects": 65,
+    "classes": {
+     "1": 1230,
+     "4": 1230,
+     "21": 294,
+     "23": 340,
+     "28": 238,
+     "33": 562,
+     "43": 517,
+     "54": 15,
+     "64": 128,
+     "74": 128,
+     "83": 264,
+     "111": 149,
+     "114": 65,
+     "115": 2,
+     "135": 4,
+     "137": 11,
+     "142": 1,
+     "156": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "customassetbundle-traininggrounds",
+     "customassetbundle-effects",
+     "customassetbundle-character_texture_npc1",
+     "customassetbundle-character_texture_npc2",
+     "library/unity default resources",
+     "customassetbundle-character_texture_hat"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 5179,
+     "no_struct": [],
+     "read_ok": 5179,
+     "errors": {},
+     "first_error": null,
+     "digest": "68636dcb87e2dd4ba0f3e8b4473a789d91f261eb28e8c558aaf3e064272bc4fd"
+    }
+   }
+  }
+ },
+ "FUSound.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 3411996,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     3411932,
+     3813664
+    ]
+   ],
+   "bundle_size": 3411996
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-FUSound"
+  ],
+  "files": {
+   "CustomAssetBundle-FUSound": {
+    "size": 3813623,
+    "sha256": "a3567793fe62473305dbabae47bb22d6d88b74636696af6affe153987c781431",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 2,
+    "tree_class_ids": [
+     83,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 102,
+    "destroyed": 0,
+    "script_objects": 0,
+    "classes": {
+     "83": 101,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 102,
+     "no_struct": [],
+     "read_ok": 102,
+     "errors": {},
+     "first_error": null,
+     "digest": "ca37fc2643a18ac562655daa26589b4c33c6987da0f7d156ec965a9cfe842dce"
+    }
+   }
+  }
+ },
+ "Icons.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 6054910,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     6054846,
+     18976072
+    ]
+   ],
+   "bundle_size": 6054910
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-Icons"
+  ],
+  "files": {
+   "CustomAssetBundle-Icons": {
+    "size": 18976033,
+    "sha256": "6c32deda7d72b74880438b67b3151b4c2bcb7e78f16cada1e1c2c4154de505bb",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 2,
+    "tree_class_ids": [
+     28,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 3467,
+    "destroyed": 0,
+    "script_objects": 0,
+    "classes": {
+     "28": 3466,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 3467,
+     "no_struct": [],
+     "read_ok": 3467,
+     "errors": {},
+     "first_error": null,
+     "digest": "4d8810af4c4a82c754e5904f090f0edada65659365d90b47ebc5e2d40655f356"
+    }
+   }
+  }
+ },
+ "LobbyMusic.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 1044760,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     1044696,
+     1055396
+    ]
+   ],
+   "bundle_size": 1044760
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-LobbyMusic"
+  ],
+  "files": {
+   "CustomAssetBundle-LobbyMusic": {
+    "size": 1055351,
+    "sha256": "7daf78f74801276268129edfc8bbaf31eb8925ae58fbaa43027ff4a645467669",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 2,
+    "tree_class_ids": [
+     83,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 2,
+    "destroyed": 0,
+    "script_objects": 0,
+    "classes": {
+     "83": 1,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 2,
+     "no_struct": [],
+     "read_ok": 2,
+     "errors": {},
+     "first_error": null,
+     "digest": "949dfb042b09507787556d6348ed09117f305b2cb55401cb2d305b84ef2e1279"
+    }
+   }
+  }
+ },
+ "Manifest.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 2016,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     1952,
+     22632
+    ]
+   ],
+   "bundle_size": 2016
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-8320bfa70e3f04727bfc405b1fd7efcc"
+  ],
+  "files": {
+   "CustomAssetBundle-8320bfa70e3f04727bfc405b1fd7efcc": {
+    "size": 22565,
+    "sha256": "dd18d037d9a1736c6a4fc68b31ad5c4161196e0b3772c1f65119ba513666fb22",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 3,
+    "tree_class_ids": [
+     -1,
+     115,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 3,
+    "destroyed": 0,
+    "script_objects": 1,
+    "classes": {
+     "114": 1,
+     "115": 1,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 3,
+     "no_struct": [],
+     "read_ok": 3,
+     "errors": {},
+     "first_error": null,
+     "digest": "0b943433bd061c329e08686eda72be7572e36f06cd1ea8b75ac209104efa338d"
+    }
+   }
+  }
+ },
+ "Map_00_00.unity3d": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 3356,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     3292,
+     38300
+    ]
+   ],
+   "bundle_size": 3356
+  },
+  "unitypack_load": [
+   "BuildPlayer-Map_00_00"
+  ],
+  "files": {
+   "BuildPlayer-Map_00_00": {
+    "size": 37419,
+    "sha256": "8c109d22e02b3af6c0e04c10cc8bd0aa035e4ae234953c46f84dd30b0bedd216",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 21,
+    "tree_class_ids": [
+     -5,
+     -4,
+     -3,
+     -2,
+     -1,
+     1,
+     4,
+     7,
+     23,
+     29,
+     31,
+     33,
+     35,
+     43,
+     46,
+     63,
+     64,
+     104,
+     127,
+     154,
+     157
+    ],
+    "big_ids": 1,
+    "objects": 47,
+    "destroyed": 0,
+    "script_objects": 9,
+    "classes": {
+     "1": 10,
+     "4": 10,
+     "7": 1,
+     "23": 2,
+     "29": 1,
+     "31": 1,
+     "33": 2,
+     "35": 1,
+     "43": 2,
+     "46": 1,
+     "63": 1,
+     "64": 2,
+     "104": 1,
+     "114": 9,
+     "127": 1,
+     "154": 1,
+     "157": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "customassetbundle-traininggrounds",
+     "library/unity default resources",
+     "customassetbundle-dongresources_00_00"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 47,
+     "no_struct": [],
+     "read_ok": 47,
+     "errors": {},
+     "first_error": null,
+     "digest": "ebc77d999634a56492c4d6ab4e6305eaea2f9e9a3b759097941d9795970be204"
+    }
+   },
+   "BuildPlayer-Map_00_00.sharedAssets": {
+    "size": 800,
+    "sha256": "8636d031b3af556970162123969f0f01e764a93cb8b62fdeebd39b5590eab9f9",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 1,
+    "tree_class_ids": [
+     150
+    ],
+    "big_ids": 1,
+    "objects": 1,
+    "destroyed": 0,
+    "script_objects": 0,
+    "classes": {
+     "150": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "library/unity default resources",
+     "customassetbundle-traininggrounds",
+     "customassetbundle-dongresources_00_00"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 1,
+     "no_struct": [],
+     "read_ok": 1,
+     "errors": {},
+     "first_error": null,
+     "digest": "1362599c21b9c55057bec550f94573aba92206d7a360b2ba69aa03e418874f57"
+    }
+   }
+  }
+ },
+ "Map_04_02.unity3d": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 202535,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     202471,
+     2151388
+    ]
+   ],
+   "bundle_size": 202535
+  },
+  "unitypack_load": [
+   "BuildPlayer-Map_04_02"
+  ],
+  "files": {
+   "BuildPlayer-Map_04_02": {
+    "size": 2138708,
+    "sha256": "1631b88adc463147cac992004f133a6bee5f1a23cb965bb60bc6e0fcf468a2ba",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 34,
+    "tree_class_ids": [
+     -14,
+     -13,
+     -12,
+     -11,
+     -10,
+     -9,
+     -8,
+     -7,
+     -6,
+     -5,
+     -4,
+     -3,
+     -2,
+     -1,
+     1,
+     4,
+     7,
+     23,
+     29,
+     31,
+     33,
+     35,
+     43,
+     46,
+     54,
+     63,
+     64,
+     104,
+     111,
+     127,
+     135,
+     137,
+     154,
+     157
+    ],
+    "big_ids": 1,
+    "objects": 27539,
+    "destroyed": 0,
+    "script_objects": 435,
+    "classes": {
+     "1": 8705,
+     "4": 8705,
+     "7": 1,
+     "23": 3019,
+     "29": 1,
+     "31": 1,
+     "33": 4629,
+     "35": 1,
+     "43": 2,
+     "46": 1,
+     "54": 40,
+     "63": 1,
+     "64": 1220,
+     "104": 1,
+     "111": 611,
+     "114": 435,
+     "127": 1,
+     "135": 65,
+     "137": 98,
+     "154": 1,
+     "157": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "customassetbundle-dongresources_04_02",
+     "customassetbundle-traininggrounds",
+     "library/unity default resources",
+     "customassetbundle-effects"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 27539,
+     "no_struct": [],
+     "read_ok": 27539,
+     "errors": {},
+     "first_error": null,
+     "digest": "7f1596119613a6213ae92fc409025ee15185556cc6cb6ee935586eae24b19ee0"
+    }
+   },
+   "BuildPlayer-Map_04_02.sharedAssets": {
+    "size": 12599,
+    "sha256": "4e26ed0ab4f30629f4ffaa5df8a2453034e0860c3cd0698df895b8c09d39855d",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 1,
+    "tree_class_ids": [
+     150
+    ],
+    "big_ids": 1,
+    "objects": 1,
+    "destroyed": 0,
+    "script_objects": 0,
+    "classes": {
+     "150": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "library/unity default resources",
+     "customassetbundle-traininggrounds",
+     "customassetbundle-effects",
+     "customassetbundle-dongresources_04_02"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 1,
+     "no_struct": [],
+     "read_ok": 1,
+     "errors": {},
+     "first_error": null,
+     "digest": "228dc3f5f43a12a079165c497917519cffc88801a43c3c0046402fded64d0be3"
+    }
+   }
+  }
+ },
+ "Nano_001.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 663180,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     663116,
+     1844344
+    ]
+   ],
+   "bundle_size": 663180
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-Nano_001"
+  ],
+  "files": {
+   "CustomAssetBundle-Nano_001": {
+    "size": 1844304,
+    "sha256": "05c2271cfc71db25deccc1898de25555e6fce31ee03830c44386e36368619c03",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 11,
+    "tree_class_ids": [
+     -1,
+     1,
+     4,
+     21,
+     28,
+     43,
+     74,
+     83,
+     111,
+     137,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 235,
+    "destroyed": 0,
+    "script_objects": 1,
+    "classes": {
+     "1": 58,
+     "4": 58,
+     "21": 2,
+     "28": 3,
+     "43": 2,
+     "74": 32,
+     "83": 75,
+     "111": 1,
+     "114": 1,
+     "137": 2,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "customassetbundle-traininggrounds",
+     "customassetbundle-icons"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 235,
+     "no_struct": [],
+     "read_ok": 235,
+     "errors": {},
+     "first_error": null,
+     "digest": "9384f707fc8913221c6bee86f107a0e98d44a8a26f2dca46b5062debe4a8bbb1"
+    }
+   }
+  }
+ },
+ "TableData.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 751481,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     751417,
+     7037104
+    ]
+   ],
+   "bundle_size": 751481
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-TableData"
+  ],
+  "files": {
+   "CustomAssetBundle-TableData": {
+    "size": 7037061,
+    "sha256": "ad2c5ad8a4468b206559f7035359ab60097e74e1e6a87a0f3adbef710153bd98",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 8,
+    "tree_class_ids": [
+     -6,
+     -5,
+     -4,
+     -3,
+     -2,
+     -1,
+     115,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 13,
+    "destroyed": 0,
+    "script_objects": 6,
+    "classes": {
+     "114": 6,
+     "115": 6,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 13,
+     "no_struct": [],
+     "read_ok": 13,
+     "errors": {},
+     "first_error": null,
+     "digest": "ac7d7e3aa15ce074b569d495940338c183723a8c0dd02b826eeeb512ec927657"
+    }
+   }
+  }
+ },
+ "UI_map.resourceFile": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 1192326,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     1192262,
+     15051692
+    ]
+   ],
+   "bundle_size": 1192326
+  },
+  "unitypack_load": [
+   "CustomAssetBundle-UI_map"
+  ],
+  "files": {
+   "CustomAssetBundle-UI_map": {
+    "size": 15051649,
+    "sha256": "9e42dadaadf6b68a0dac9bbd154f5b44ddb4116755fe6097d0c103150a5f8c02",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 2,
+    "tree_class_ids": [
+     28,
+     142
+    ],
+    "big_ids": 1,
+    "objects": 11,
+    "destroyed": 0,
+    "script_objects": 0,
+    "classes": {
+     "28": 10,
+     "142": 1
+    },
+    "untyped_classes": [],
+    "externals": [],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 11,
+     "no_struct": [],
+     "read_ok": 11,
+     "errors": {},
+     "first_error": null,
+     "digest": "782b08c4e57029142e2594499fef2268344d59ad37ba516e0a9f5f422d3668e6"
+    }
+   }
+  }
+ },
+ "main.unity3d": {
+  "header": {
+   "signature": "UnityWeb",
+   "stream_version": 2,
+   "player_version": "fusion-2.x.x",
+   "engine_version": "2.5.5b4",
+   "min_streamed_bytes": 9977143,
+   "header_size": 64,
+   "min_levels_for_load": 1,
+   "num_levels": 1,
+   "level_ends": [
+    [
+     9977079,
+     58720820
+    ]
+   ],
+   "bundle_size": 9977143
+  },
+  "unitypack_load": [
+   "Assembly - CSharp - first pass.dll"
+  ],
+  "files": {
+   "Assembly - CSharp - first pass.dll": {
+    "size": 412672,
+    "sha256": "d35cbcaa42f3290a4eeee15bc519f43f4680062816b4408410bc98425aba1688",
+    "kind": "dll"
+   },
+   "Assembly - CSharp.dll": {
+    "size": 1884160,
+    "sha256": "8db676ec4f12bda807d133cd5994c1b41b294fc803da61ea6cf594935cc1e834",
+    "kind": "dll"
+   },
+   "Assembly - UnityScript - first pass.dll": {
+    "size": 10240,
+    "sha256": "9b01a91ee950d474844102710e2792ad4dd9176f8484cb1d9cd9150f16d7deb0",
+    "kind": "dll"
+   },
+   "Mono.Data.Tds.dll": {
+    "size": 73216,
+    "sha256": "88d54b583128c539e171ed79295e8b7d7c3feeb654a15d4d1ab07eb2e5616a8d",
+    "kind": "dll"
+   },
+   "Mono.Security.dll": {
+    "size": 287744,
+    "sha256": "995f3d33018a7888d5a0b6520f1b7f6f2ce084fc062a0fb76c5be428d6456baf",
+    "kind": "dll"
+   },
+   "System.Configuration.Install.dll": {
+    "size": 19456,
+    "sha256": "0a6da6cb0b2f7e213542ce8857af7674bce1b63deb6e624dc75cc6fc54497bbf",
+    "kind": "dll"
+   },
+   "System.Configuration.dll": {
+    "size": 117760,
+    "sha256": "6d01682332500af4bda03d5e8092adb1dd032123b8e8b4674e53eff6078e360a",
+    "kind": "dll"
+   },
+   "System.Data.dll": {
+    "size": 813568,
+    "sha256": "d0c7c43cea00dea9b049b3e285893b4fbfc80ad01a2ace5616062110cffdbc38",
+    "kind": "dll"
+   },
+   "System.Drawing.dll": {
+    "size": 450048,
+    "sha256": "3239c01a181b98a2802a0f12af0dab7b0bd804873abaddfe5d99713625caef2e",
+    "kind": "dll"
+   },
+   "System.EnterpriseServices.dll": {
+    "size": 46080,
+    "sha256": "8a9481b547d227ae405e32f6b7df7f0c586bd6faf1659cf46768df2514196167",
+    "kind": "dll"
+   },
+   "System.Security.dll": {
+    "size": 132608,
+    "sha256": "6aeb05bdd4f6b048329ae770488ea8b5c8439bfa80c1edc752420fa4c8a809df",
+    "kind": "dll"
+   },
+   "System.Transactions.dll": {
+    "size": 26624,
+    "sha256": "bf761ded68b5107f0a9d99dbc346a917cb5361c821a98b0cf125969d42a8403c",
+    "kind": "dll"
+   },
+   "System.Xml.dll": {
+    "size": 1250304,
+    "sha256": "52c099c899d86777db1ba2d06a98c52eae49630c25828ba352bf1c065bd8afea",
+    "kind": "dll"
+   },
+   "System.dll": {
+    "size": 1467392,
+    "sha256": "853c74b466600729289dddf571598624e665dbd57646e0daaa05dbb7a2092e17",
+    "kind": "dll"
+   },
+   "mainData": {
+    "size": 84519,
+    "sha256": "377d6e45ef679e1415d2b0eec65926dc59a13241b4fcce421e4361976ed15d65",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 41,
+    "tree_class_ids": [
+     -5,
+     -4,
+     -3,
+     -2,
+     -1,
+     1,
+     4,
+     5,
+     7,
+     11,
+     13,
+     20,
+     23,
+     29,
+     30,
+     31,
+     33,
+     35,
+     45,
+     46,
+     47,
+     52,
+     55,
+     63,
+     71,
+     78,
+     81,
+     92,
+     94,
+     98,
+     104,
+     108,
+     116,
+     124,
+     127,
+     129,
+     141,
+     147,
+     149,
+     155,
+     157
+    ],
+    "big_ids": 1,
+    "objects": 52,
+    "destroyed": 0,
+    "script_objects": 8,
+    "classes": {
+     "1": 5,
+     "4": 5,
+     "5": 1,
+     "7": 1,
+     "11": 1,
+     "13": 1,
+     "20": 1,
+     "23": 1,
+     "29": 1,
+     "30": 1,
+     "31": 1,
+     "33": 1,
+     "35": 1,
+     "45": 1,
+     "46": 1,
+     "47": 1,
+     "52": 1,
+     "55": 1,
+     "63": 1,
+     "71": 1,
+     "78": 1,
+     "81": 1,
+     "92": 1,
+     "94": 1,
+     "98": 1,
+     "104": 1,
+     "108": 1,
+     "114": 8,
+     "116": 1,
+     "124": 1,
+     "127": 1,
+     "129": 1,
+     "141": 1,
+     "147": 1,
+     "149": 1,
+     "155": 1,
+     "157": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "sharedassets0.assets",
+     "library/cache/96/963484209d11fd7f110076aa44295342",
+     "library/cache/5d/5d7f4c401ae8946bcb0d6ff68a9e7466",
+     "library/cache/d8/d84268709d11078d11005b9844295342",
+     "library/cache/67/67e32db1cd51440a3a1ab163c0652422",
+     "library/cache/cb/cbf0a732ad112a541100162a44295342",
+     "library/cache/e9/e9ba2083ad114a07d000fbfb8d76c639",
+     "library/cache/57/57b33a14b6d5347c5a85c36f6cb3b280",
+     "library/cache/f4/f4901f25d4e1542589348bbb89563d8e",
+     "library/cache/41/41c783569d11bd7f11006b1944295342",
+     "library/cache/9c/9ce107479d11178d11005b9844295342",
+     "library/cache/0e/0e447868506ba49f0a73235b8a8b647a",
+     "library/cache/6e/6ee87b78ba3c442beaddd98a7feab3f5",
+     "library/cache/9d/9dccc8e8f0da4494991c26ef59019551",
+     "library/cache/05/054a31a99d11e49d110086ba44295342",
+     "library/cache/be/befbb4b9c320b4b18a08ef7afb93b6c9",
+     "library/cache/48/48dca5b99d113b8d11006bab44295342",
+     "library/cache/ba/ba646e3ae62824daf993bea4976b8821",
+     "library/cache/1c/1cac2e0bcc34e4b3cbb4bd85982eba83",
+     "library/cache/67/67f8781cad112c75d0008dfa8d76c639",
+     "library/cache/b6/b6aa781cad112c75d0008dfa8d76c639",
+     "library/cache/64/641b781cad112c75d0008dfa8d76c639",
+     "library/cache/70/708b781cad112c75d0008dfa8d76c639",
+     "library/cache/25/257bc83cbeb544540bd0e558aa9b1383",
+     "library/cache/41/4116114fad112a07d000fbfb8d76c639",
+     "library/unity default resources"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 52,
+     "no_struct": [],
+     "read_ok": 52,
+     "errors": {},
+     "first_error": null,
+     "digest": "98e9f4f26307837b119d5b980227d6204153c750f02293640f39329f5c27d3ad"
+    }
+   },
+   "mysql.data.dll": {
+    "size": 315392,
+    "sha256": "8f24f4d0570ff4cb380bb52d3e99e401bc462e660f7363e135da79f4f80c1ca8",
+    "kind": "dll"
+   },
+   "sharedassets0.assets": {
+    "size": 51328521,
+    "sha256": "5f15311ec166a32ee15f652177d6f9837999c56d3354acb013ff9cef3d1e8b3b",
+    "kind": "serialized",
+    "format": 7,
+    "endian": "<",
+    "type_trees": 133,
+    "tree_class_ids": [
+     -116,
+     -115,
+     -114,
+     -113,
+     -112,
+     -111,
+     -110,
+     -109,
+     -108,
+     -107,
+     -106,
+     -105,
+     -104,
+     -103,
+     -102,
+     -101,
+     -100,
+     -99,
+     -98,
+     -97,
+     -96,
+     -95,
+     -94,
+     -93,
+     -92,
+     -91,
+     -90,
+     -89,
+     -88,
+     -87,
+     -86,
+     -85,
+     -84,
+     -83,
+     -82,
+     -81,
+     -80,
+     -79,
+     -78,
+     -77,
+     -76,
+     -75,
+     -74,
+     -73,
+     -72,
+     -71,
+     -70,
+     -69,
+     -68,
+     -67,
+     -66,
+     -65,
+     -64,
+     -63,
+     -62,
+     -61,
+     -60,
+     -59,
+     -58,
+     -57,
+     -56,
+     -55,
+     -54,
+     -53,
+     -52,
+     -51,
+     -50,
+     -49,
+     -48,
+     -47,
+     -46,
+     -45,
+     -44,
+     -43,
+     -42,
+     -41,
+     -40,
+     -39,
+     -38,
+     -37,
+     -36,
+     -35,
+     -34,
+     -33,
+     -32,
+     -31,
+     -30,
+     -29,
+     -28,
+     -27,
+     -26,
+     -25,
+     -24,
+     -23,
+     -22,
+     -21,
+     -20,
+     -19,
+     -18,
+     -17,
+     -16,
+     -15,
+     -14,
+     -13,
+     -12,
+     -11,
+     -10,
+     -9,
+     -8,
+     -7,
+     -6,
+     -5,
+     -4,
+     -3,
+     -2,
+     -1,
+     1,
+     4,
+     20,
+     21,
+     23,
+     28,
+     33,
+     48,
+     49,
+     82,
+     83,
+     84,
+     109,
+     115,
+     128,
+     143,
+     150
+    ],
+    "big_ids": 1,
+    "objects": 1739,
+    "destroyed": 0,
+    "script_objects": 217,
+    "classes": {
+     "1": 97,
+     "4": 97,
+     "20": 26,
+     "21": 31,
+     "23": 1,
+     "28": 753,
+     "33": 1,
+     "48": 189,
+     "49": 2,
+     "82": 7,
+     "83": 9,
+     "84": 1,
+     "109": 2,
+     "114": 217,
+     "115": 276,
+     "128": 26,
+     "143": 3,
+     "150": 1
+    },
+    "untyped_classes": [],
+    "externals": [
+     "library/unity default resources"
+    ],
+    "layout_ok": true,
+    "object_align": 8,
+    "unitypackff": {
+     "open": "ok",
+     "objects": 1739,
+     "no_struct": [],
+     "read_ok": 1739,
+     "errors": {},
+     "first_error": null,
+     "digest": "573cdda515de8c6ccaaf31083aeb39fe73ebfc2f92390c608036eef583d99ff8"
+    }
+   }
+  }
+ }
+}
