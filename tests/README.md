@@ -33,7 +33,7 @@ A known library bug is a test marked `xfail(strict=True)`: it is expected to fai
 
 There are none at the moment.
 
-Not covered yet: `UnityEnvironment` beyond finding files (`discover`, `archive:` URLs), `bin/` scripts other than `dumpxdt.py` (`integration/test_scripts.py`), `AudioClip` export.
+Not covered yet: `UnityEnvironment` beyond finding files (`discover`, `archive:` URLs), `bin/` scripts other than `index_bundles.py` and `dumpxdt.py` (`integration/test_scripts.py`), `AudioClip` export.
 
 ## Builds
 
