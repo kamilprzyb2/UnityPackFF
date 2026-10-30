@@ -1,8 +1,8 @@
 {
  "Icons.resourceFile": {
   "CustomAssetBundle-784fa24bcf2da4f5eabe9547958616eb": {
-   "saved": "4e1be8b681b3c806a5605cf9c8c56c2fac64a60e68a675850c499cac5e5a20bb",
-   "identical": false,
+   "saved": "b719421167413f5b550a33a067e5a2ce62bc0b6315947195c54c7f4c93eae2aa",
+   "identical": true,
    "save_error": null
   }
  },
@@ -15,8 +15,8 @@
  },
  "Map_00_00.unity3d": {
   "BuildPlayer-Map_00_00": {
-   "saved": "ba6e91c6a1718cfd0c0a1d96e4748e98721af8ae96c113134515e0be742b4d14",
-   "identical": false,
+   "saved": "f18eeb5dd597551dfe14f46b192c3bc43019f8f20c060796da70422d8bdbd1f9",
+   "identical": true,
    "save_error": null
   },
   "BuildPlayer-Map_00_00.sharedAssets": {
@@ -27,8 +27,8 @@
  },
  "Map_04_02.unity3d": {
   "BuildPlayer-Map_04_02": {
-   "saved": "f42852bcdb1c20968c0c9819f5d1ad0e3b2a48c949e914600f6486a5fedff634",
-   "identical": false,
+   "saved": "310cc3b72dc6a166804be78c7b21bf2e81c665897c401d4a6509e2f62ba836f1",
+   "identical": true,
    "save_error": null
   },
   "BuildPlayer-Map_04_02.sharedAssets": {
@@ -39,8 +39,8 @@
  },
  "TableData.resourceFile": {
   "CustomAssetBundle-1dca92eecee4742d985b799d8226666d": {
-   "saved": "2446d637cd88ae8c995fcdad9e5d03127c42af5fc354c5082027533b0fc40983",
-   "identical": false,
+   "saved": "e70cb289c3d2f4d7cf2cfe7f376c477d8d8394e1f257e3c8af2413b80fec32d7",
+   "identical": true,
    "save_error": null
   }
  }

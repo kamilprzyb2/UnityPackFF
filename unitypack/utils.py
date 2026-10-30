@@ -75,6 +75,19 @@ class BitReader:
                 return ret
 
 
+class NaN32(float):
+	"""
+	A 32-bit NaN read from a file, with its bit pattern (bits), so that it is
+	written back unchanged: going through a Python float would turn a
+	signaling NaN into a quiet one.
+	"""
+
+	def __new__(cls, data, endian="<"):
+		self = super().__new__(cls, "nan")
+		self.bits = int.from_bytes(data, "little" if endian == "<" else "big")
+		return self
+
+
 class BinaryReader:
 	def __init__(self, buf, endian="<"):
 		self.buf = buf
@@ -137,7 +150,11 @@ class BinaryReader:
 		return struct.unpack(self.endian + "I", self.read(4))[0]
 
 	def read_float(self) -> float:
-		return struct.unpack(self.endian + "f", self.read(4))[0]
+		data = self.read(4)
+		ret = struct.unpack(self.endian + "f", data)[0]
+		if ret != ret:
+			ret = NaN32(data, self.endian)
+		return ret
 
 	def read_double(self) -> float:
 		return struct.unpack(self.endian + "d", self.read(8))[0]
@@ -154,11 +171,12 @@ class BinaryWriter:
 		self.buf = buf
 		self.endian = endian
 
-	def align(self):
+	def align(self, n=4):
+		# write the padding: a seek leaves no bytes behind if nothing follows
 		old = self.tell()
-		new = (old + 3) & -4
+		new = (old + n - 1) & -n
 		if new > old:
-			self.seek(new - old, SEEK_CUR)
+			self.write(b"\0" * (new - old))
 
 	def write(self, *args):
 		return self.buf.write(*args)
@@ -205,6 +223,8 @@ class BinaryWriter:
 		return self.write(struct.pack(self.endian + "I", val))
 
 	def write_float(self, val):
+		if isinstance(val, NaN32):
+			return self.write(val.bits.to_bytes(4, "little" if self.endian == "<" else "big"))
 		return self.write(struct.pack(self.endian + "f", val))
 
 	def write_double(self, val):

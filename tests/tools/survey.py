@@ -50,7 +50,7 @@ def survey_file(path, read_objects=True):
 		"externals": [e["path"] for e in sf.externals],
 		"layout_ok": sf.end == sf.file_size,
 		# tells writers apart: Unity starts every object on 8 bytes,
-		# unitypack's Asset.save() on 4
+		# older versions of unitypack's Asset.save() on 4
 		"object_align": next(a for a in (8, 4, 2, 1) if all(o["offset"] % a == 0 for o in sf.objects if o["size"])),
 	})
 	rec["unitypackff"] = survey_unitypackff(path, read_objects)

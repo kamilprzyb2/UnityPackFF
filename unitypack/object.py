@@ -218,23 +218,28 @@ class ObjectInfo:
 			return self.asset.get_asset(path)
 
 	def save_data(self, buf):
+		"Write the object's data and return its offset and size in buf"
+
 		# We avoid saving the object's contents in self._contents,
 		# since that can cause the program to take up gigabytes of
 		# memory after having saved a large asset bundle.
 		contents = self.read()
 
 		object_buf = BytesIO()
-		self.data_offset = buf.tell()
+		offset = buf.tell()
 		self.write_value(self.type_tree, BinaryWriter(object_buf), contents)
 
 		object_data = object_buf.getvalue()
-		self.size = len(object_data)
 		buf.write(object_data)
 
-	def save_metadata(self, buf):
+		# self.data_offset and self.size keep pointing into the source
+		# file, so the object can still be read (and saved again)
+		return offset, len(object_data)
+
+	def save_metadata(self, buf, offset, size):
 		self.write_id(buf, self.path_id)
-		buf.write_uint(self.data_offset - self.asset.data_offset)
-		buf.write_uint(self.size)
+		buf.write_uint(offset - self.asset.data_offset)
+		buf.write_uint(size)
 
 		buf.write_int(self.type_id)
 		buf.write_int16(self.class_id)

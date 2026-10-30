@@ -54,6 +54,20 @@ def test_align():
 	assert r.tell() == 8
 
 
+def test_writer_align_writes_padding():
+	f = io.BytesIO()
+	w = BinaryWriter(f)
+	w.write(b"abcde")
+	w.align()
+	w.align()
+	assert f.getvalue() == b"abcde\0\0\0"
+	w.align(8)
+	assert f.getvalue() == b"abcde\0\0\0"
+	w.write(b"x")
+	w.align(8)
+	assert f.getvalue() == b"abcde\0\0\0x" + bytes(7)
+
+
 def test_unterminated_string():
 	with pytest.raises(ValueError):
 		BinaryReader(io.BytesIO(b"abc")).read_string()
@@ -70,3 +84,16 @@ def test_bit_reader():
 def test_bit_reader_bytes():
 	r = BitReader(b"\x01\xff\x80", 8)
 	assert [r.read() for _ in range(3)] == [1, 255, 128]
+
+
+@pytest.mark.parametrize("endian", ["<", ">"])
+@pytest.mark.parametrize("bits", [0x7FA45696, 0xFF800001, 0x7FC00000, 0xFFFFFFFF])
+def test_nan_bits_survive(endian, bits):
+	# 0x7fa45696 is a signaling NaN (top fraction bit clear), as found in a
+	# real mesh; a plain float round trip would set that bit
+	data = bits.to_bytes(4, "little" if endian == "<" else "big")
+	v = BinaryReader(io.BytesIO(data), endian).read_float()
+	assert math.isnan(v)
+	out = io.BytesIO()
+	BinaryWriter(out, endian).write_float(v)
+	assert out.getvalue() == data
