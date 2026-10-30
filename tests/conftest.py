@@ -18,7 +18,7 @@ from pathlib import Path
 
 import pytest
 
-from tests.bundles import BUILDS, Build, BundleUnavailable
+from tests.bundles import BUILDS, Build, BundleUnavailable, archives_required
 
 EXPECTED_DIR = Path(__file__).resolve().parent / "expected"
 
@@ -76,10 +76,12 @@ def build(request):
 
 @pytest.fixture
 def unpacked(build, bundle):
-	"Directory with the archive's files; skips when the archive can't be fetched."
+	"Directory with the archive's files; skips (fails, if archives are required) when the archive can't be fetched."
 	try:
 		return build.unpack(bundle)
 	except BundleUnavailable as e:
+		if archives_required():
+			pytest.fail(str(e))
 		pytest.skip(str(e))
 
 

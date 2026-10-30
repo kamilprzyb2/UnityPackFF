@@ -120,3 +120,12 @@ def test_manifests_hold_no_game_data():
 		m = json.loads(p.read_text())
 		assert set(m) <= {"uuid", "asset_url", "name", "parent_uuid", "hidden", "description",
 			"main_file_url", "main_file_info", "total_compressed_size", "total_uncompressed_size", "bundles"}
+
+
+@pytest.mark.parametrize("value, required", [(None, False), ("", False), ("0", False), ("1", True), ("yes", True)])
+def test_archives_required(monkeypatch, value, required):
+	if value is None:
+		monkeypatch.delenv("UNITYPACKFF_REQUIRE_ARCHIVES", raising=False)
+	else:
+		monkeypatch.setenv("UNITYPACKFF_REQUIRE_ARCHIVES", value)
+	assert bundles.archives_required() is required
