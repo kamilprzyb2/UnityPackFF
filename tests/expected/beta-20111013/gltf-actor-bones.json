@@ -1,0 +1,30 @@
+{
+ "CharacterCreation.resourceFile": {
+  "actor_m.kfm.glb": "6dd806227b64272ebfb794c6013cfb71acfcd74782c53aba29dd00772ae5802d",
+  "actor_w.kfm.glb": "159d70813736e6120366f3063e68d2ca1537e0526ccfea9432a663661f0a9f15"
+ },
+ "CharacterSelection.resourceFile": {
+  "actor_m.kfm.glb": "6dd806227b64272ebfb794c6013cfb71acfcd74782c53aba29dd00772ae5802d",
+  "actor_w.kfm.glb": "159d70813736e6120366f3063e68d2ca1537e0526ccfea9432a663661f0a9f15"
+ },
+ "CharacterSelection_wear_shirts.resourceFile": {
+  "wear_f_shirt_easy.nif@f_easy_a_f_skin.glb": "4f269cb68ed971265999ac9ad70582009b3cd45ec198bdeb8c101089daa7f716",
+  "wear_f_shirt_easy.nif@f_easy_b_f_skin.glb": "4f269cb68ed971265999ac9ad70582009b3cd45ec198bdeb8c101089daa7f716",
+  "wear_f_shirt_easy.nif@f_easy_c_f_skin.glb": "4f269cb68ed971265999ac9ad70582009b3cd45ec198bdeb8c101089daa7f716",
+  "wear_f_shirt_easy.nif@female_default01_color01_f_skin.glb": "4f269cb68ed971265999ac9ad70582009b3cd45ec198bdeb8c101089daa7f716",
+  "wear_f_shirt_easy.nif@female_default01_color01_m_skin.glb": "4f269cb68ed971265999ac9ad70582009b3cd45ec198bdeb8c101089daa7f716",
+  "wear_f_shirt_easy.nif@female_default01_color02_f_skin.glb": "4f269cb68ed971265999ac9ad70582009b3cd45ec198bdeb8c101089daa7f716",
+  "wear_f_shirt_easy.nif@female_default01_color02_m_skin.glb": "4f269cb68ed971265999ac9ad70582009b3cd45ec198bdeb8c101089daa7f716",
+  "wear_f_shirt_easy.nif@female_default01_color03_f_skin.glb": "4f269cb68ed971265999ac9ad70582009b3cd45ec198bdeb8c101089daa7f716",
+  "wear_f_shirt_easy.nif@female_default01_color03_m_skin.glb": "4f269cb68ed971265999ac9ad70582009b3cd45ec198bdeb8c101089daa7f716",
+  "wear_f_shirt_easy.nif@female_default01_color04_f_skin.glb": "4f269cb68ed971265999ac9ad70582009b3cd45ec198bdeb8c101089daa7f716",
+  "wear_f_shirt_easy.nif@female_default01_color04_m_skin.glb": "4f269cb68ed971265999ac9ad70582009b3cd45ec198bdeb8c101089daa7f716",
+  "wear_f_shirt_easy.nif@female_default01_color05_f_skin.glb": "4f269cb68ed971265999ac9ad70582009b3cd45ec198bdeb8c101089daa7f716",
+  "wear_f_shirt_easy.nif@female_default01_color05_m_skin.glb": "4f269cb68ed971265999ac9ad70582009b3cd45ec198bdeb8c101089daa7f716",
+  "wear_m_shirt_easy.nif@boysrollertee_a.glb": "6eda8445309dc4d7c8a46a7e21339cde98b46705b161ab1168f0d3d015f25a9c",
+  "wear_m_shirt_easy.nif@boysrollertee_b.glb": "6eda8445309dc4d7c8a46a7e21339cde98b46705b161ab1168f0d3d015f25a9c",
+  "wear_m_shirt_easy.nif@m_easy_a.glb": "6eda8445309dc4d7c8a46a7e21339cde98b46705b161ab1168f0d3d015f25a9c",
+  "wear_m_shirt_easy.nif@m_easy_b.glb": "6eda8445309dc4d7c8a46a7e21339cde98b46705b161ab1168f0d3d015f25a9c",
+  "wear_m_shirt_easy.nif@m_easy_c.glb": "6eda8445309dc4d7c8a46a7e21339cde98b46705b161ab1168f0d3d015f25a9c"
+ }
+}

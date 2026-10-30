@@ -9,8 +9,11 @@ left-handed, glTF right-handed), so positions and normals get -x, rotations
 embedded as upright PNGs.
 """
 
+import hashlib
 import io
 import math
+import os
+import re
 
 import pytest
 from PIL import Image
@@ -20,7 +23,7 @@ from tests.unit.test_export import QUAD, compressed_mesh, fdict, mesh, packed, s
 from unitypack.engine.component import Transform
 from unitypack.engine.object import GameObject
 from unitypack.engine.texture import Material, Texture2D, TextureFormat
-from unitypack.gltf import GLTFWriter, export_gameobject, export_mesh, mirror_matrix
+from unitypack.gltf import ExternalFiles, GLTFWriter, export_gameobject, export_mesh, mirror_matrix
 
 
 def color(r, g, b, a=1.0):
@@ -382,6 +385,137 @@ def test_without_skins():
 	assert len(w.json["scenes"][0]["nodes"]) == 1
 
 
+def plain_child(parent_tr, name, ids, tex=None):
+	"A child GameObject of a Transform, with a MeshFilter + MeshRenderer; returns its Transform pointer"
+	go = GameObject(fdict(m_Name=name, m_Component=[]))
+	tr = Pointer(Transform(fdict(m_GameObject=Pointer(go, next(ids)), m_LocalPosition=vec(0, 0, 0),
+		m_LocalRotation=fdict(x=0, y=0, z=0, w=1), m_LocalScale=vec(1, 1, 1), m_Children=[], m_Father=None)), next(ids))
+	add_plain_mesh(go, tr, name, ids, tex)
+	parent_tr.target._obj["m_Children"].append(tr)
+	return tr
+
+
+def add_plain_mesh(go, tr, name, ids, tex=None):
+	filt = fdict(m_GameObject=None, m_Mesh=Pointer(mesh(**QUAD, indices=[0, 1, 2], name=name), next(ids)))
+	renderer = fdict(m_GameObject=None, m_Materials=[Pointer(material(name, tex), next(ids))])
+	go._obj["m_Component"] = [(4, tr), (33, Pointer(filt, next(ids))), (23, Pointer(renderer, next(ids)))]
+
+
+def worn_item():
+	"""
+	A worn item, as some hair is: the rig's skinned mesh, and plain meshes
+	beside it: on the bone (a joint of the skin), under the bone, and under
+	the root (a textured one)
+	"""
+	ids = iter(range(500, 600))
+	root = rig()
+	root_tr = root.component[0][1]
+	bone_tr = root_tr.target._obj["m_Children"][0]
+	add_plain_mesh(bone_tr.target.game_object.resolve(), bone_tr, "on the bone", ids)
+	plain_child(bone_tr, "Biped Object", ids)
+	plain_child(root_tr, "Biped Object@#0", ids, tex=Pointer(texture("hat"), next(ids)))
+	return root
+
+
+def test_skinned_only():
+	w = GLTFWriter()
+	w.add_gameobject(worn_item(), skinned_only=True)
+	g = GLB(w.glb())
+	[m] = g["meshes"]
+	assert "skin" in g["nodes"][g["scenes"][0]["nodes"][1]]
+	# the bone stays, a joint; the nodes that only carried a plain mesh go
+	assert sorted(n["name"] for n in g["nodes"]) == ["bone", "rig", "rig (skinned)"]
+	assert [n.get("mesh") for n in g["nodes"] if n["name"] != "rig (skinned)"] == [None, None]
+	assert "materials" not in g.json and "images" not in g.json
+	assert w.left_out == ["bone", "bone/Biped Object", "Biped Object@#0"]
+	[warning] = w.warnings
+	assert "'Biped Object@#0'" in warning and "textured" in warning
+
+
+def test_skinned_only_is_off_by_default():
+	w = GLTFWriter()
+	w.add_gameobject(worn_item())
+	g = GLB(w.glb())
+	assert len(g["meshes"]) == 4
+	assert sorted(n["name"] for n in g["nodes"]) == ["Biped Object", "Biped Object@#0", "bone", "rig", "rig (skinned)"]
+	assert w.left_out == [] and w.warnings == []
+
+
+# What binds a worn item to the character: the actor's ActorSkinCombiner
+# (actorBones, a list of Transforms) and an ActorWearIndexTable beside each
+# worn SkinnedMeshRenderer (for each bone, an index into the boy's and the
+# girl's actorBones)
+
+def script(**fields):
+	"A MonoBehaviour's fields, as read"
+	return fdict(m_GameObject=None, m_Enabled=1, m_Script=Pointer(None, 0), m_Name="", **fields)
+
+
+def actor():
+	"The rig as an actor: actorBones lists the bone, a Transform elsewhere (-1) and the rig"
+	root = rig()
+	root_tr = root.component[0][1]
+	bone_tr = root_tr.target._obj["m_Children"][0]
+	stranger = Pointer(None, 999)
+	combiner = script(actorBones=[bone_tr, stranger, root_tr, Pointer(None, 0)])
+	root._obj["m_Component"].append((114, Pointer(combiner, 700)))
+	return root
+
+
+def worn(m=(5, 0), f=(7, -1), bones=None):
+	"The rig as a worn item: its skin's two bones map to actor bones m and f"
+	root = rig(bones=bones)
+	table = script(transformIndicesM=list(m), transformIndicesF=list(f))
+	root._obj["m_Component"].append((114, Pointer(table, 701)))
+	return root
+
+
+def test_actor_bones_of_the_actor():
+	g = GLB(export_gameobject_with(actor(), actor_bones=True))
+	root = g["nodes"][g["scenes"][0]["nodes"][0]]
+	names = {i: n["name"] for i, n in enumerate(g["nodes"])}
+	bones = root["extras"]["actor_bones"]
+	assert [names.get(b) for b in bones] == ["bone", None, "rig", None]
+	assert bones[1] == bones[3] == -1
+
+
+def test_actor_bones_of_a_worn_item():
+	w = GLTFWriter()
+	w.add_gameobject(worn(), actor_bones=True)
+	g = GLB(w.glb())
+	[skin] = g["skins"]
+	# one entry per joint, in the skin's joint order; none is -1
+	assert skin["extras"]["actor_bones"] == {"m": [5, 0], "f": [7, -1]}
+	assert w.unbound_skins == [] and w.warnings == []
+
+
+def test_actor_bones_are_off_by_default():
+	g = GLB(export_gameobject(worn()))
+	assert "extras" not in g["skins"][0]
+	g = GLB(export_gameobject(actor()))
+	assert "extras" not in g["nodes"][g["scenes"][0]["nodes"][0]]
+
+
+def test_skin_without_index_table():
+	w = GLTFWriter()
+	w.add_gameobject(rig(), actor_bones=True)
+	assert w.unbound_skins == ["c"]  # the mesh's name
+	assert "extras" not in w.json["skins"][0]
+
+
+def test_index_table_of_the_wrong_length():
+	w = GLTFWriter()
+	w.add_gameobject(worn(m=(1, 2, 3), f=(4,)), actor_bones=True)
+	assert w.json["skins"][0]["extras"]["actor_bones"] == {"m": [1, 2], "f": [4, -1]}
+	assert len(w.warnings) == 2 and "transformIndicesM has 3 entries for 2 bones" in w.warnings[0]
+
+
+def export_gameobject_with(gameobject, **options):
+	w = GLTFWriter()
+	w.add_gameobject(gameobject, **options)
+	return w.glb()
+
+
 def test_clip():
 	move = clip(position_curves=[curve_on("bone", key(0.0, vec(1, 0, 0), vec(1, 0, 0)), key(1.0, vec(2, 0, 0), vec(1, 0, 0)))])
 	g = GLB(export_gameobject(rig(clips=[move])))
@@ -437,9 +571,45 @@ def test_clip_extras_and_missing_paths():
 	w = GLTFWriter()
 	w.add_gameobject(rig(clips=[c]))
 	anim = w.json["animations"][0]
-	assert anim["extras"] == {"float_curves": [":_Color.r"], "events": [{"time": 0.75, "function": "end"}]}
+	assert anim["extras"]["events"] == [{"time": 0.75, "function": "end"}]
+	assert anim["extras"]["float_curves"] == {":_Color.r": {"times": [0.0], "values": [0.0], "node": w.json["scenes"][0]["nodes"][0]}}
 	assert len(anim["channels"]) == 1
 	assert "no node for 1 curve paths, such as 'gone'" in w.warnings[0]
+
+
+def float_curve(attribute, *keys, path=""):
+	return fdict(curve=serialized_curve(list(keys)), attribute=attribute, path=path, classID=21, script=None)
+
+
+def test_clip_float_curve_values():
+	# a character's build: _FatFactor 0.0075 -> 0 -> -0.0078, sampled at the clip's rate as transforms are
+	shape = clip("shape", position_curves=[curve_on("bone", key(0.0, vec(1, 0, 0), vec(0, 0, 0)), key(1.0, vec(1, 0, 0), vec(0, 0, 0)))],
+		float_curves=[
+			float_curve("[0]._FatFactor", key(0.0, 0.0075, -0.015), key(0.5, 0.0, -0.0153), key(1.0, -0.0078, -0.0156)),
+			float_curve("_Color.r", key(0.0, 0.5, 0.0), key(1.0, 0.5, 0.0), path="bone"),
+		])
+	g = GLB(export_gameobject(rig(clips=[shape])))
+	curves = g["animations"][0]["extras"]["float_curves"]
+	assert list(curves) == [":[0]._FatFactor", "bone:_Color.r"]
+	fat = curves[":[0]._FatFactor"]
+	assert fat["times"] == [0, 0.5, 1]
+	assert fat["values"] == pytest.approx([0.0075, 0.0, -0.0078])
+	assert g["nodes"][fat["node"]]["name"] == "rig"
+	# a constant curve: one sample, as for transforms
+	assert curves["bone:_Color.r"]["values"] == [0.5] and curves["bone:_Color.r"]["times"] == [0]
+	assert g["nodes"][curves["bone:_Color.r"]["node"]]["name"] == "bone"
+
+
+def test_material_only_clip():
+	# no transform curve, so no glTF animation: the document's extras keep it
+	scroll = clip("nif-default", float_curves=[float_curve("_MainTex.offset.x", key(0.0, 0.0, 1.0), key(1.0, 1.0, 1.0))],
+		events=[fdict(time=0.5, functionName="half", data="", messageOptions=1)])
+	g = GLB(export_gameobject(rig(clips=[scroll])))
+	assert "animations" not in g.json
+	[c] = g["extras"]["material_clips"]
+	assert c["name"] == "nif-default"
+	assert c["float_curves"][":_MainTex.offset.x"]["values"] == pytest.approx([0, 0.5, 1])
+	assert c["events"] == [{"time": 0.5, "function": "half"}]
 
 
 def test_clip_without_channels_is_left_out():
@@ -630,6 +800,40 @@ def test_spot_and_disabled_lights():
 	assert "extensions" not in off.json and "children" not in off["nodes"][0]
 
 
+def collided_gameobject():
+	"A GameObject with no renderer, a mesh collider, a sphere trigger and a kinematic rigidbody"
+	go = GameObject(fdict(m_Name="wall", m_Component=[]))
+	tr = Transform(fdict(m_GameObject=Pointer(go, 2), m_LocalPosition=vec(0, 0, 0), m_LocalRotation=fdict(x=0, y=0, z=0, w=1),
+		m_LocalScale=vec(1, 1, 1), m_Children=[], m_Father=None))
+	quad = Pointer(mesh(**QUAD, indices=[0, 1, 2], name="collision"), 3)
+	go._obj["m_Component"] = [
+		(4, Pointer(tr, 1)),
+		(64, Pointer(fdict(m_Material=None, m_IsTrigger=False, m_Convex=True, m_SmoothSphereCollisions=False, m_Mesh=quad), 4)),
+		(135, Pointer(fdict(m_Material=None, m_IsTrigger=True, m_Radius=1.5, m_Center=vec(1, 2, 3)), 5)),
+		(54, Pointer(fdict(m_Mass=2.0, m_Drag=0.0, m_AngularDrag=0.05, m_UseGravity=True, m_IsKinematic=True), 6)),
+	]
+	return go
+
+
+def test_colliders():
+	w = GLTFWriter()
+	w.add_root(w.add_gameobject(collided_gameobject(), colliders=True))
+	g = GLB(w.glb())
+	[node] = g["nodes"]
+	mesh_collider, sphere = node["extras"]["colliders"]
+	assert mesh_collider == {"trigger": False, "type": "mesh", "mesh": 0, "convex": True}
+	assert sphere == {"trigger": True, "center": [-1, 2, 3], "type": "sphere", "radius": 1.5}  # x mirrored
+	assert node["extras"]["rigidbody"] == {"mass": 2.0, "kinematic": True, "gravity": True}
+	# the collision mesh is in the file, but no node draws it
+	assert "mesh" not in node and g["meshes"][0]["name"] == "collision"
+	assert "material" not in g["meshes"][0]["primitives"][0]
+
+
+def test_colliders_are_off_by_default():
+	g = GLB(export_gameobject(collided_gameobject()))
+	assert "extras" not in g["nodes"][0] and "meshes" not in g.json
+
+
 def test_normals_are_made_unit_length():
 	m = mesh(QUAD["vertices"], [(0, 0, 2), (1, 1, 1), (0, 0, 0), (0, 0, 1)], QUAD["uvs"], [0, 1, 2])
 	g = GLB(export_mesh(m))
@@ -657,3 +861,180 @@ def test_node_rotations_are_unit_length():
 	assert nodes[zero] == {"name": "zero"}
 	assert nodes[long] == {"name": "long"}
 	assert nodes[half]["rotation"] == pytest.approx([0, -math.sqrt(0.5), 0, math.sqrt(0.5)])
+
+
+# External files: images and each mesh's data in a shared folder, named by
+# their content, and the .glb pointing at them by relative URI.
+
+def external_export(shared, out, *meshes):
+	"A .glb in out with (mesh, materials) on a node each, its images and mesh data in shared; its GLB"
+	w = GLTFWriter(external=ExternalFiles(str(shared)))
+	for m, materials in meshes:
+		w.add_root(w.add_node(m.name, mesh=w.add_mesh(m, materials)))
+	out.mkdir(exist_ok=True)
+	(out / "x.glb").write_bytes(w.glb(str(out)))
+	return GLB((out / "x.glb").read_bytes(), base=out)
+
+
+def test_external_files_are_shared(tmp_path):
+	shared = tmp_path / "shared"
+	quad = mesh(**QUAD, indices=[0, 1, 2, 0, 2, 3], name="quad")
+	tri = mesh(**QUAD, indices=[0, 1, 2], name="tri")
+	a = external_export(shared, tmp_path / "a", (quad, [material("one", tex=Pointer(texture(), 5))]))
+	# the same mesh and pixels, read again, with another material and texture name
+	quad_again = mesh(**QUAD, indices=[0, 1, 2, 0, 2, 3], name="quad")
+	b = external_export(shared, tmp_path / "b", (tri, []), (quad_again, [material("two", tex=Pointer(texture("other"), 6))]))
+
+	assert len(list(shared.glob("*.png"))) == 1
+	assert len(list(shared.glob("*.bin"))) == 2  # the quad once, and the triangle
+	[png] = shared.glob("*.png")
+	for g in (a, b):
+		[image] = g["images"]
+		assert image["uri"] == "../shared/" + png.name and "bufferView" not in image
+		assert image["mimeType"] == "image/png"
+		assert g.image(0) == png.read_bytes()
+		# nothing left for a BIN chunk: every buffer is a file
+		assert g.bin == b"" and all("uri" in buf for buf in g["buffers"])
+	assert a["images"][0]["name"] == "tex" and b["images"][0]["name"] == "other"
+	quad_uri = a["buffers"][0]["uri"]
+	assert quad_uri in [buf["uri"] for buf in b["buffers"]]
+	# and the data reads back through them
+	p = b["meshes"][1]["primitives"][0]
+	assert b.accessor(p["attributes"]["POSITION"]) == approx([(0, 0, 0), (-1, 0, 0), (-1, 1, 0), (0, 1, 0)])
+	assert b.accessor(p["indices"]) == [0, 2, 1, 0, 3, 2]
+
+
+def test_external_mesh_data_does_not_depend_on_its_material(tmp_path):
+	shared = tmp_path / "shared"
+	no_uvs = dict(QUAD, uvs=[])
+	# a textured material on a mesh without UVs becomes an untextured copy: the mesh's data is the same
+	external_export(shared, tmp_path / "a", (mesh(**no_uvs, indices=[0, 1, 2]), [material(tex=Pointer(texture(), 5))]))
+	external_export(shared, tmp_path / "b", (mesh(**no_uvs, indices=[0, 1, 2]), []))
+	assert len(list(shared.glob("*.bin"))) == 1
+
+
+def test_external_same_mesh_twice_in_one_file(tmp_path):
+	"Added once per set of materials, the mesh's data is one buffer"
+	quad = mesh(**QUAD, indices=[0, 1, 2], name="quad")
+	g = external_export(tmp_path / "shared", tmp_path / "a", (quad, [material("one")]), (quad, [material("two")]))
+	assert len(g["meshes"]) == 2 and len(g["buffers"]) == 1
+
+
+def test_external_skin_and_clips_stay_in_the_glb(tmp_path):
+	shared = tmp_path / "shared"
+	w = GLTFWriter(external=ExternalFiles(str(shared)))
+	w.add_gameobject(rig(clips=[clip(position_curves=[curve_on("bone", key(0.0, vec(1, 0, 0), vec(1, 0, 0)), key(1.0, vec(2, 0, 0), vec(1, 0, 0)))])]))
+	g = GLB(w.glb(str(tmp_path)), base=tmp_path)
+	assert len(g["buffers"]) == 2 and "uri" not in g["buffers"][0]
+
+	def buffer(accessor):
+		return g["bufferViews"][g["accessors"][accessor]["bufferView"]]["buffer"]
+
+	mesh_accessors = [a for m in g["meshes"] for p in m["primitives"] for a in [*p["attributes"].values(), p["indices"]]]
+	assert {buffer(a) for a in mesh_accessors} == {1}  # skin weights included
+	assert buffer(g["skins"][0]["inverseBindMatrices"]) == 0
+	samplers = g["animations"][0]["samplers"]
+	assert {buffer(s[k]) for s in samplers for k in ("input", "output")} == {0}
+	assert g.accessor(g["meshes"][0]["primitives"][0]["attributes"]["WEIGHTS_0"])[1] == approx([(1, 0, 0, 0)])[0]
+
+
+def test_external_terrain(tmp_path):
+	shared = tmp_path / "shared"
+	w = GLTFWriter(external=ExternalFiles(str(shared)))
+	w.add_root(w.add_node("t", mesh=w.add_terrain(terrain_data())))
+	g = GLB(w.glb(str(tmp_path)), base=tmp_path)
+	[p] = g["meshes"][0]["primitives"]
+	assert len(g.accessor(p["attributes"]["POSITION"])) == 33 * 33
+	assert g.bin == b"" and len(g["buffers"]) == 1
+	# the base map, the splat, the control map and the lightmap
+	assert len(g["images"]) == 4 and all(i["uri"].startswith("shared/") for i in g["images"])
+	assert len(list(shared.glob("*.png"))) == 4
+
+
+def test_external_uris(tmp_path):
+	w = GLTFWriter(external=ExternalFiles(str(tmp_path / "shared files")))
+	w.add_root(w.add_node("m", mesh=w.add_mesh(mesh(**QUAD, indices=[0, 1, 2]))))
+	name = GLB(w.glb(str(tmp_path / "shared files")), base=tmp_path / "shared files")["buffers"][0]["uri"]
+	assert re.fullmatch(r"[0-9a-f]{16}\.bin", name)
+	tiles = tmp_path / "tiles" / "x"
+	tiles.mkdir(parents=True)
+	assert GLB(w.glb(str(tiles)), base=tiles)["buffers"][0]["uri"] == "../../shared%20files/" + name
+
+
+def test_external_files_put(tmp_path):
+	store = ExternalFiles(str(tmp_path / "d"))
+	name = store.put(b"data", "bin")
+	assert name == hashlib.sha256(b"data").hexdigest()[:16] + ".bin"
+	assert store.put(b"data", "bin") == name
+	assert store.written == {name} and store.names == {name}
+	assert os.listdir(tmp_path / "d") == [name]  # no temporary file left
+	# another export's file of that name is not written again
+	other = ExternalFiles(str(tmp_path / "d"))
+	(tmp_path / "d" / name).write_bytes(b"kept")
+	assert other.put(b"data", "bin") == name and other.written == set()
+	assert (tmp_path / "d" / name).read_bytes() == b"kept"
+
+
+# Clips in files of their own
+
+def split_rig():
+	"The rig with two clips, a material-only clip and a collider"
+	move = clip("move", position_curves=[curve_on("bone", key(0.0, vec(1, 0, 0), vec(1, 0, 0)), key(1.0, vec(2, 0, 0), vec(1, 0, 0)))])
+	turn = clip("turn", rotation_curves=[curve_on("bone",
+		key(0.0, fdict(x=0, y=0, z=0, w=1), fdict(x=0, y=0, z=0, w=0)), key(1.0, fdict(x=0, y=1, z=0, w=0), fdict(x=0, y=0, z=0, w=0)))])
+	scroll = clip("scroll", float_curves=[float_curve("_MainTex.offset.x", key(0.0, 0.0, 1.0), key(1.0, 1.0, 1.0))])
+	return rig(clips=[move, turn, scroll])
+
+
+def test_split_clips():
+	w = GLTFWriter()
+	w.add_gameobject(split_rig())
+	whole = GLB(w.glb())
+	base, clips = w.split_clips()
+	assert [name for name, _ in clips] == ["move", "turn", "scroll"]
+
+	model = GLB(base.glb())
+	assert "animations" not in model.json and "extras" not in model.json
+	assert model["nodes"] == whole["nodes"]
+	assert model["meshes"] == whole["meshes"] and model["skins"] == whole["skins"]
+	skinned = model["meshes"][0]["primitives"][0]["attributes"]
+	for attribute, accessor in skinned.items():
+		assert model.accessor(accessor) == whole.accessor(whole["meshes"][0]["primitives"][0]["attributes"][attribute])
+	assert model.accessor(model["skins"][0]["inverseBindMatrices"]) == whole.accessor(whole["skins"][0]["inverseBindMatrices"])
+
+	for (name, writer), animation in zip(clips, whole["animations"]):
+		g = GLB(writer.glb())
+		# the same nodes in the same order, without meshes or skins
+		assert [n.get("name") for n in g["nodes"]] == [n.get("name") for n in whole["nodes"]]
+		assert [n.get("children") for n in g["nodes"]] == [n.get("children") for n in whole["nodes"]]
+		assert not any("mesh" in n or "skin" in n for n in g["nodes"])
+		for key in ("meshes", "skins", "materials", "images"):
+			assert key not in g.json
+		[a] = g["animations"]
+		assert a["name"] == name == animation["name"]
+		assert a["channels"] == animation["channels"]
+		for s, ws in zip(a["samplers"], animation["samplers"]):
+			assert g.accessor(s["input"]) == whole.accessor(ws["input"])
+			assert g.accessor(s["output"]) == whole.accessor(ws["output"])
+	scroll = GLB(clips[2][1].glb())
+	assert "animations" not in scroll.json
+	assert scroll["extras"]["material_clips"] == whole["extras"]["material_clips"]
+
+
+def test_split_clips_with_external_files(tmp_path):
+	w = GLTFWriter(external=ExternalFiles(tmp_path / "shared"))
+	w.add_gameobject(split_rig())
+	base, clips = w.split_clips()
+	model = GLB(base.glb(tmp_path), base=tmp_path)
+	assert [b.get("uri", "").startswith("shared/") for b in model["buffers"]] == [False, True]
+	assert len(model.accessor(model["meshes"][0]["primitives"][0]["attributes"]["POSITION"])) == 3
+	move = GLB(clips[0][1].glb(tmp_path), base=tmp_path)
+	assert [b.get("uri") for b in move["buffers"]] == [None]  # the clip's own samples only
+
+
+def test_split_clips_without_clips():
+	w = GLTFWriter()
+	w.add_gameobject(gameobject_tree())
+	base, clips = w.split_clips()
+	assert clips == []
+	assert base.glb() == w.glb()
