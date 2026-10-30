@@ -5,6 +5,7 @@ on made-up files from tests/synth.py.
 """
 
 import io
+import struct
 
 import pytest
 
@@ -58,6 +59,24 @@ def test_contents_is_memoized(asset):
 	assert obj.read() is obj.contents  # read() returns the memoized object once there is one
 
 
+def test_format7_48bit_ids():
+	# two IDs share their low 32 bits; the pointer's m_FileID carries the top 16
+	asset = open_asset(synth.big_id_file())
+	assert asset.objects.keys() == {1, synth.BIG_A, synth.BIG_B}
+	ptr = asset.objects[1].read()["m_Other"]
+	assert (ptr.file_id, ptr.path_id) == (0, synth.BIG_B)
+	assert ptr.object is asset.objects[synth.BIG_B]
+	assert ptr.resolve().script == "second"
+
+
+def test_format7_external_pointer():
+	# file index 1 with the top bits of an ID in the other file
+	data = synth.serialized_file({1000: synth.THING}, [(1, 1000, 1000, synth.thing(0, 0.0, False, "", synth.big_pointer(1, synth.BIG_A), []))],
+		externals=["customassetbundle-other"], format=7)
+	ptr = open_asset(data).objects[1].read()["m_Other"]
+	assert (ptr.file_id, ptr.path_id) == (1, synth.BIG_A)
+
+
 def test_get_object_by_path():
 	asset = open_asset(synth.bundle_file())
 	assert asset.get_object_by_path("assets/a.txt") is asset.objects[2]
@@ -87,6 +106,7 @@ def test_unnamed_file():
 def test_no_type_trees_fall_back_to_structs_dat():
 	# like the 32 untyped map tiles: a format-6 file with zero type trees
 	asset = open_asset(synth.serialized_file({}, [(1, 49, 49, synth.text_asset("n", "s"))]))
+	assert asset.objects[1].uses_structs_dat
 	assert asset.objects[1].read().script == "s"
 
 
@@ -94,9 +114,36 @@ def test_no_type_trees_unknown_class():
 	asset = open_asset(synth.serialized_file({}, [(1, 7, 7, b"\0" * 8)]))
 	asset.load()
 	assert asset.types[7] is None  # class 7 is not in structs.dat: no schema, but the file still opens
+	with pytest.raises(ValueError, match="No type tree for class 7"):
+		asset.objects[1].read()
+
+
+def test_structs_dat_layout_that_does_not_fit():
+	# a TextAsset with 8 more bytes than structs.dat's layout reads
+	asset = open_asset(synth.serialized_file({}, [(1, 49, 49, synth.text_asset("n", "s") + bytes(8))]))
+	with pytest.raises(ValueError, match="structs.dat doesn't fit: read 20 of 28 bytes"):
+		asset.objects[1].read()
+
+
+def test_structs_dat_layout_that_fails():
+	# too short for the layout: the reader's own error is wrapped
+	asset = open_asset(synth.serialized_file({}, [(1, 49, 49, synth.pack_string("n"))]))
+	with pytest.raises(ValueError, match="structs.dat doesn't fit"):
+		asset.objects[1].read()
+
+
+def test_structs_dat_for_an_unknown_type_id():
+	# type ID 50 has no tree here (class 49 does): its layout comes from structs.dat
+	asset = open_asset(synth.serialized_file({49: synth.TEXT_ASSET}, [(1, 50, 49, synth.text_asset("n", "s"))]))
+	assert asset.objects[1].uses_structs_dat
+	assert asset.objects[1].read().script == "s"
+
+
+def test_own_type_tree_is_not_structs_dat(asset):
+	assert not asset.objects[1].uses_structs_dat
 
 
 def test_truncated_object_is_an_error():
 	data = synth.serialized_file({49: synth.TEXT_ASSET}, [(1, 49, 49, synth.pack_string("only a name"))])
-	with pytest.raises(Exception):
+	with pytest.raises(struct.error):  # m_Script's length is past the end
 		open_asset(data).objects[1].read()
