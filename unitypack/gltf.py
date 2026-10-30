@@ -136,7 +136,7 @@ def _unit(x, y, z):
 
 def _unit_quaternion(q):
 	"A rotation of length 1; a zero quaternion (some files store one) is no rotation"
-	length = math.sqrt(sum(c * c for c in q))
+	length = math.sqrt(float_sum(c * c for c in q))
 	return [c / length for c in q] if length else [0.0, 0.0, 0.0, 1.0]
 
 
@@ -425,7 +425,7 @@ class GLTFWriter:
 				for k in range(3):
 					normals[i][k] += face[k]
 		for v in normals:
-			length = math.sqrt(sum(c * c for c in v))
+			length = math.sqrt(float_sum(c * c for c in v))
 			v[:] = [c / length for c in v] if length else [0.0, 1.0, 0.0]
 
 		attrs = {
