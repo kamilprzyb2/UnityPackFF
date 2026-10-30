@@ -1,0 +1,40 @@
+{
+ "DongResources_04_02.resourceFile": {
+  "CustomAssetBundle-DongResources_04_02": {
+   "size": [
+    129,
+    129
+   ],
+   "levels": 3,
+   "scale": [
+    4.0,
+    600.0,
+    4.0
+   ],
+   "heights": [
+    12303,
+    14132
+   ],
+   "heights_sha256": "313238c54299e9fc",
+   "shifts": 959,
+   "shift_flags": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    8,
+    9,
+    10
+   ],
+   "lod": {
+    "minmax_equal": 120,
+    "minmax_one_step": 50,
+    "minmax_other": 0,
+    "error_equal": 77,
+    "error_larger": 8,
+    "error_smaller": 0
+   }
+  }
+ }
+}

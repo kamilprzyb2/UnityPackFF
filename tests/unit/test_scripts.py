@@ -6,8 +6,10 @@ import json
 import subprocess
 import sys
 
+from PIL import Image
+
 from tests import synth
-from tests.unit.support import ROOT, run_script as run
+from tests.unit.support import ROOT, open_asset, run_script as run
 
 
 def test_index_bundles(tmp_path):
@@ -28,6 +30,155 @@ def test_index_bundles(tmp_path):
 		["-", "cache/CustomAssetBundle-y", "2", "0", "TextAsset", "assets/a.txt"],
 		["-", "cache/CustomAssetBundle-z", "", "", "", "assets/gone.txt"],  # a null pointer
 	]
+
+
+def test_unityextract_shaders(tmp_path):
+	# FusionFall's shaders have an empty m_Name: the file is named from the source
+	shader = synth.Node("Shader", "Base", children=[synth.string_node("m_Name"), synth.string_node("m_Script")])
+	sources = ['Shader "normal_blendOneOne" {\n SubShader {}\n}', 'Shader "SkinnedToonShading" {}', "no name here"]
+	objects = [(i + 1, 48, 48, synth.pack_string("") + synth.pack_string(src)) for i, src in enumerate(sources)]
+	(tmp_path / "X.resourceFile").write_bytes(synth.unityweb([("CustomAssetBundle-x", synth.serialized_file({48: shader}, objects))]))
+	run("unityextract.py", "--shaders", "-o", tmp_path / "out", tmp_path / "X.resourceFile")
+	out = tmp_path / "out"
+	assert sorted(p.name for p in out.iterdir()) == ["SkinnedToonShading.shader", "normal_blendOneOne.shader", "shader_3.shader"]
+	assert (out / "normal_blendOneOne.shader").read_text() == sources[0]
+
+
+# dump_script.py on made-up script objects: a script's own type tree gives
+# its objects a negative class ID
+
+import struct  # noqa: E402
+
+COLOR = synth.Node("ColorRGBA", "data", 16, [synth.float_node(c) for c in "rgba"])
+
+
+def mono_behaviour(*fields):
+	return synth.Node("MonoBehaviour", "Base", children=[
+		synth.pptr_node("m_GameObject", "GameObject"), synth.Node("UInt8", "m_Enabled", 1, flags=synth.ALIGN),
+		synth.pptr_node("m_Script", "MonoScript"), synth.string_node("m_Name"), *fields])
+
+
+def mono_behaviour_data(name, script_id, data):
+	return struct.pack("<iiB3xii", 0, 0, 1, 0, script_id) + synth.pack_string(name) + data
+
+
+PALETTES = mono_behaviour(synth.Node("ColorSet", "cSkinColor", children=[synth.array_node("skinColor", COLOR)]))
+ROWS = mono_behaviour(synth.array_node("TableElement", synth.Node("Row", "data", children=[
+	synth.int_node("iType"), synth.string_node("strHairMesh")])))
+
+
+def script_file():
+	"A palette object named male.bsd, outside the container, and a table at all_hnpc.asset"
+	colors = [(0.25, 0.5, 0.75, 1.0), (1.0, 0.0, 0.0, 0.5)]
+	palettes = struct.pack("<I", len(colors)) + b"".join(struct.pack("<4f", *c) for c in colors)
+	rows = struct.pack("<I", 2) + struct.pack("<i", 47) + synth.pack_string("f_head_014_type01.nif") + \
+		struct.pack("<i", 3) + synth.pack_string("null")
+	return synth.serialized_file({142: synth.ASSET_BUNDLE, -1: PALETTES, -2: ROWS}, [
+		(1, 142, 142, synth.asset_bundle("bundle", [(0, 3)], [("all_hnpc.asset", 0, 1, (0, 3))])),
+		(2, -1, 114, mono_behaviour_data("male.bsd", 9, palettes)),
+		(3, -2, 114, mono_behaviour_data("all_hnpc", 0, rows)),
+	])
+
+
+def test_dump_script(tmp_path):
+	(tmp_path / "f").write_bytes(script_file())
+	# by name; colours as [r, g, b, a], pointers as file and path IDs or null
+	bsd = json.loads(run("dump_script.py", tmp_path / "f", "MALE.BSD"))
+	assert bsd["cSkinColor"]["skinColor"] == [[0.25, 0.5, 0.75, 1.0], [1.0, 0.0, 0.0, 0.5]]
+	assert bsd["m_Script"] == {"file_id": 0, "path_id": 9}
+	assert bsd["m_GameObject"] is None
+	# by container path, into a file
+	run("dump_script.py", tmp_path / "f", "all_hnpc.asset", "-o", tmp_path / "hnpc.json")
+	hnpc = json.loads((tmp_path / "hnpc.json").read_text())
+	assert hnpc["TableElement"] == [{"iType": 47, "strHairMesh": "f_head_014_type01.nif"}, {"iType": 3, "strHairMesh": "null"}]
+	# several: by the names given
+	both = json.loads(run("dump_script.py", tmp_path / "f", "male.bsd", "all_hnpc"))
+	assert list(both) == ["male.bsd", "all_hnpc"] and both["all_hnpc"] == hnpc
+
+
+def test_dump_script_lists_and_rejects(tmp_path):
+	(tmp_path / "f").write_bytes(script_file())
+	rows = [line.split("\t") for line in run("dump_script.py", tmp_path / "f").splitlines()]
+	assert [(r[0], r[2], r[3]) for r in rows] == [("2", "male.bsd", ""), ("3", "all_hnpc", "all_hnpc.asset")]
+	r = subprocess.run([sys.executable, str(ROOT / "bin" / "dump_script.py"), str(tmp_path / "f"), "nope"],
+		capture_output=True, text=True, env={"PYTHONPATH": str(ROOT)})
+	assert r.returncode != 0 and "no script object 'nope'" in r.stderr
+
+
+# dump_terrain.py / replace_terrain.py on a made-up 33 x 33 heightmap
+
+def terrain_heights(f):
+	t = open_asset(f.read_bytes()).objects[1].read()
+	return t.heights, t.shifts
+
+
+def test_dump_terrain(tmp_path):
+	heights = [x * 100 + z for x in range(33) for z in range(33)]  # x-major
+	(tmp_path / "t").write_bytes(synth.terrain_file(heights, [(1, 2, 8)]))
+	run("dump_terrain.py", tmp_path / "t", tmp_path / "h.png")
+
+	img = Image.open(tmp_path / "h.png")
+	assert img.mode in ("I;16", "I") and img.size == (33, 33)
+	# north up: column x, row 32 - z
+	assert img.getpixel((5, 32)) == 500  # x 5, z 0
+	assert img.getpixel((5, 0)) == 532  # x 5, z 32
+	assert img.getpixel((0, 30)) == 2
+	shifts = json.loads((tmp_path / "h.shifts.json").read_text())
+	assert shifts["shifts"] == [[1, 2, 8]]
+	assert (shifts["width"], shifts["max_height"], shifts["scale"]) == (33, 32766, [4.0, 600.0, 4.0])
+
+
+def test_replace_terrain(tmp_path):
+	heights = [x * 100 + z for x in range(33) for z in range(33)]
+	(tmp_path / "t").write_bytes(synth.terrain_file(heights, [(1, 2, 8)]))
+	run("dump_terrain.py", tmp_path / "t", tmp_path / "h.png")
+
+	img = Image.open(tmp_path / "h.png")
+	img.putpixel((5, 32), 32766)  # x 5, z 0
+	img.save(tmp_path / "h2.png")
+	(tmp_path / "s.json").write_text(json.dumps({"shifts": [[3, 4, 2], [0, 0, 5]]}))
+
+	run("replace_terrain.py", tmp_path / "h2.png", tmp_path / "t", "-o", tmp_path / "t2")
+	new, shifts = terrain_heights(tmp_path / "t2")
+	assert new == heights[:5 * 33] + [32766] + heights[5 * 33 + 1:]
+	assert shifts == [(1, 2, 8)]  # kept
+
+	run("replace_terrain.py", tmp_path / "h.png", tmp_path / "t2", "--shifts", tmp_path / "s.json")  # in place
+	new, shifts = terrain_heights(tmp_path / "t2")
+	assert new == heights
+	assert shifts == [(3, 4, 2), (0, 0, 5)]
+
+
+def test_replace_terrain_8_bit(tmp_path):
+	# as older versions of dump_terrain.py wrote them: one row per x, 255 = 20000
+
+	(tmp_path / "t").write_bytes(synth.terrain_file([0] * (33 * 33)))
+	img = Image.new("RGB", (33, 33))
+	img.putpixel((7, 2), (255, 255, 255))  # x 2, z 7
+	img.save(tmp_path / "old.png")
+	run("replace_terrain.py", tmp_path / "old.png", tmp_path / "t")
+	new, _ = terrain_heights(tmp_path / "t")
+	assert new[2 * 33 + 7] == 20000
+	assert sum(new) == 20000
+
+
+def test_replace_terrain_rejects_old_usage(tmp_path):
+	(tmp_path / "t").write_bytes(synth.terrain_file([0] * (33 * 33)))
+	r = subprocess.run([sys.executable, str(ROOT / "bin" / "replace_terrain.py"), "x.png", "0x1234", str(tmp_path / "t")],
+		capture_output=True, text=True, env={"PYTHONPATH": str(ROOT)})
+	assert r.returncode != 0
+	assert "no longer takes an offset" in r.stderr
+
+
+def test_export_gltf_rejects_untyped_file(tmp_path):
+	# like the map tiles built without type trees: no traceback, a reason
+	(tmp_path / "BuildPlayer-Map").write_bytes(synth.serialized_file({}, [(1, 104, 104, bytes(8))]))
+	r = subprocess.run([sys.executable, str(ROOT / "bin" / "export_gltf.py"), str(tmp_path / "BuildPlayer-Map"), "-o", str(tmp_path)],
+		capture_output=True, text=True, env={"PYTHONPATH": str(ROOT)})
+	assert r.returncode != 0
+	assert "has no type trees" in r.stderr
+	assert "Traceback" not in r.stderr
+	assert not list(tmp_path.glob("*.glb"))
 
 
 # fetch_bundles.py on made-up archives, served from a folder (file://) or a

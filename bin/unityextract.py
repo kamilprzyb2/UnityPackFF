@@ -8,6 +8,7 @@ from argparse import ArgumentParser
 from io import BytesIO
 from unitypack.asset import Asset
 from unitypack.export import OBJMesh
+from unitypack.gltf import export_mesh, shader_name
 from unitypack.utils import extract_audioclip_samples
 
 
@@ -35,6 +36,7 @@ class UnityExtract:
 		p.add_argument("--as-asset", action="store_true", help="Force open files as Asset format")
 		p.add_argument("--filter", nargs="*", help="Filter extraction for a specific name")
 		p.add_argument("-n", "--dry-run", action="store_true", help="Skip writing files")
+		p.add_argument("--glb", action="store_true", help="Write meshes as glTF binaries (.glb) instead of OBJ")
 		self.args = p.parse_args(args)
 
 		self.handle_formats = []
@@ -92,7 +94,9 @@ class UnityExtract:
 			return False
 
 		d = obj.read()
-		if self.args.filter and not matches(d.name.lower(), self.args.filter):
+		# a Shader's m_Name is empty in some builds; its source names it
+		name = (shader_name(d) or "shader_%d" % obj.path_id) if obj.type == "Shader" else d.name
+		if self.args.filter and not matches(name.lower(), self.args.filter):
 			return
 
 		if obj.type == "AudioClip":
@@ -108,12 +112,16 @@ class UnityExtract:
 			self.write_to_file(filename, d.movie_data, mode="wb")
 
 		elif obj.type == "Shader":
-			self.write_to_file(d.name + ".cg", d.script)
+			# ShaderLab source, with any compiled programs inside it
+			self.write_to_file(name + ".shader", d.script)
 
 		elif obj.type == "Mesh":
 			try:
-				mesh_data = OBJMesh(d).export()
-				self.write_to_file(d.name + ".obj", mesh_data, mode="w")
+				if self.args.glb:
+					self.write_to_file(d.name + ".glb", export_mesh(d), mode="wb")
+				else:
+					mesh_data = OBJMesh(d).export()
+					self.write_to_file(d.name + ".obj", mesh_data, mode="w")
 			except NotImplementedError as e:
 				print("WARNING: Could not extract %r (%s)" % (d, e))
 				#mesh_data = pickle.dumps(d._obj)

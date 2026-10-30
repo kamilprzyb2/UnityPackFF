@@ -1,0 +1,70 @@
+{
+ "CharacterSelection_wear_face.resourceFile": {
+  "wear/f_face_001_type01.nif": {
+   "nodes": 158,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "skins": 2,
+   "animations": 0,
+   "images": [],
+   "sha256": "c9ce500eadefd6aa",
+   "warnings": 3
+  },
+  "wear/f_face_001_type02.nif": {
+   "nodes": 158,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "skins": 2,
+   "animations": 0,
+   "images": [],
+   "sha256": "f6646e14f35afb0b",
+   "warnings": 3
+  },
+  "wear/m_face_001_type01.nif": {
+   "nodes": 130,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "skins": 2,
+   "animations": 0,
+   "images": [],
+   "sha256": "fc8885e6dab9a408",
+   "warnings": 3
+  },
+  "wear/m_face_001_type02.nif": {
+   "nodes": 130,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "skins": 2,
+   "animations": 0,
+   "images": [],
+   "sha256": "d15455e33cf440fb",
+   "warnings": 3
+  }
+ },
+ "Nano_001.resourceFile": {
+  "nano/nano_buttercup.kfm": {
+   "nodes": 60,
+   "meshes": 2,
+   "primitives": 2,
+   "materials": 2,
+   "skins": 2,
+   "animations": 32,
+   "images": [
+    [
+     256,
+     256
+    ],
+    [
+     256,
+     2
+    ]
+   ],
+   "sha256": "e71c62dbfd69de50",
+   "warnings": 1
+  }
+ }
+}

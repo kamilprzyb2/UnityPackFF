@@ -8,6 +8,10 @@ Command-line tools that run the same operations as the integration tests, but wr
 | `survey.py` | Describes every file: format, type trees, class IDs, what UnityPackFF can read | `integration/test_survey.py` |
 | `roundtrip.py` | ffbuildtool extract → UnityPackFF save → ffbuildtool pack → re-open and compare; optionally a whole playable build | `integration/test_roundtrip.py` |
 | `meshes.py` | Exports every mesh of an archive as OBJ, plus the skin weights of skinned meshes | `integration/test_meshes.py` |
+| `clips.py` | Reads every AnimationClip of an archive and samples each curve at the clip's rate | `integration/test_clips.py` |
+| `terrain.py` | Dumps every terrain of an archive with `bin/dump_terrain.py` and compares Unity's level-of-detail data with what `TerrainData` works out | `integration/test_terrain.py` |
+| `gltf.py` | Exports every prefab of an archive, or a map tile's whole scene, as glTF (`.glb`) and runs the Khronos validator on them when it's installed | `integration/test_gltf.py` |
+| `mapdata.py` | Reads the attribute grid and colours of map tiles and the music zones of `main.unity3d`, and dumps them with `bin/dump_mapdata.py` | `integration/test_mapdata.py` |
 | `_common.py` | The options all the scripts share (not run directly) | |
 
 Run them from the repository root (`UnityPackFF/`) as modules of the `tests` package: `python3 -m tests.tools.<name>`, without `.py`.
@@ -112,3 +116,63 @@ Prints how many meshes each archive has and how many of them are skinned. Writes
 | `<path ID>_<name>.skin.json` | skinned meshes only: per vertex, its `[bone index, weight]` pairs (1 to 4, adding up to 1). The bone index points into the `m_Bones` list of the mesh's SkinnedMeshRenderer |
 
 and `out/meshes/<build>.json` with the statistics the integration test checks (vertex and triangle counts, OBJ digest, how many vertices have how many weights).
+
+## clips.py
+
+```sh
+python3 -m tests.tools.clips --build 104 --bundle FutureNano.resourceFile
+python3 -m tests.tools.clips --build 1013 --bundle Nano_001.resourceFile
+```
+
+Prints how many clips each archive has and how many store their rotations compressed. Writes, per serialized file, `out/clips/<build>/<archive>/<file>/<path ID>_<name>.json` for each clip: its name, sample rate, length and events, then per curve its kind (`rotation`, `position`, `scale` or `float`), the transform path it moves (for a `float` curve, path and property), its keys, and its values at every frame from 0 to the clip's length. Rotations are sampled as `evaluate()` returns them, without normalizing. Also writes `out/clips/<build>.json` with the statistics the integration test checks (curve and key counts per kind, length, event names, a digest of the samples).
+
+## terrain.py
+
+```sh
+python3 -m tests.tools.terrain --build 104                  # DongResources_04_02 (Orchid Bay)
+python3 -m tests.tools.terrain --build 1013 --bundle DongResources_07_08.resourceFile
+```
+
+Without `--bundle` or `--all` it takes `DongResources_04_02.resourceFile`, the one terrain archive in the curated set. Prints, per terrain, its size, how many shifted vertices it has, and how Unity's level-of-detail data compares with a recomputation from the heights:
+
+| Count | Meaning |
+| --- | --- |
+| `minmax_equal` / `minmax_one_step` | patch min/max heights equal to ours as float32, or one float32 step away (Unity's own rounding) |
+| `minmax_other` | further apart (0 on every terrain checked) |
+| `error_equal` | patch error equal to the bilinear one, to 0.1% |
+| `error_larger` | larger: only on terrains with shifts, which the engine also counts |
+| `error_smaller` | smaller (0 on every terrain checked) |
+
+Writes `out/terrain/<build>/<archive>/<file>.png` and `.shifts.json` as `bin/dump_terrain.py` writes them (a 16-bit heightmap, north up, and the shifted vertices), and `out/terrain/<build>.json` with the statistics the integration test checks.
+
+## gltf.py
+
+```sh
+python3 -m tests.tools.gltf --build 104 --bundle FutureNano.resourceFile
+python3 -m tests.tools.gltf --build all --bundle World_shared_part1.resourceFile
+python3 -m tests.tools.gltf --build 1013 --bundle Map_04_02.unity3d    # a whole scene
+```
+
+For a `Map_XX_YY.unity3d` archive it exports the scene instead: every active GameObject, the terrain (shifts applied, splats blended into a base map) and skinned, animated props; the archives the scene points into (its DongResources, World_shared parts, ...) are unpacked and resolved too.
+
+Exports every prefab (a GameObject listed in the archive's AssetBundle container) with `unitypack.gltf`: its Transform tree, meshes and materials (textures embedded), skins and animation clips. Pointers into other archives (most textures) resolve against the build's curated archives only, unpacked as needed, so the result doesn't depend on what else is in the cache.
+
+Writes `out/gltf/<build>/<archive>/<container path>.glb` and `out/gltf/<build>.json`: per prefab, its node, mesh, primitive, material, skin and animation counts, image sizes, a digest of every accessor, the exporter's warnings and, with the validator, its error and warning counts.
+
+**The Khronos glTF validator** is optional. Install the npm package somewhere and point `UNITYPACKFF_GLTF_VALIDATOR` at that folder (Node.js must be on `PATH`):
+
+```sh
+mkdir -p ~/gltf-validator && npm install --prefix ~/gltf-validator gltf-validator
+export UNITYPACKFF_GLTF_VALIDATOR=~/gltf-validator
+```
+
+`integration/test_gltf.py` then also requires every exported file to pass it with no errors and no warnings.
+
+## mapdata.py
+
+```sh
+python3 -m tests.tools.mapdata --build 104                  # Map_04_02 and main.unity3d
+python3 -m tests.tools.mapdata --build 1013 --bundle Map_07_08.unity3d
+```
+
+Without `--bundle` or `--all` it takes `Map_04_02.unity3d` and `main.unity3d`. Prints which kinds of map data each file has. Writes `out/mapdata/<build>/<file>.json` as `bin/dump_mapdata.py` writes them (the attribute grid as rows, z = 0 first, with a count per flag; fog, sky and light colours; music and ambient zones) and `out/mapdata/<build>.json` with the statistics the integration test checks.
