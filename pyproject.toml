@@ -7,7 +7,7 @@ name = "unitypack"
 version = "0.8.1"
 description = "Python implementation of the .unity3d format"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 authors = [{name = "Jerome Leclanche", email = "jerome@leclan.ch"}]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -15,11 +15,12 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
     "Topic :: Multimedia :: Graphics",
 ]
 dependencies = [
@@ -28,6 +29,11 @@ dependencies = [
     "Pillow",
     "tinytag",
     "wand",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7",
 ]
 
 [project.urls]
@@ -54,7 +60,10 @@ script-files = [
 include-package-data = false
 
 [tool.setuptools.packages]
-find = {namespaces = false}
+find = {namespaces = false, exclude = ["tests", "tests.*"]}
 
 [tool.setuptools.package-data]
 unitypack = ["classes.json", "strings.dat", "structs.dat"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
