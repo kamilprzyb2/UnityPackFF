@@ -43,6 +43,8 @@ Download = "https://github.com/HearthSim/UnityPack/tarball/master"
 [tool.setuptools]
 script-files = [
     "bin/additem.py",
+    "bin/dump_mapdata.py",
+    "bin/dump_script.py",
     "bin/dump_terrain.py",
     "bin/dumpxdt.py",
     "bin/fetch_bundles.py",
