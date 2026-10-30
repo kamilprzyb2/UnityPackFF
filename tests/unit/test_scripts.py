@@ -32,6 +32,18 @@ def test_index_bundles(tmp_path):
 	]
 
 
+def test_unityextract_shaders(tmp_path):
+	# FusionFall's shaders have an empty m_Name: the file is named from the source
+	shader = synth.Node("Shader", "Base", children=[synth.string_node("m_Name"), synth.string_node("m_Script")])
+	sources = ['Shader "normal_blendOneOne" {\n SubShader {}\n}', 'Shader "SkinnedToonShading" {}', "no name here"]
+	objects = [(i + 1, 48, 48, synth.pack_string("") + synth.pack_string(src)) for i, src in enumerate(sources)]
+	(tmp_path / "X.resourceFile").write_bytes(synth.unityweb([("CustomAssetBundle-x", synth.serialized_file({48: shader}, objects))]))
+	run("unityextract.py", "--shaders", "-o", tmp_path / "out", tmp_path / "X.resourceFile")
+	out = tmp_path / "out"
+	assert sorted(p.name for p in out.iterdir()) == ["SkinnedToonShading.shader", "normal_blendOneOne.shader", "shader_3.shader"]
+	assert (out / "normal_blendOneOne.shader").read_text() == sources[0]
+
+
 # dump_script.py on made-up script objects: a script's own type tree gives
 # its objects a negative class ID
 
@@ -156,6 +168,17 @@ def test_replace_terrain_rejects_old_usage(tmp_path):
 		capture_output=True, text=True, env={"PYTHONPATH": str(ROOT)})
 	assert r.returncode != 0
 	assert "no longer takes an offset" in r.stderr
+
+
+def test_export_gltf_rejects_untyped_file(tmp_path):
+	# like the map tiles built without type trees: no traceback, a reason
+	(tmp_path / "BuildPlayer-Map").write_bytes(synth.serialized_file({}, [(1, 104, 104, bytes(8))]))
+	r = subprocess.run([sys.executable, str(ROOT / "bin" / "export_gltf.py"), str(tmp_path / "BuildPlayer-Map"), "-o", str(tmp_path)],
+		capture_output=True, text=True, env={"PYTHONPATH": str(ROOT)})
+	assert r.returncode != 0
+	assert "has no type trees" in r.stderr
+	assert "Traceback" not in r.stderr
+	assert not list(tmp_path.glob("*.glb"))
 
 
 # fetch_bundles.py on made-up archives, served from a folder (file://) or a

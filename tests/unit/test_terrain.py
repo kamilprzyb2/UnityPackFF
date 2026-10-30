@@ -139,3 +139,104 @@ def test_save_round_trip():
 	t2 = open_asset(save(asset)).objects[1].read()
 	assert t2.heights == heights
 	assert t2.heightmap["m_PrecomputedError"] == pytest.approx(t.heightmap["m_PrecomputedError"])
+
+
+# TerrainData.mesh(): the surface with shifts applied, in Unity's coordinates
+
+def test_mesh_grid():
+	_, t = terrain(flat_with({(2, 5): 3000}))
+	positions, uvs, triangles = t.mesh()
+	assert len(positions) == SIZE * SIZE
+	assert len(triangles) == (SIZE - 1) ** 2 * 6
+	# vertex z * width + x is heightmap vertex (x, z)
+	assert positions[5 * SIZE + 2] == pytest.approx((8.0, 3000 / MAX_HEIGHT * 600, 20.0))
+	assert uvs[5 * SIZE + 2] == pytest.approx((8 / 128, 20 / 128))
+	assert uvs[-1] == (1.0, 1.0)
+
+
+def test_mesh_default_diagonal():
+	_, t = terrain()
+	a, b, c, d = 0, 1, SIZE, SIZE + 1
+	# split along (x, z)-(x + 1, z + 1): both triangles share a and d
+	assert t.mesh()[2][:6] == [a, c, d, a, d, b]
+
+
+def test_mesh_shift_moves_a_vertex_and_keeps_its_height():
+	_, t = terrain(flat_with({(5, 6): 2000}), [(5, 6, 2 | 8)])  # +x and +z
+	positions, uvs, _ = t.mesh()
+	v = 6 * SIZE + 5
+	assert positions[v] == pytest.approx((24.0, 2000 / MAX_HEIGHT * 600, 28.0))
+	# right above vertex (6, 7): a vertical step
+	assert positions[v][::2] == positions[7 * SIZE + 6][::2]
+	# texture coordinates follow the moved position
+	assert uvs[v] == pytest.approx((24 / 128, 28 / 128))
+
+
+@pytest.mark.parametrize("flags,move", [(1, (-4, 0)), (2, (4, 0)), (4, (0, -4)), (8, (0, 4)), (1 | 2 | 8, (0, 4))])
+def test_mesh_shift_directions(flags, move):
+	_, t = terrain(shifts=[(10, 10, flags)])
+	p = t.mesh()[0][10 * SIZE + 10]
+	assert (p[0] - 40, p[2] - 40) == move
+
+
+def test_mesh_cells_around_a_shift_with_even_sum_take_the_other_diagonal():
+	_, t = terrain(shifts=[(5, 7, 1)])
+	triangles = t.mesh()[2]
+
+	def cell(x, z):
+		i = (z * (SIZE - 1) + x) * 6
+		return triangles[i:i + 6]
+
+	def split(x, z, other):
+		a = z * SIZE + x
+		b, c, d = a + 1, a + SIZE, a + SIZE + 1
+		return [a, c, b, b, c, d] if other else [a, c, d, a, d, b]
+
+	# the four cells around (5, 7): (5, 7), (4, 7), (5, 6), (4, 6); x + z even for (5, 7) and (4, 6)
+	assert cell(5, 7) == split(5, 7, True)
+	assert cell(4, 6) == split(4, 6, True)
+	assert cell(4, 7) == split(4, 7, False)
+	assert cell(5, 6) == split(5, 6, False)
+	assert cell(3, 3) == split(3, 3, False)
+
+
+# blend_splats(): the splat textures blended by the control maps, as Unity's base map
+
+def test_blend_splats():
+	from PIL import Image
+	from unitypack.engine.terrain import blend_splats
+
+	red = Image.new("RGB", (4, 4), (255, 0, 0))
+	blue = Image.new("RGB", (4, 4), (0, 0, 255))
+	# left half all red (R channel), right half all blue (G channel)
+	control = Image.new("RGBA", (2, 1))
+	control.putdata([(255, 0, 0, 0), (0, 255, 0, 0)])
+	out = blend_splats([(red, (16, 16), (0, 0)), (blue, (16, 16), (0, 0))], [control], (128, 128), 8)
+	assert out.size == (8, 8)
+	assert out.getpixel((0, 4)) == (255, 0, 0)
+	assert out.getpixel((7, 4)) == (0, 0, 255)
+
+
+def test_blend_splats_tiles_each_splat():
+	from PIL import Image
+	from unitypack.engine.terrain import blend_splats
+
+	# a 2 x 1 splat, black then white, tiled every 32 units on a 128-unit terrain: 4 repeats in 8 pixels
+	splat = Image.new("RGB", (2, 1))
+	splat.putdata([(0, 0, 0), (255, 255, 255)])
+	control = Image.new("RGBA", (1, 1), (255, 0, 0, 0))
+	out = blend_splats([(splat, (32, 32), (0, 0))], [control], (128, 128), 8)
+	assert [out.getpixel((x, 0))[0] for x in range(8)] == [0, 255] * 4
+
+
+def test_terrain_without_shifts_field():
+	# terrains saved by newer Unity versions (some of Retrobution's) have no m_Shifts
+	_, t = terrain(flat_with({(17, 3): 5000}), [(5, 5, 2)])
+	del t.heightmap["m_Shifts"]
+	assert t.shifts == []
+	positions, _, _ = t.mesh()
+	assert positions[5 * SIZE + 5][0] == 20.0
+	t.set_heights(flat_with({(17, 3): 6000}))  # recomputes as without shifts
+	assert t.heightmap["m_PrecomputedError"][4] == pytest.approx(5000 / MAX_HEIGHT * 600)
+	with pytest.raises(ValueError, match="without m_Shifts"):
+		t.set_shifts([(1, 1, 1)])

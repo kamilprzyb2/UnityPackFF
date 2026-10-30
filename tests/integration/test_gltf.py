@@ -45,3 +45,24 @@ def test_export_gltf_script(build, bundle, unpacked, env_dir, tmp_path):
 	assert len(files) == count
 	for f in files:
 		GLB(f.read_bytes())
+
+
+@pytest.mark.bundles("Map_04_02.unity3d", "Map_00_00.unity3d")
+def test_scene(build, bundle, unpacked, expected, tmp_path):
+	from tests.tools.gltf import export_scenes
+
+	env = CuratedEnvironment(build)
+	try:
+		env.add_references(bundle)
+		stats = export_scenes(build, bundle, env.dir, tmp_path)
+	finally:
+		env.close()
+	files = [s.pop("_file") for s in stats.values()]
+	assert stats
+	expected.check("gltf-scene/" + bundle, stats)
+	if bundle.startswith("Map_04_02"):
+		assert all(s["terrains"] == 1 for s in stats.values())
+
+	if have_validator():
+		issues = validate(files)
+		assert {f: r for f, r in issues.items() if r["errors"] or r["warnings"]} == {}

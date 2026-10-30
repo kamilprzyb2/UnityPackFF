@@ -13,7 +13,7 @@
      256
     ]
    ],
-   "sha256": "8c52a95da5e969a0",
+   "sha256": "83c9d46364ff0e88",
    "warnings": 2
   },
   "nano/nano_eduardo.kfm": {
@@ -29,7 +29,7 @@
      256
     ]
    ],
-   "sha256": "0b9fc20b8172b2aa",
+   "sha256": "37038e5439595bda",
    "warnings": 2
   },
   "nano/nano_numbuhtwo.kfm": {
@@ -45,7 +45,7 @@
      256
     ]
    ],
-   "sha256": "b12274a4464394d6",
+   "sha256": "b0888a5f60133112",
    "warnings": 2
   }
  },
@@ -79,7 +79,7 @@
      512
     ]
    ],
-   "sha256": "23aa6ba5f3b80dce",
+   "sha256": "1542cc4ddcd24e98",
    "warnings": 1
   },
   "map/beach/dt_obbh_beach chair_01.nif": {
@@ -95,7 +95,7 @@
      256
     ]
    ],
-   "sha256": "fb8db9a7f452ac41",
+   "sha256": "27c1a6bbf0c9e249",
    "warnings": 1
   },
   "map/beach/dt_obbh_beach chair_01_notowel.nif": {
@@ -111,7 +111,7 @@
      256
     ]
    ],
-   "sha256": "0e482e6bcc8e7451",
+   "sha256": "c9ce05450f1e3ac9",
    "warnings": 1
   },
   "map/beach/dt_obbh_board.nif": {
@@ -191,7 +191,7 @@
      128
     ]
    ],
-   "sha256": "f9d7503ae576c027",
+   "sha256": "be812cc929fcd855",
    "warnings": 1
   },
   "map/beach/dt_obbh_strusture_tower_01.nif": {
@@ -211,7 +211,7 @@
      256
     ]
    ],
-   "sha256": "969935553dc46369",
+   "sha256": "fdc10caa776880e0",
    "warnings": 1
   },
   "map/beach/dt_obbh_tube.nif": {
@@ -251,7 +251,7 @@
      256
     ]
    ],
-   "sha256": "4e489c2f41ed43d7",
+   "sha256": "cd43aad5b7b4133a",
    "warnings": 2
   },
   "map/charlesdarwin/sb_otcd_school_gymtree02.nif": {
@@ -271,7 +271,7 @@
      256
     ]
    ],
-   "sha256": "01f18d3624c1b0bd",
+   "sha256": "5adc5e942c6dc083",
    "warnings": 2
   },
   "map/charlesdarwin/sb_otcd_school_tree_b_01.nif": {
@@ -291,7 +291,7 @@
      256
     ]
    ],
-   "sha256": "6f21131ea96a9f84",
+   "sha256": "75d0c285cbfac99e",
    "warnings": 2
   },
   "map/dtetc/dt_etc_busstop02.nif": {
@@ -315,7 +315,7 @@
      128
     ]
    ],
-   "sha256": "a60a60b9744a57d7",
+   "sha256": "88510c69a7bc218d",
    "warnings": 3
   },
   "map/dtetc/dt_etc_dustbin_01.nif": {
@@ -326,7 +326,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "6625d1a1b7d51844",
+   "sha256": "9f968b5ab650a4b9",
    "warnings": 2
   },
   "map/dtetc/dt_etc_passengercar_a_01.nif": {
@@ -342,7 +342,7 @@
      512
     ]
    ],
-   "sha256": "4f00e587c7fecb8a",
+   "sha256": "48728bbd8625a86c",
    "warnings": 1
   },
   "map/dtetc/dt_etc_passengercar_d_01.nif": {
@@ -358,7 +358,7 @@
      512
     ]
    ],
-   "sha256": "e12c3b0ce1a755cc",
+   "sha256": "ac2c1746e2864e0e",
    "warnings": 1
   },
   "map/dtetc/dt_mtdb_bench_a01.nif": {
@@ -374,7 +374,7 @@
      256
     ]
    ],
-   "sha256": "5aa48f3cac51e41c",
+   "sha256": "9dcd271bb8d9c742",
    "warnings": 1
   },
   "map/dtetc/dt_mtdb_bench_a02.nif": {
@@ -390,7 +390,7 @@
      256
     ]
    ],
-   "sha256": "3bdc272857d97abb",
+   "sha256": "20350b8611e43196",
    "warnings": 1
   },
   "map/dtetc/dt_mtdb_etc01.nif": {
@@ -406,7 +406,7 @@
      512
     ]
    ],
-   "sha256": "aa8b9e7d49d4b2cd",
+   "sha256": "e25498f73f1c0eb7",
    "warnings": 1
   },
   "map/dtetc/dt_mtdb_fountain_01.nif": {
@@ -434,7 +434,7 @@
      128
     ]
    ],
-   "sha256": "1e286d2466c18c87",
+   "sha256": "b9fd5eaa02519126",
    "warnings": 2
   },
   "map/dtetc/dt_mtdb_parasol_a01.nif": {
@@ -450,7 +450,7 @@
      512
     ]
    ],
-   "sha256": "51c931020965b48e",
+   "sha256": "8aea8a90fb4807ab",
    "warnings": 1
   },
   "map/dtetc/dt_mtdb_table_a01.nif": {
@@ -466,7 +466,7 @@
      256
     ]
    ],
-   "sha256": "b66c51012f673f50",
+   "sha256": "234d8667a7ea9a5b",
    "warnings": 1
   },
   "map/dtetc/dt_obj_signs_03.nif": {
@@ -490,7 +490,7 @@
      128
     ]
    ],
-   "sha256": "e30dd4ebf9943c28",
+   "sha256": "d99ced9cf5c58a7b",
    "warnings": 3
   },
   "map/dtetc/dt_obj_signs_04.nif": {
@@ -514,7 +514,7 @@
      256
     ]
    ],
-   "sha256": "d4e5f10da1478c48",
+   "sha256": "71bb094e99c52ece",
    "warnings": 3
   },
   "map/dtetc/dt_obj_signs_05.nif": {
@@ -542,7 +542,7 @@
      128
     ]
    ],
-   "sha256": "a449f4c541f0fa5a",
+   "sha256": "cfb1dccabdf96777",
    "warnings": 3
   },
   "map/dtetc/dt_tree_02.nif": {
@@ -558,7 +558,7 @@
      256
     ]
    ],
-   "sha256": "8df8087be8621a4f",
+   "sha256": "de78a0a73489cdac",
    "warnings": 1
   },
   "map/dtetc/dt_tree_04.nif": {
@@ -574,7 +574,7 @@
      256
     ]
    ],
-   "sha256": "77135e8981312718",
+   "sha256": "8d44496c5f2160dd",
    "warnings": 1
   },
   "map/dtetc/dt_tree_14.nif": {
@@ -585,7 +585,7 @@
    "skins": 0,
    "animations": 0,
    "images": [],
-   "sha256": "c4457ad4263dedc4",
+   "sha256": "a6946eae33ed7c4a",
    "warnings": 2
   },
   "map/ep/downtown_jumppad_01.nif": {
@@ -601,7 +601,7 @@
      256
     ]
    ],
-   "sha256": "d1d40df08979deef",
+   "sha256": "6b7f46fad334aa13",
    "warnings": 1
   },
   "map/ep/downtown_jumppad_02.nif": {
@@ -617,7 +617,7 @@
      256
     ]
    ],
-   "sha256": "b6484e0b44663712",
+   "sha256": "4b319dc9f0eee5ca",
    "warnings": 1
   },
   "map/ep/ep_beach_mat.nif": {
@@ -633,7 +633,7 @@
      256
     ]
    ],
-   "sha256": "11521c1a6159bc77",
+   "sha256": "ba19629532b5ee51",
    "warnings": 1
   },
   "map/ep/ep_course.nif": {
@@ -649,7 +649,7 @@
      128
     ]
    ],
-   "sha256": "b46ea4e0cab22886",
+   "sha256": "8310795751822196",
    "warnings": 1
   },
   "map/ep/ep_zip_dt_a.nif": {
@@ -665,7 +665,7 @@
      256
     ]
    ],
-   "sha256": "b41011270017686b",
+   "sha256": "77b03d8037541a4c",
    "warnings": 1
   },
   "map/ep/ep_zip_dt_b.nif": {
@@ -681,7 +681,7 @@
      32
     ]
    ],
-   "sha256": "2ec70dcf096ee859",
+   "sha256": "1b5c22512a6769d6",
    "warnings": 1
   },
   "map/ep/ep_zip_dt_c.nif": {
@@ -697,7 +697,7 @@
      256
     ]
    ],
-   "sha256": "e7d13daf7c5be1a5",
+   "sha256": "724f3e8aa1a9583a",
    "warnings": 1
   },
   "map/ep/fusion_ring.nif": {
@@ -717,7 +717,7 @@
      256
     ]
    ],
-   "sha256": "11efc3c044c58cf9",
+   "sha256": "2b78d398bff50434",
    "warnings": 3
   },
   "map/etc/dt_mtsm_fence_ef03_10.nif": {
@@ -728,7 +728,7 @@
    "skins": 0,
    "animations": 1,
    "images": [],
-   "sha256": "daf42a565e4da0a1",
+   "sha256": "2b817dada767a64e",
    "warnings": 5
   },
   "map/etc/dt_mtsm_fence_ef03_5.nif": {
@@ -739,7 +739,7 @@
    "skins": 0,
    "animations": 1,
    "images": [],
-   "sha256": "b196bb3bb276b2a0",
+   "sha256": "f46a2937401aebb1",
    "warnings": 5
   },
   "map/etc/etc_beach_a01_120.nif": {
@@ -755,7 +755,7 @@
      512
     ]
    ],
-   "sha256": "079c7ab079bdfebc",
+   "sha256": "a44f264480e8bb69",
    "warnings": 1
   },
   "map/etc/etc_beach_a02_90.nif": {
@@ -771,7 +771,7 @@
      512
     ]
    ],
-   "sha256": "affb2ef49a6a7d4a",
+   "sha256": "a772d40b34b3624d",
    "warnings": 1
   },
   "map/etc/etc_beach_e01.nif": {
@@ -787,7 +787,7 @@
      512
     ]
    ],
-   "sha256": "dc3994f1c5592cee",
+   "sha256": "6632300ac15334f0",
    "warnings": 1
   },
   "map/etc/etc_beach_e02.nif": {
@@ -803,7 +803,7 @@
      256
     ]
    ],
-   "sha256": "d470850c54ce919d",
+   "sha256": "be29c277f71f526a",
    "warnings": 1
   },
   "map/etc/etc_beach_e02_480.nif": {
@@ -819,7 +819,7 @@
      256
     ]
    ],
-   "sha256": "4ab325e9c78eae1a",
+   "sha256": "752df73fd3770b8b",
    "warnings": 1
   },
   "map/etc/etc_beach_e03_560.nif": {
@@ -835,7 +835,7 @@
      256
     ]
    ],
-   "sha256": "e0f4974ea61b740a",
+   "sha256": "157291b589a1d5d2",
    "warnings": 1
   },
   "map/etc/etc_beach_l01_120.nif": {
@@ -851,7 +851,7 @@
      512
     ]
    ],
-   "sha256": "fa0596a891d922da",
+   "sha256": "c1cdcc08efbd5c09",
    "warnings": 1
   },
   "map/etc/etc_beach_y01_120.nif": {
@@ -867,7 +867,7 @@
      512
     ]
    ],
-   "sha256": "55bb4fe868c69932",
+   "sha256": "6ed11173bdcd49c4",
    "warnings": 1
   },
   "map/etc/etc_parasol_01.nif": {
@@ -887,7 +887,7 @@
      512
     ]
    ],
-   "sha256": "8537284c8ff234b5",
+   "sha256": "855fd59811e08f76",
    "warnings": 1
   },
   "map/etc/etc_signs_06.nif": {
@@ -907,7 +907,7 @@
      128
     ]
    ],
-   "sha256": "a90d23b4a074e08d",
+   "sha256": "934f0195b7524f3a",
    "warnings": 1
   },
   "map/etc/etc_signs_10.nif": {
@@ -927,7 +927,7 @@
      128
     ]
    ],
-   "sha256": "a6ea1a166bc91a9a",
+   "sha256": "d82b8e56e6f74485",
    "warnings": 1
   },
   "map/etc/etc_store_03.nif": {
@@ -951,7 +951,7 @@
      256
     ]
    ],
-   "sha256": "bd5d218f642e36f3",
+   "sha256": "704eba126adb4379",
    "warnings": 1
   },
   "map/etc/etc_store_04.nif": {
@@ -975,7 +975,7 @@
      128
     ]
    ],
-   "sha256": "7c80e495993a7e04",
+   "sha256": "409e08fc034684b5",
    "warnings": 1
   },
   "map/etc/etc_tree_04.nif": {
@@ -991,7 +991,7 @@
      128
     ]
    ],
-   "sha256": "caa86fec952547fa",
+   "sha256": "d9dbc025227cbc57",
    "warnings": 3
   },
   "map/etc/wd_etc_stone04_01.nif": {
@@ -1007,7 +1007,7 @@
      256
     ]
    ],
-   "sha256": "f84e4d6272bf52ca",
+   "sha256": "28369b467dc485b5",
    "warnings": 1
   },
   "map/etc/wd_etc_stone04_02.nif": {
@@ -1023,7 +1023,7 @@
      256
     ]
    ],
-   "sha256": "e63c90c18b4df72e",
+   "sha256": "fcea4ab76501ee93",
    "warnings": 1
   },
   "map/etc/wd_etc_stone04_03.nif": {
@@ -1039,7 +1039,7 @@
      256
     ]
    ],
-   "sha256": "8fd3c7819bacf8e3",
+   "sha256": "d2e4491436769384",
    "warnings": 1
   },
   "map/etc/wd_etc_stone07_01.nif": {
@@ -1055,7 +1055,7 @@
      256
     ]
    ],
-   "sha256": "e1b3d8150e7ede1f",
+   "sha256": "e4dd6ec68b515fd3",
    "warnings": 1
   },
   "map/etc/wd_etc_stone07_02.nif": {
@@ -1071,7 +1071,7 @@
      256
     ]
    ],
-   "sha256": "786a35ea7760d5d2",
+   "sha256": "69bb85b2741d7159",
    "warnings": 1
   },
   "map/etc/wd_etc_stone07_04.nif": {
@@ -1087,7 +1087,7 @@
      256
     ]
    ],
-   "sha256": "84c8e042d4e0d8d8",
+   "sha256": "f32997e3c299d6e5",
    "warnings": 1
   },
   "map/questitem/quest_item_box.nif": {
@@ -1103,7 +1103,7 @@
      256
     ]
    ],
-   "sha256": "207d0a5af8d4d63b",
+   "sha256": "cec42de68bde4c8a",
    "warnings": 1
   },
   "map/questitem/quest_item_chests.nif": {
@@ -1119,7 +1119,7 @@
      256
     ]
    ],
-   "sha256": "67d898f05d021416",
+   "sha256": "a1ee84844eaac68d",
    "warnings": 1
   },
   "map/questitem/quest_item_k_ecom.nif": {
@@ -1143,7 +1143,7 @@
      64
     ]
    ],
-   "sha256": "60f521f7dc392598",
+   "sha256": "e462ec5ef5f118bb",
    "warnings": 3
   },
   "map/questitem/quest_item_k_ecom_b2.nif": {
@@ -1157,9 +1157,13 @@
     [
      256,
      256
+    ],
+    [
+     64,
+     64
     ]
    ],
-   "sha256": "b77a38c9f4a6d893",
+   "sha256": "0e65a394a7a3fb31",
    "warnings": 1
   },
   "map/wharf/dt_obwh_fishing.nif": {
@@ -1179,7 +1183,7 @@
      32
     ]
    ],
-   "sha256": "15cab3b804b5d241",
+   "sha256": "9dc3057012d02d24",
    "warnings": 2
   },
   "map/wharf/dt_obwh_ship1.nif": {
@@ -1203,7 +1207,7 @@
      256
     ]
    ],
-   "sha256": "c5fdbeb4db1bf4de",
+   "sha256": "65574a9bafd217ab",
    "warnings": 1
   },
   "map/wharf/dt_obwh_ship2.nif": {
@@ -1219,7 +1223,7 @@
      512
     ]
    ],
-   "sha256": "3d9dfac45e4c47a8",
+   "sha256": "2295457abfebefe6",
    "warnings": 1
   },
   "map/wharf/dt_obwh_ship_01.nif": {
@@ -1235,7 +1239,7 @@
      512
     ]
    ],
-   "sha256": "bb50a45551f4dbe4",
+   "sha256": "5f8d3e6595e99470",
    "warnings": 1
   },
   "map/wharf/dt_obwh_shoppingmall_02.nif": {
@@ -1267,7 +1271,7 @@
      256
     ]
    ],
-   "sha256": "1aabc07acbad9be8",
+   "sha256": "17ce5558d259eabd",
    "warnings": 1
   },
   "mob/dt_etc_passengercar_a.kfm": {
@@ -1278,7 +1282,7 @@
    "skins": 1,
    "animations": 1,
    "images": [],
-   "sha256": "ed57feb59a1af539",
+   "sha256": "66ebb6382fde3913",
    "warnings": 1
   },
   "mob/dt_etc_pickupcar_a.kfm": {
@@ -1289,7 +1293,7 @@
    "skins": 1,
    "animations": 1,
    "images": [],
-   "sha256": "b6989dde8c835ef4",
+   "sha256": "327dfec2fb90f614",
    "warnings": 1
   },
   "mob/mob_dolbelzet.kfm": {
@@ -1305,7 +1309,7 @@
      256
     ]
    ],
-   "sha256": "082cd52125074379",
+   "sha256": "7c3580c9cef598c3",
    "warnings": 2
   },
   "mob/mob_kingshoulderrobo.kfm": {
@@ -1321,7 +1325,7 @@
      256
     ]
    ],
-   "sha256": "90f6450e6725900e",
+   "sha256": "268e49efdcb64a7c",
    "warnings": 2
   },
   "mob/npc_bomerbango2.kfm": {
@@ -1332,7 +1336,7 @@
    "skins": 1,
    "animations": 3,
    "images": [],
-   "sha256": "113318d18494be2c",
+   "sha256": "415c51ef87252d58",
    "warnings": 6
   },
   "mob/rxcom.kfm": {
@@ -1343,7 +1347,7 @@
    "skins": 0,
    "animations": 1,
    "images": [],
-   "sha256": "29dac3fce29d9046",
+   "sha256": "a2e0a7e9d6dcd9c8",
    "warnings": 0
   },
   "prefabs/eps/epelements/epe[153].prefab": {
@@ -1363,7 +1367,7 @@
      256
     ]
    ],
-   "sha256": "94e05c5b86ae9fa9",
+   "sha256": "520a74b7599fa482",
    "warnings": 3
   },
   "prefabs/eps/epelements/epe[218].prefab": {
@@ -1379,7 +1383,7 @@
      256
     ]
    ],
-   "sha256": "e79247ee713952b3",
+   "sha256": "b3e44d64aa08888f",
    "warnings": 1
   },
   "prefabs/eps/epelements/epe[221].prefab": {
@@ -1395,7 +1399,7 @@
      256
     ]
    ],
-   "sha256": "449c6327cc79c321",
+   "sha256": "dc06d74f2b1621ba",
    "warnings": 1
   },
   "prefabs/eps/epelements/epe[252].prefab": {
@@ -1415,7 +1419,7 @@
      128
     ]
    ],
-   "sha256": "27a424db650de154",
+   "sha256": "a9486b1d527d0e6e",
    "warnings": 2
   },
   "prefabs/eps/epelements/epe[418].prefab": {
@@ -1431,7 +1435,7 @@
      512
     ]
    ],
-   "sha256": "95863f6752720ea9",
+   "sha256": "bf3943649b046fd6",
    "warnings": 1
   },
   "prefabs/eps/epelements/epe[421].prefab": {
@@ -1455,7 +1459,7 @@
      256
     ]
    ],
-   "sha256": "b67b73ca68cf450c",
+   "sha256": "4f9c92c0b63136b0",
    "warnings": 1
   },
   "prefabs/eps/epelements/epe[422].prefab": {
@@ -1471,7 +1475,7 @@
      512
     ]
    ],
-   "sha256": "0208d3393ecd2c8d",
+   "sha256": "b635b60d98743f29",
    "warnings": 1
   }
  }
