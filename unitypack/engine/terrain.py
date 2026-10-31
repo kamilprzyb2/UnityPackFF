@@ -1,4 +1,5 @@
 from collections import namedtuple
+from enum import IntEnum
 from .object import Object, field
 
 
@@ -24,6 +25,52 @@ class Shift(namedtuple("Shift", "x z flags")):
 	"""
 
 
+class DetailRenderMode(IntEnum):
+	"How a detail prototype is drawn (DetailPrototype.render_mode)"
+	GrassBillboard = 0  # its texture on quads that turn to face the camera, waving
+	VertexLit = 1  # its mesh, lit, not waving
+	Grass = 2  # its mesh, waving like grass
+
+
+def _rgba(c):
+	return (c["r"], c["g"], c["b"], c["a"])
+
+
+def _render_mode(value):
+	"A DetailRenderMode, or the stored number if it isn't one"
+	try:
+		return DetailRenderMode(value)
+	except ValueError:
+		return value
+
+
+class DetailPrototype(namedtuple("DetailPrototype", (
+		"texture prototype use_mesh render_mode min_width max_width min_height max_height "
+		"noise_spread bend_factor healthy_color dry_color grayscale_lighting lightmap_factor"))):
+	"""
+	One kind of terrain detail (grass, flowers, small rocks), as stored.
+	texture is a pointer to its Texture2D and prototype a pointer to a
+	GameObject; use_mesh says which of the two it draws. Each instance
+	gets a width and a height between the min and max (FusionFall stores
+	min 1.0 for every prototype and max 0.5 to 2.0, so max can be the
+	smaller), and a colour between healthy_color and dry_color, picked by a
+	noise over the terrain whose features are noise_spread apart.
+	bend_factor is how far the wind bends it, lightmap_factor how much the
+	terrain's lightmap darkens it, grayscale_lighting whether its texture is
+	lit as grayscale. Colours are (r, g, b, a).
+	"""
+
+	@classmethod
+	def from_dict(cls, d):
+		return cls(
+			texture=d["prototypeTexture"], prototype=d["prototype"], use_mesh=bool(d["usePrototypeMesh"]),
+			render_mode=_render_mode(d["renderMode"]), min_width=d["minWidth"], max_width=d["maxWidth"],
+			min_height=d["minHeight"], max_height=d["maxHeight"], noise_spread=d["noiseSpread"],
+			bend_factor=d["bendFactor"], healthy_color=_rgba(d["healthyColor"]), dry_color=_rgba(d["dryColor"]),
+			grayscale_lighting=bool(d["grayscaleLighting"]), lightmap_factor=d["lightmapFactor"],
+		)
+
+
 class TerrainData(Object):
 	"""
 	A terrain's heightmap and its textures. The heightmap is a square grid of
@@ -34,6 +81,15 @@ class TerrainData(Object):
 	worked out from the heights: per patch, the lowest and highest height
 	(m_MinMaxPatchHeights) and how far its simplified surface is from the
 	real one (m_PrecomputedError). set_heights() updates it.
+
+	The detail database (grass) is a grid of detail_resolution x
+	detail_resolution cells over the whole terrain, with, per detail
+	prototype, how many instances of it each cell holds; Unity scatters
+	them inside the cell when it draws them. It is stored in square patches
+	of m_PatchSamples cells, m_PatchCount along each side; each patch lists
+	the prototypes it has (layerIndices) and their counts, one layer of
+	m_PatchSamples^2 cells after the other. Patches and the cells in a
+	patch are z-major (x first), unlike the heights.
 	"""
 
 	heightmap = field("m_Heightmap")
@@ -70,6 +126,69 @@ class TerrainData(Object):
 	def shifts(self):
 		"[Shift] (the records name z 'y'); none for terrains saved by newer Unity versions, which have no m_Shifts"
 		return [Shift(s["x"], s["y"], s["flags"]) for s in self.heightmap.get("m_Shifts", [])]
+
+	def _details(self):
+		"The detail database's fields; none if the object was read without one"
+		return self._obj.get("m_DetailDatabase") or {}
+
+	@property
+	def detail_prototypes(self):
+		"[DetailPrototype], in the order the detail layers number them"
+		return [DetailPrototype.from_dict(d) for d in self._details().get("m_DetailPrototypes", [])]
+
+	@property
+	def detail_resolution(self):
+		"Detail cells along each side of the terrain (0 if it has no detail database)"
+		db = self._details()
+		return db.get("m_PatchCount", 0) * db.get("m_PatchSamples", 0)
+
+	@property
+	def waving_grass(self):
+		"The wind on billboard and grass details: tint (r, g, b, a), strength, amount and speed"
+		db = self._details()
+		return {
+			"tint": _rgba(db["m_WavingGrassTint"]), "strength": db["m_WavingGrassStrength"],
+			"amount": db["m_WavingGrassAmount"], "speed": db["m_WavingGrassSpeed"],
+		}
+
+	def detail_layer(self, prototype):
+		"""
+		How many instances of detail prototype (an index into
+		detail_prototypes) each cell holds, as bytes: detail_resolution^2
+		counts, z-major (cell (x, z) at z * detail_resolution + x), cell
+		(0, 0) at the terrain's origin. Image.frombytes("L", ...) makes
+		it an image in Unity's orientation, like Texture2D.image.
+		"""
+		return self.detail_layers(only=prototype).get(prototype, bytes(self.detail_resolution ** 2))
+
+	def detail_layers(self, only=None):
+		"{prototype index: detail_layer()} for every prototype with at least one instance (only: that prototype alone)"
+		db = self._details()
+		count, samples = db.get("m_PatchCount", 0), db.get("m_PatchSamples", 0)
+		resolution = count * samples
+		cells = samples * samples
+		patches = db.get("m_Patches", [])
+		if len(patches) != count * count:
+			raise ValueError("%d detail patches for %d x %d" % (len(patches), count, count))
+		layers = {}
+		for i, patch in enumerate(patches):
+			pz, px = divmod(i, count)
+			indices, counts = patch["layerIndices"], patch["numberOfObjects"]
+			if len(counts) != len(indices) * cells:
+				raise ValueError("detail patch %d has %d counts for %d layers of %d cells" % (i, len(counts), len(indices), cells))
+			for j, prototype in enumerate(indices):
+				if only is not None and prototype != only:
+					continue
+				layer = counts[j * cells:(j + 1) * cells]
+				if not any(layer):
+					continue
+				if prototype not in layers:
+					layers[prototype] = bytearray(resolution * resolution)
+				out = layers[prototype]
+				for sz in range(samples):
+					start = (pz * samples + sz) * resolution + px * samples
+					out[start:start + samples] = layer[sz * samples:(sz + 1) * samples]
+		return {k: bytes(layers[k]) for k in sorted(layers)}
 
 	def set_heights(self, heights):
 		"""

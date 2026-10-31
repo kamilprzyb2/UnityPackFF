@@ -6,13 +6,17 @@ A heightmap is (2^n * 16 + 1)^2 vertices, stored x-major (vertex (x, z) at
 x * height + z) as integers from 0 to 32766. Its level-of-detail patches
 (16 x 16 cells at level 0, twice as wide at each level up, keeping every
 2^level-th vertex) each have a min/max height and an error.
+
+Details (grass) are counts per cell of a grid over the terrain, per detail
+prototype, stored in z-major patches of z-major cells.
 """
 
 import pytest
+from PIL import Image
 
 from tests import synth
 from tests.unit.support import open_asset, save
-from unitypack.engine.terrain import MAX_HEIGHT, Shift, TerrainData
+from unitypack.engine.terrain import MAX_HEIGHT, DetailPrototype, DetailRenderMode, Shift, TerrainData
 
 SIZE = 33  # 2 x 2 patches at level 0, one at level 1
 
@@ -240,3 +244,93 @@ def test_terrain_without_shifts_field():
 	assert t.heightmap["m_PrecomputedError"][4] == pytest.approx(5000 / MAX_HEIGHT * 600)
 	with pytest.raises(ValueError, match="without m_Shifts"):
 		t.set_shifts([(1, 1, 1)])
+
+
+# Details: 2 x 2 patches of 2 x 2 cells (a 4 x 4 grid), three prototypes
+
+DETAIL_PATCHES = [
+	([0], [1, 0, 0, 0]),  # patch x 0, z 0: prototype 0 in cell (0, 0)
+	([1, 0], [0, 0, 0, 3] + [0, 2, 0, 0]),  # patch x 1, z 0: layers in any order; 3 in (3, 1), 2 in (3, 0)
+	([], []),  # patch x 0, z 1: none
+	([2], [0, 0, 0, 0]),  # patch x 1, z 1: an empty layer
+]
+
+
+def detailed_terrain(patches=DETAIL_PATCHES):
+	prototypes = [
+		synth.detail_prototype(texture=(1, 7)),
+		synth.detail_prototype(prototype=(0, 5), width=(0.5, 0.75), height=(1.5, 2.5), render_mode=1, use_mesh=1),
+		synth.detail_prototype(texture=(0, 9), render_mode=7),
+	]
+	details = synth.detail_database(patches, prototypes, count=2, samples=2)
+	asset = open_asset(synth.terrain_file([1000] * (SIZE * SIZE), details=details))
+	return asset, asset.objects[1].contents
+
+
+def grid(cells):
+	"A 4 x 4 layer, z-major, with {(x, z): count} set"
+	out = bytearray(16)
+	for (x, z), n in cells.items():
+		out[z * 4 + x] = n
+	return bytes(out)
+
+
+def test_detail_prototypes():
+	_, t = detailed_terrain()
+	grass, mesh, odd = t.detail_prototypes
+	assert isinstance(grass, DetailPrototype)
+	assert (grass.texture.file_id, grass.texture.path_id) == (1, 7)
+	assert not grass.prototype and not grass.use_mesh
+	assert grass.render_mode is DetailRenderMode.GrassBillboard
+	assert (grass.min_width, grass.max_width, grass.min_height, grass.max_height) == (1.0, 2.0, 1.0, 0.5)
+	assert (grass.noise_spread, grass.bend_factor) == (0.25, pytest.approx(0.1))
+	assert grass.healthy_color == (0.25, 1.0, 0.125, 1.0) and grass.dry_color == (0.75, 0.5, 0.0, 1.0)
+	assert grass.grayscale_lighting is True and grass.lightmap_factor == 0.5
+	assert mesh.use_mesh and mesh.prototype.path_id == 5 and mesh.render_mode is DetailRenderMode.VertexLit
+	assert (mesh.min_width, mesh.max_width, mesh.min_height, mesh.max_height) == (0.5, 0.75, 1.5, 2.5)
+	assert odd.render_mode == 7  # not a DetailRenderMode: kept as stored
+
+
+def test_detail_resolution_and_wind():
+	_, t = detailed_terrain()
+	assert t.detail_resolution == 4
+	assert t.waving_grass == {"tint": (1.0, 0.875, 0.75, 1.0), "strength": 0.5, "amount": 0.25, "speed": 0.125}
+
+
+def test_detail_layers_are_z_major():
+	_, t = detailed_terrain()
+	layers = t.detail_layers()
+	assert list(layers) == [0, 1]  # prototype 2 has no instances
+	assert layers[0] == grid({(0, 0): 1, (3, 0): 2})
+	assert layers[1] == grid({(3, 1): 3})
+	assert t.detail_layer(1) == layers[1]
+	assert t.detail_layer(2) == bytes(16)
+
+
+def test_detail_layer_as_image():
+	_, t = detailed_terrain()
+	img = Image.frombytes("L", (4, 4), t.detail_layer(1))
+	assert img.getpixel((3, 1)) == 3  # (x, z): Unity's orientation, as Texture2D.image
+
+
+@pytest.mark.parametrize("patches, error", [
+	(DETAIL_PATCHES[:3], "3 detail patches for 2 x 2"),
+	(DETAIL_PATCHES[:3] + [([2], [0, 0, 0])], "detail patch 3 has 3 counts for 1 layers of 4 cells"),
+])
+def test_detail_layers_check_the_patches(patches, error):
+	_, t = detailed_terrain(patches)
+	with pytest.raises(ValueError, match=error):
+		t.detail_layers()
+
+
+def test_terrain_without_details():
+	_, t = terrain()
+	assert t.detail_prototypes == [] and t.detail_resolution == 0 and t.detail_layers() == {}
+
+
+def test_save_round_trip_with_details():
+	asset, t = detailed_terrain()
+	before = save(asset)
+	again = open_asset(before)
+	assert save(again) == before
+	assert again.objects[1].read().detail_layers() == t.detail_layers()

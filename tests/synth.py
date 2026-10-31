@@ -282,12 +282,101 @@ TERRAIN_DATA = Node("TerrainData", "Base", children=[
 ])
 
 
-def terrain_data(heights, shifts, error, minmax, size, levels, scale=(4.0, 600.0, 4.0), name="terrain"):
-	"heights: x-major, size * size values; shifts: [(x, z, flags)]"
+def vector3_node(name):
+	return Node("Vector3f", name, 12, [float_node("x"), float_node("y"), float_node("z")])
+
+
+def color_node(name):
+	return Node("ColorRGBA", name, 16, [float_node(c) for c in "rgba"])
+
+
+def bytes_node(name):
+	return Node("vector", name, children=[
+		Node("Array", "Array", children=[int_node("size"), int_node("data", "UInt8", 1)], is_array=True, flags=ALIGN),
+	])
+
+
+# the 104 client's DetailDatabase (terrain details: grass), trees included
+DETAIL_DATABASE = Node("DetailDatabase", "m_DetailDatabase", children=[
+	array_node("m_Patches", Node("DetailPatch", "data", children=[
+		Node("AABB", "bounds", 24, [vector3_node("m_Center"), vector3_node("m_Extent")]),
+		bytes_node("layerIndices"),
+		bytes_node("numberOfObjects"),
+	])),
+	array_node("m_DetailPrototypes", Node("DetailPrototype", "data", 88, [
+		pptr_node("prototype", "GameObject"),
+		pptr_node("prototypeTexture", "Texture2D"),
+		*[float_node(n) for n in ("minWidth", "maxWidth", "minHeight", "maxHeight", "noiseSpread", "bendFactor")],
+		color_node("healthyColor"),
+		color_node("dryColor"),
+		int_node("grayscaleLighting"),
+		float_node("lightmapFactor"),
+		int_node("renderMode"),
+		int_node("usePrototypeMesh"),
+	], version=2)),
+	int_node("m_PatchCount"),
+	int_node("m_PatchSamples"),
+	array_node("m_RandomRotations", vector3_node("data")),
+	color_node("m_WavingGrassTint"),
+	float_node("m_WavingGrassStrength"),
+	float_node("m_WavingGrassAmount"),
+	float_node("m_WavingGrassSpeed"),
+	array_node("m_TreeInstances", Node("TreeInstance", "data", 32, [
+		vector3_node("position"), float_node("widthScale"), float_node("heightScale"),
+		Node("ColorRGBA", "color", 4, [int_node("rgba", "UInt32")]),
+		Node("ColorRGBA", "lightmapColor", 4, [int_node("rgba", "UInt32")]),
+		int_node("index"),
+	])),
+	array_node("m_TreePrototypes", Node("TreePrototype", "data", 12, [pptr_node("prefab", "GameObject"), float_node("bendFactor")])),
+	array_node("m_PreloadTextureAtlasData", pptr_node("data", "Texture2D")),
+])
+
+TERRAIN_DATA_WITH_DETAILS = Node("TerrainData", "Base", children=[
+	string_node("m_Name"),
+	DETAIL_DATABASE,
+	HEIGHTMAP,
+	pptr_node("m_Lightmap", "Texture2D"),
+])
+
+
+def detail_prototype(texture=(0, 0), prototype=(0, 0), width=(1.0, 2.0), height=(1.0, 0.5), render_mode=0, use_mesh=0):
+	"One DetailPrototype: pointers as (file ID, path ID); fixed noise, bend, colours and lighting"
+	return (struct.pack("<ii", *prototype) + struct.pack("<ii", *texture)
+		+ struct.pack("<6f", width[0], width[1], height[0], height[1], 0.25, 0.1)
+		+ struct.pack("<4f", 0.25, 1.0, 0.125, 1.0) + struct.pack("<4f", 0.75, 0.5, 0.0, 1.0)
+		+ struct.pack("<ifii", 1, 0.5, render_mode, use_mesh))
+
+
+def detail_database(patches, prototypes, count, samples):
+	"""
+	patches: count * count [(layer indices, counts)], z-major, each with
+	len(layer indices) * samples^2 counts; prototypes: detail_prototype()s
+	"""
+	def byte_vector(b):
+		b = bytes(b)
+		return struct.pack("<I", len(b)) + b + b"\0" * (-len(b) % 4)
+
+	data = struct.pack("<I", len(patches))
+	for layers, counts in patches:
+		data += struct.pack("<6f", 1e-30, 2e-30, 3e-30, 4e-30, 5e-30, 6e-30)  # as junk as the real ones
+		data += byte_vector(layers) + byte_vector(counts)
+	data += struct.pack("<I", len(prototypes)) + b"".join(prototypes)
+	data += struct.pack("<ii", count, samples)
+	data += struct.pack("<I", 0)  # m_RandomRotations
+	data += struct.pack("<4f", 1.0, 0.875, 0.75, 1.0) + struct.pack("<3f", 0.5, 0.25, 0.125)
+	data += struct.pack("<II", 0, 0)  # no trees
+	data += struct.pack("<I", 0)  # m_PreloadTextureAtlasData
+	return data
+
+
+def terrain_data(heights, shifts, error, minmax, size, levels, scale=(4.0, 600.0, 4.0), name="terrain", details=None):
+	"heights: x-major, size * size values; shifts: [(x, z, flags)]; details: detail_database() bytes"
 	def aligned(b):
 		return b + b"\0" * (-len(b) % 4)
 
 	data = pack_string(name)
+	if details is not None:
+		data += details
 	data += aligned(struct.pack("<I", len(heights)) + b"".join(struct.pack("<h", h) for h in heights))
 	data += aligned(struct.pack("<I", len(shifts)) + b"".join(struct.pack("<HHH", *s) for s in shifts))
 	data += struct.pack("<I", len(error)) + b"".join(struct.pack("<f", e) for e in error)
@@ -298,9 +387,15 @@ def terrain_data(heights, shifts, error, minmax, size, levels, scale=(4.0, 600.0
 	return data + struct.pack("<ii", 0, 0)
 
 
-def terrain_file(heights, shifts=(), size=33, levels=1, error=None, minmax=None):
-	"A file holding one TerrainData (path ID 1); its level-of-detail arrays default to the right length, all 0"
+def terrain_file(heights, shifts=(), size=33, levels=1, error=None, minmax=None, details=None):
+	"""
+	A file holding one TerrainData (path ID 1); its level-of-detail arrays
+	default to the right length, all 0. With details (detail_database()
+	bytes), its type tree has the detail database
+	"""
 	patches = sum(4 ** level for level in range(levels + 1))
 	error = error if error is not None else [0.0] * patches
 	minmax = minmax if minmax is not None else [0.0] * (2 * patches)
-	return serialized_file({156: TERRAIN_DATA}, [(1, 156, 156, terrain_data(heights, list(shifts), error, minmax, size, levels))])
+	tree = TERRAIN_DATA if details is None else TERRAIN_DATA_WITH_DETAILS
+	data = terrain_data(heights, list(shifts), error, minmax, size, levels, details=details)
+	return serialized_file({156: tree}, [(1, 156, 156, data)])

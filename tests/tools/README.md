@@ -9,7 +9,7 @@ Command-line tools that run the same operations as the integration tests, but wr
 | `roundtrip.py` | ffbuildtool extract → UnityPackFF save → ffbuildtool pack → re-open and compare; optionally a whole playable build | `integration/test_roundtrip.py` |
 | `meshes.py` | Exports every mesh of an archive as OBJ, plus the skin weights of skinned meshes | `integration/test_meshes.py` |
 | `clips.py` | Reads every AnimationClip of an archive and samples each curve at the clip's rate | `integration/test_clips.py` |
-| `terrain.py` | Dumps every terrain of an archive with `bin/dump_terrain.py` and compares Unity's level-of-detail data with what `TerrainData` works out | `integration/test_terrain.py` |
+| `terrain.py` | Dumps every terrain of an archive with `bin/dump_terrain.py`, compares Unity's level-of-detail data with what `TerrainData` works out, and counts its details (grass) | `integration/test_terrain.py` |
 | `gltf.py` | Exports every prefab of an archive, or a map tile's whole scene, as glTF (`.glb`) and runs the Khronos validator on them when it's installed | `integration/test_gltf.py` |
 | `mapdata.py` | Reads the attribute grid and colours of map tiles and the music zones of `main.unity3d`, and dumps them with `bin/dump_mapdata.py` | `integration/test_mapdata.py` |
 | `_common.py` | The options all the scripts share (not run directly) | |
@@ -133,7 +133,7 @@ python3 -m tests.tools.terrain --build 104                  # DongResources_04_0
 python3 -m tests.tools.terrain --build 1013 --bundle DongResources_07_08.resourceFile
 ```
 
-Without `--bundle` or `--all` it takes `DongResources_04_02.resourceFile`, the one terrain archive in the curated set. Prints, per terrain, its size, how many shifted vertices it has, and how Unity's level-of-detail data compares with a recomputation from the heights:
+Without `--bundle` or `--all` it takes `DongResources_04_02.resourceFile`, the one terrain archive in the curated set. Prints, per terrain, its size, how many shifted vertices it has, how many detail instances, and how Unity's level-of-detail data compares with a recomputation from the heights:
 
 | Count | Meaning |
 | --- | --- |
@@ -143,7 +143,7 @@ Without `--bundle` or `--all` it takes `DongResources_04_02.resourceFile`, the o
 | `error_larger` | larger: only on terrains with shifts, which the engine also counts |
 | `error_smaller` | smaller (0 on every terrain checked) |
 
-Writes `out/terrain/<build>/<archive>/<file>.png` and `.shifts.json` as `bin/dump_terrain.py` writes them (a 16-bit heightmap, north up, and the shifted vertices), and `out/terrain/<build>.json` with the statistics the integration test checks.
+Writes `out/terrain/<build>/<archive>/<file>.png`, `.shifts.json`, `.details.json` and `.detail<N>.png` as `bin/dump_terrain.py --details` writes them (a 16-bit heightmap, north up, the shifted vertices, the detail prototypes, and each detail layer's instance counts), and `out/terrain/<build>.json` with the statistics the integration test checks, including per terrain its detail resolution, prototypes, render modes, and each layer's instance count and digest.
 
 ## gltf.py
 
