@@ -637,6 +637,19 @@ def test_container_path():
 	assert w.container_path(Pointer(None, 5)) is None  # its file isn't loaded
 
 
+def test_script_colours():
+	# colours as [r, g, b, a], as everywhere else in the export; a vector stays as stored
+	root = gameobject_tree()
+	setup = script(fogColor=color(0.0, 0.25, 0.0), fogDepth=0.77, sky=[color(1.0, 0.5, 0.0, 0.5)], at=vec(1, 2, 3))
+	setup["m_Script"] = Pointer(fdict(m_ClassName="DongColorSetup"), 921)
+	root._obj["m_Component"].append((-4, Pointer(setup, 922)))
+	w = GLTFWriter()
+	w.add_gameobject(root, scripts=True)
+	[entry] = w.json["nodes"][w.json["scenes"][0]["nodes"][0]]["extras"]["scripts"]
+	assert entry["fields"] == {"fogColor": [0.0, 0.25, 0.0, 1.0], "fogDepth": pytest.approx(0.77),
+		"sky": [[1.0, 0.5, 0.0, 0.5]], "at": {"x": 1, "y": 2, "z": 3}}
+
+
 def test_disabled_script():
 	w = GLTFWriter()
 	w.add_gameobject(scripted_tree(enabled=0), scripts=True)

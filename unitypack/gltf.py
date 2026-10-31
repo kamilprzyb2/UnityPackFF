@@ -825,7 +825,8 @@ class GLTFWriter:
 		platforms, rings, jump pads and their waypoints (Ep*Trigger,
 		Waypoint). Values are as stored, so vectors are in Unity's
 		coordinates, not mirrored: which of them are positions only the
-		script knows. Pointers become {"node": n} for a GameObject in this
+		script knows. Colours become [r, g, b, a], as everywhere else in
+		the export. Pointers become {"node": n} for a GameObject in this
 		export or a component on one (with "component", its class), and
 		{"object": name, "type": class, "path": container path} for
 		anything else ("path" only if its file's container lists it; an
@@ -937,6 +938,8 @@ class GLTFWriter:
 			return [self._script_value(v, depth + 1) for v in value]
 		fields = _fields(value)
 		if hasattr(fields, "items"):
+			if set(fields) == {"r", "g", "b", "a"}:  # a Color
+				return _color(fields)
 			return {str(k): self._script_value(v, depth + 1) for k, v in fields.items()}
 		return str(value)
 

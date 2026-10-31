@@ -334,7 +334,7 @@ Options (`--help` has the details):
 * `--actor-bones`: the bone lists that bind worn items to the character, in the extras
 * `--split-clips`: the model without its clips, and each clip in a file of its own, `<name>@<clip>.glb`
 * `--colliders`: colliders and rigidbodies in the nodes' extras
-* `--scripts`: each node's scripts and their fields in its extras (`extras.scripts`: class name, enabled, fields as stored; pointers to exported objects as node indices, others by name, class and container path). FusionFall places effects (the Infected Zones' barriers) and drives the zones' moving platforms, rings and slides with them
+* `--scripts`: each node's scripts and their fields in its extras (`extras.scripts`: class name, enabled, fields as stored, colours as `[r, g, b, a]`; pointers to exported objects as node indices, others by name, class and container path). FusionFall places effects (the Infected Zones' barriers) and drives the zones' moving platforms, rings and slides with them
 * `--external DIR`: images and mesh data as separate files in `DIR`, named by their content, so exports into the same folder share them
 
 `unityextract.py --glb` writes single meshes as glTF instead of OBJ.
