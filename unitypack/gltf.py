@@ -825,13 +825,17 @@ class GLTFWriter:
 		platforms, rings, jump pads and their waypoints (Ep*Trigger,
 		Waypoint). Values are as stored, so vectors are in Unity's
 		coordinates, not mirrored: which of them are positions only the
-		script knows. Pointers become {"node": n} for a GameObject in this
+		script knows. Colours become [r, g, b, a], as everywhere else in
+		the export. Pointers become {"node": n} for a GameObject in this
 		export or a component on one (with "component", its class), and
 		{"object": name, "type": class, "path": container path} for
 		anything else ("path" only if its file's container lists it; an
 		effect's prefab, say); null pointers become None. An array of more
 		than SCRIPT_ARRAY_LIMIT elements becomes {"omitted": its length},
-		with a warning (MapAttributeTable's grid, which mapdata reads).
+		with a warning (MapAttributeTable's grid, which mapdata reads). A
+		script whose class is unknown and that has no fields of its own (one
+		of Unity's built-in scripts, which no build ships) is left out, with
+		a warning.
 		"""
 		export = GameObjectExport(self, gameobject, skins, animations, sample_rate, inactive, colliders, skinned_only,
 			actor_bones, scripts)
@@ -857,23 +861,37 @@ class GLTFWriter:
 
 	@staticmethod
 	def _class_name(pointer, target):
-		"The class of an object: a script's own class name, else the engine class; None if unknown"
+		"""
+		The class of an object: a script's own class name (its MonoScript's
+		m_ClassName), else the class its type tree names, else the engine
+		class; None if unknown. The MonoScript comes first because scripts
+		whose fields are laid out alike share a type tree, named after one of
+		them: EpSynchronizer's objects read as TerrainDetailManager's (neither
+		has fields of its own).
+		"""
+		fields = _fields(target)
+		script = fields.get("m_Script") if hasattr(fields, "get") else None
+		if script:
+			ms = GLTFWriter._quiet_resolve(script)
+			if ms is not None and _fields(ms).get("m_ClassName"):
+				return _fields(ms)["m_ClassName"]
 		try:
 			t = pointer.object.type
 			return getattr(t, "name", None) or str(t)
 		except Exception:
 			pass
-		script = _fields(target).get("m_Script") if hasattr(_fields(target), "get") else None
-		if script:
-			ms = GLTFWriter._quiet_resolve(script)
-			if ms is not None and _fields(ms).get("m_ClassName"):
-				return _fields(ms)["m_ClassName"]
 		if isinstance(target, dict):  # fields read without a class (a script whose MonoScript isn't loaded)
 			return None
 		return type(target).__name__
 
-	def _container_path(self, pointer):
-		"The container path the pointer's file lists the object under, or None"
+	def container_path(self, pointer):
+		"""
+		The container path the file a pointer points into lists its object
+		under (the name the game loads it by, such as an effect's
+		"effect/epbarrier1.nif"), or None: the file isn't loaded, has no
+		container, or doesn't list the object. Each file's container is read
+		once per writer.
+		"""
 		try:
 			asset = pointer.asset
 		except Exception:
@@ -906,7 +924,7 @@ class GLTFWriter:
 			if go and self._pointer_key(go) in self._gameobject_nodes:
 				return {"node": self._gameobject_nodes[self._pointer_key(go)], "component": typename}
 			ret = {"object": (fields.get("m_Name") if hasattr(fields, "get") else None) or None, "type": typename}
-			path = self._container_path(value)
+			path = self.container_path(value)
 			if path is not None:
 				ret["path"] = path
 			return ret
@@ -920,6 +938,8 @@ class GLTFWriter:
 			return [self._script_value(v, depth + 1) for v in value]
 		fields = _fields(value)
 		if hasattr(fields, "items"):
+			if set(fields) == {"r", "g", "b", "a"}:  # a Color
+				return _color(fields)
 			return {str(k): self._script_value(v, depth + 1) for k, v in fields.items()}
 		return str(value)
 
@@ -933,6 +953,9 @@ class GLTFWriter:
 				self.warnings.append("node %d: script %r can't be read" % (node, pointer))
 				continue
 			name = self._class_name(pointer, script)
+			if name is None and all(k.startswith("m_") for k in fields):
+				self.warnings.append("node %d: a script of an unknown class, with no fields of its own: left out" % (node))
+				continue
 			entry = {"script": name, "enabled": bool(fields.get("m_Enabled", True)), "fields": {}}
 			for k, v in fields.items():
 				if k.startswith("m_"):
