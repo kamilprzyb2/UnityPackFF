@@ -13,7 +13,7 @@
      256
     ]
    ],
-   "sha256": "83c9d46364ff0e88",
+   "sha256": "8b7f8f41719b0652",
    "warnings": 2
   },
   "nano/nano_eduardo.kfm": {
@@ -29,7 +29,7 @@
      256
     ]
    ],
-   "sha256": "37038e5439595bda",
+   "sha256": "213855388f26c231",
    "warnings": 2
   },
   "nano/nano_numbuhtwo.kfm": {
@@ -45,7 +45,7 @@
      256
     ]
    ],
-   "sha256": "5882a80b8119ec12",
+   "sha256": "62f9864b3b2c8701",
    "warnings": 2
   }
  },
@@ -63,7 +63,7 @@
      256
     ]
    ],
-   "sha256": "c6a6d2eeba93d522",
+   "sha256": "3dde5317136b972b",
    "warnings": 0
   },
   "map/dtetc/dt_mtdb_ef_signboard_01.nif": {
@@ -91,7 +91,7 @@
      128
     ]
    ],
-   "sha256": "398049f9ccb21e7e",
+   "sha256": "69a059c2d6fffdb8",
    "warnings": 0
   },
   "map/ep/suburbs_jumppad_02.nif": {
@@ -111,7 +111,7 @@
      256
     ]
    ],
-   "sha256": "b65e08dcd9b22a07",
+   "sha256": "504dd69e17fbaf50",
    "warnings": 0
   },
   "map/ep/wilds_move_01.nif": {
@@ -131,7 +131,7 @@
      256
     ]
    ],
-   "sha256": "a3ad00ae4fd59247",
+   "sha256": "fedce9c0d3db173f",
    "warnings": 1
   },
   "map/etc/dt_mtsm_fence_ef02.nif": {
@@ -159,7 +159,7 @@
      128
     ]
    ],
-   "sha256": "30ae2f370b3f68e5",
+   "sha256": "4362826825c836d3",
    "warnings": 2
   },
   "map/etc/dt_mtsm_fence_ef02_5.nif": {
@@ -187,7 +187,7 @@
      128
     ]
    ],
-   "sha256": "694c3edcae0159c7",
+   "sha256": "51171141cdb7cfee",
    "warnings": 2
   },
   "map/etc/indun_roof_black.nif": {
@@ -203,7 +203,7 @@
      32
     ]
    ],
-   "sha256": "618f6eaab9e6e141",
+   "sha256": "c72bdfca1c7cda46",
    "warnings": 1
   },
   "map/etc/indun_wall_12.nif": {
@@ -227,7 +227,7 @@
      512
     ]
    ],
-   "sha256": "de5fb888b1f9f1c1",
+   "sha256": "37b16da441b3561c",
    "warnings": 1
   },
   "map/etc/indun_wall_24.nif": {
@@ -251,7 +251,7 @@
      512
     ]
    ],
-   "sha256": "1453062ba3c23172",
+   "sha256": "ed850dfd5974adc3",
    "warnings": 1
   },
   "map/etc/indun_wall_48.nif": {
@@ -275,7 +275,7 @@
      512
     ]
    ],
-   "sha256": "49ea60437d84253c",
+   "sha256": "51e9c82031e2ddb6",
    "warnings": 1
   },
   "map/etc/wd_etc_stone06_03.nif": {
@@ -291,7 +291,7 @@
      256
     ]
    ],
-   "sha256": "346f9361812b0171",
+   "sha256": "8b2f521ef2bf87b0",
    "warnings": 1
   },
   "map/etc/wd_etc_stone07_01.nif": {
@@ -307,7 +307,7 @@
      256
     ]
    ],
-   "sha256": "4b0d611632c57d75",
+   "sha256": "a036a9cf50f1eb0f",
    "warnings": 0
   },
   "map/etc/wd_etc_stone07_02.nif": {
@@ -323,7 +323,7 @@
      256
     ]
    ],
-   "sha256": "69bb85b2741d7159",
+   "sha256": "4e5a14eb9cf9c512",
    "warnings": 1
   },
   "map/etc/wd_etc_stone07_03.nif": {
@@ -339,7 +339,7 @@
      256
     ]
    ],
-   "sha256": "d40454dab6282c2f",
+   "sha256": "da1e983e0aeedaf7",
    "warnings": 0
   },
   "map/etc/wd_etc_stone07_04.nif": {
@@ -355,7 +355,7 @@
      256
     ]
    ],
-   "sha256": "9f4b2f4c8c4fbfe7",
+   "sha256": "a10c8bbf67ba7e22",
    "warnings": 0
   },
   "map/fuseslair/wd_dlfl_stone01.nif": {
@@ -371,7 +371,7 @@
      512
     ]
    ],
-   "sha256": "0fa7f7f7c699f728",
+   "sha256": "dfee43d28902ce43",
    "warnings": 1
   },
   "map/fuseslair/wd_dlfl_stone02.nif": {
@@ -387,7 +387,7 @@
      256
     ]
    ],
-   "sha256": "7cf17e615e325304",
+   "sha256": "d210e53292190c14",
    "warnings": 1
   },
   "map/leakeylake/wd_bwll_cplant_01.nif": {
@@ -403,7 +403,7 @@
      256
     ]
    ],
-   "sha256": "53e2d2a407665ee3",
+   "sha256": "e24e29a8195bdb4d",
    "warnings": 0
   },
   "map/leakeylake/wd_bwll_cplant_02.nif": {
@@ -419,7 +419,7 @@
      256
     ]
    ],
-   "sha256": "709aaec7c53f4f3e",
+   "sha256": "09814d826df1a639",
    "warnings": 0
   },
   "map/leakeylake/wd_bwll_cplant_02_1.nif": {
@@ -435,7 +435,7 @@
      256
     ]
    ],
-   "sha256": "75216cb5d544bba1",
+   "sha256": "55e1150b1902718b",
    "warnings": 0
   },
   "map/leakeylake/wd_bwll_cplant_06.nif": {
@@ -451,7 +451,7 @@
      128
     ]
    ],
-   "sha256": "a2377a3d30763a1d",
+   "sha256": "a643cc939ffc121d",
    "warnings": 0
   },
   "map/questitem/quest_item_computer_consoles.nif": {
@@ -471,7 +471,7 @@
      256
     ]
    ],
-   "sha256": "627898119ad17b55",
+   "sha256": "c97a6f8105742c3f",
    "warnings": 0
   },
   "map/questitem/quest_item_crates_01.nif": {
@@ -487,7 +487,7 @@
      256
     ]
    ],
-   "sha256": "401ff4f138823919",
+   "sha256": "9a33a22a65252ecc",
    "warnings": 0
   },
   "map/questitem/quest_timemachin.nif": {
@@ -539,7 +539,7 @@
      128
     ]
    ],
-   "sha256": "b882ad48a33c3e32",
+   "sha256": "811f1d1bd397fd01",
    "warnings": 5
   },
   "map/questitem/timemachine_01.nif": {
@@ -615,7 +615,7 @@
      256
     ]
    ],
-   "sha256": "dfdb849e9e6a1e65",
+   "sha256": "a725cda77481ff2c",
    "warnings": 2
   },
   "map/twistedforest/wd_jutf_plant 03.nif": {
@@ -631,7 +631,7 @@
      128
     ]
    ],
-   "sha256": "a2fff4f03e13c692",
+   "sha256": "5c967865cce02694",
    "warnings": 1
   },
   "map/twistedforest/wd_jutf_plant 04.nif": {
@@ -651,7 +651,7 @@
      64
     ]
    ],
-   "sha256": "a5eb5cef911bbffd",
+   "sha256": "2251d1c04368cefb",
    "warnings": 0
   },
   "map/twistedforest/wd_jutf_plant 05.nif": {
@@ -667,7 +667,7 @@
      128
     ]
    ],
-   "sha256": "c0a9b9046d0ecfd1",
+   "sha256": "b8bb230efb48088b",
    "warnings": 1
   },
   "map/twistedforest/wd_jutf_plant 07.nif": {
@@ -683,7 +683,7 @@
      128
     ]
    ],
-   "sha256": "77b85b6adfa83498",
+   "sha256": "efa73e16797a5b76",
    "warnings": 0
   },
   "map/twistedforest/wd_jutf_plant 08.nif": {
@@ -703,7 +703,7 @@
      64
     ]
    ],
-   "sha256": "d534d1d4540159dd",
+   "sha256": "c6e0906ee63ffd55",
    "warnings": 1
   },
   "mob/fusion_billy.kfm": {
@@ -723,7 +723,7 @@
      1
     ]
    ],
-   "sha256": "0a8b75afcb672ad1",
+   "sha256": "1ec28918c5d8f124",
    "warnings": 4
   },
   "mob/fusion_blooexpression.kfm": {
@@ -739,7 +739,7 @@
      1
     ]
    ],
-   "sha256": "2217eadaa23acbc8",
+   "sha256": "07e8eb89f193b9d8",
    "warnings": 4
   },
   "mob/fusion_bubbles.kfm": {
@@ -759,7 +759,7 @@
      1
     ]
    ],
-   "sha256": "a45d346d9174370a",
+   "sha256": "5c0c0b6ea0ca1240",
    "warnings": 4
   },
   "mob/fusion_cheese.kfm": {
@@ -779,7 +779,7 @@
      1
     ]
    ],
-   "sha256": "52237d80d98fa4ac",
+   "sha256": "527d484dbe528654",
    "warnings": 3
   },
   "mob/fusion_coco.kfm": {
@@ -799,7 +799,7 @@
      1
     ]
    ],
-   "sha256": "198c656beabf20ab",
+   "sha256": "ea45209610f8239b",
    "warnings": 4
   },
   "mob/fusion_computress.kfm": {
@@ -815,7 +815,7 @@
      256
     ]
    ],
-   "sha256": "6af24462ef27d5b6",
+   "sha256": "d98894ef8bb99d04",
    "warnings": 5
   },
   "mob/fusion_coopturns.kfm": {
@@ -835,7 +835,7 @@
      1
     ]
    ],
-   "sha256": "99d98c5bc911c76a",
+   "sha256": "8ae5cfd661fbfde7",
    "warnings": 4
   },
   "mob/fusion_courage.kfm": {
@@ -859,7 +859,7 @@
      256
     ]
    ],
-   "sha256": "16aa3a1c9feb6886",
+   "sha256": "d6c6dfe8aa8bd4fc",
    "warnings": 4
   },
   "mob/fusion_deedee.kfm": {
@@ -879,7 +879,7 @@
      1
     ]
    ],
-   "sha256": "c942f4e4782930fc",
+   "sha256": "56f9072e86f49943",
    "warnings": 4
   },
   "mob/fusion_dexter.kfm": {
@@ -903,7 +903,7 @@
      64
     ]
    ],
-   "sha256": "7a62a1098453b6a2",
+   "sha256": "7dece950c90a5948",
    "warnings": 5
   },
   "mob/fusion_ed.kfm": {
@@ -923,7 +923,7 @@
      1
     ]
    ],
-   "sha256": "02dc38634603f2f4",
+   "sha256": "815c2dd9d935afb4",
    "warnings": 4
   },
   "mob/fusion_edd.kfm": {
@@ -943,7 +943,7 @@
      1
     ]
    ],
-   "sha256": "698e2775408b1352",
+   "sha256": "0148a978221d0810",
    "warnings": 4
   },
   "mob/fusion_eddy.kfm": {
@@ -963,7 +963,7 @@
      1
     ]
    ],
-   "sha256": "b2df826b4fa58ee3",
+   "sha256": "a2812e9b8fa7d588",
    "warnings": 4
   },
   "mob/fusion_grandpamax.kfm": {
@@ -987,7 +987,7 @@
      256
     ]
    ],
-   "sha256": "42b76a236119841a",
+   "sha256": "bd98d99c8c0fdc36",
    "warnings": 4
   },
   "mob/fusion_grim.kfm": {
@@ -1011,7 +1011,7 @@
      256
     ]
    ],
-   "sha256": "ea46ffae8e583ace",
+   "sha256": "c2977e1370e0100b",
    "warnings": 4
   },
   "mob/fusion_gwen.kfm": {
@@ -1031,7 +1031,7 @@
      1
     ]
    ],
-   "sha256": "c46cc77a2845c896",
+   "sha256": "2b85a97a3659cab5",
    "warnings": 4
   },
   "mob/fusion_hex.kfm": {
@@ -1055,7 +1055,7 @@
      256
     ]
    ],
-   "sha256": "1a92c62f481ee38c",
+   "sha256": "3f73d5ea1fec96e8",
    "warnings": 4
   },
   "mob/fusion_him.kfm": {
@@ -1075,7 +1075,7 @@
      1
     ]
    ],
-   "sha256": "819eb039877d2ea8",
+   "sha256": "b1c1d01688e8edfe",
    "warnings": 4
   },
   "mob/fusion_mac.kfm": {
@@ -1095,7 +1095,7 @@
      1
     ]
    ],
-   "sha256": "b4a3495a74fe853c",
+   "sha256": "584ae04d8733bb54",
    "warnings": 4
   },
   "mob/fusion_mandark.kfm": {
@@ -1115,7 +1115,7 @@
      1
     ]
    ],
-   "sha256": "2a7ca1a0f2499e7c",
+   "sha256": "f77a7363f0350c4d",
    "warnings": 4
   },
   "mob/fusion_mandy.kfm": {
@@ -1135,7 +1135,7 @@
      1
     ]
    ],
-   "sha256": "c35cc532831c62be",
+   "sha256": "33b7e9e871d51829",
    "warnings": 4
   },
   "mob/fusion_mayor.kfm": {
@@ -1155,7 +1155,7 @@
      1
     ]
    ],
-   "sha256": "1adc77eece1f885d",
+   "sha256": "bb3c902133047961",
    "warnings": 5
   },
   "mob/fusion_numbuhfive.kfm": {
@@ -1179,7 +1179,7 @@
      256
     ]
    ],
-   "sha256": "5888cc8e9e1eafd7",
+   "sha256": "3212f566325cd3ba",
    "warnings": 4
   },
   "mob/fusion_numbuhfour.kfm": {
@@ -1199,7 +1199,7 @@
      1
     ]
    ],
-   "sha256": "1767769ff7cbae3d",
+   "sha256": "deab8fe4f3604810",
    "warnings": 4
   },
   "mob/fusion_numbuhone.kfm": {
@@ -1223,7 +1223,7 @@
      1
     ]
    ],
-   "sha256": "b21e74edd4528ef4",
+   "sha256": "d5c09bd800a54616",
    "warnings": 3
   },
   "mob/fusion_numbuhthree.kfm": {
@@ -1243,7 +1243,7 @@
      1
     ]
    ],
-   "sha256": "3a64daf3dc4b9dbb",
+   "sha256": "2cc3558e2ae11481",
    "warnings": 4
   },
   "mob/fusion_professorutonium.kfm": {
@@ -1267,7 +1267,7 @@
      256
     ]
    ],
-   "sha256": "a2af4651246045b5",
+   "sha256": "b09f031444f80a01",
    "warnings": 4
   },
   "mob/fusion_samuraijack.kfm": {
@@ -1287,7 +1287,7 @@
      1
     ]
    ],
-   "sha256": "ee5227e3af82a3cb",
+   "sha256": "2d35f76954130d10",
    "warnings": 4
   },
   "mob/fusion_scotsman.kfm": {
@@ -1307,7 +1307,7 @@
      1
     ]
    ],
-   "sha256": "77348fb1ad995de5",
+   "sha256": "1f54ddbd03a3f2ce",
    "warnings": 4
   },
   "mob/fusion_vilgax.kfm": {
@@ -1327,7 +1327,7 @@
      1
     ]
    ],
-   "sha256": "3c189c88e05efee4",
+   "sha256": "14a51f347453f1fb",
    "warnings": 4
   },
   "mob/fusion_wilt.kfm": {
@@ -1351,7 +1351,7 @@
      256
     ]
    ],
-   "sha256": "11cccdebf39fd792",
+   "sha256": "d3380f6654f86db9",
    "warnings": 4
   },
   "mob/mob_flyingmonkey.kfm": {
@@ -1371,7 +1371,7 @@
      1
     ]
    ],
-   "sha256": "96a2ae4bc3440b3e",
+   "sha256": "806f38126208cd1c",
    "warnings": 1
   },
   "mob/mob_fusionextremesaurus.kfm": {
@@ -1387,7 +1387,7 @@
      256
     ]
    ],
-   "sha256": "c9054eabf3369416",
+   "sha256": "a1734b1abd809192",
    "warnings": 1
   },
   "mob/mob_gasspawn.kfm": {
@@ -1407,7 +1407,7 @@
      1
     ]
    ],
-   "sha256": "ee6a06ea7d26f7d1",
+   "sha256": "79518cdd8e40d0e5",
    "warnings": 3
   },
   "mob/mob_griffonroar.kfm": {
@@ -1423,7 +1423,7 @@
      256
     ]
    ],
-   "sha256": "79bc1faf4b096bc6",
+   "sha256": "688e1c6a47bd06b0",
    "warnings": 1
   },
   "mob/mob_motorgorilla.kfm": {
@@ -1434,7 +1434,7 @@
    "skins": 1,
    "animations": 19,
    "images": [],
-   "sha256": "506a168e0692a391",
+   "sha256": "ecc251a12700aa04",
    "warnings": 1
   },
   "mob/mob_pirate.kfm": {
@@ -1450,7 +1450,7 @@
      256
     ]
    ],
-   "sha256": "4abd112886f8b480",
+   "sha256": "8213adee98b530f0",
    "warnings": 1
   },
   "mob/mob_swampycannibalfrog.kfm": {
@@ -1466,7 +1466,7 @@
      256
     ]
    ],
-   "sha256": "afb20956c9f41b12",
+   "sha256": "f1494af834305700",
    "warnings": 4
   },
   "mob/mob_telegraphpole.kfm": {
@@ -1482,7 +1482,7 @@
      256
     ]
    ],
-   "sha256": "98e2cd841a7c96df",
+   "sha256": "39873954f8cae4e3",
    "warnings": 1
   },
   "mob/mob_themepark.kfm": {
@@ -1498,7 +1498,7 @@
      256
     ]
    ],
-   "sha256": "a31e80c9e9ce7983",
+   "sha256": "57081a90d6d3f997",
    "warnings": 1
   },
   "mob/mob_threeeyes.kfm": {
@@ -1514,7 +1514,7 @@
      256
     ]
    ],
-   "sha256": "024ad129a718ff07",
+   "sha256": "9c1e57c0a61cf4f2",
    "warnings": 1
   },
   "mob/mob_turtleworm.kfm": {
@@ -1530,7 +1530,7 @@
      256
     ]
    ],
-   "sha256": "b71e3a33e886aa73",
+   "sha256": "eeeed796e209a0c3",
    "warnings": 1
   },
   "mob/mob_ventilatordino.kfm": {
@@ -1546,7 +1546,7 @@
      256
     ]
    ],
-   "sha256": "043239034e1ed02e",
+   "sha256": "76d92e495a518696",
    "warnings": 1
   },
   "mob/npc_billy.kfm": {
@@ -1557,7 +1557,7 @@
    "skins": 1,
    "animations": 11,
    "images": [],
-   "sha256": "a82621523396fd05",
+   "sha256": "362a6a0c4760eff5",
    "warnings": 2
   },
   "mob/npc_blossom.kfm": {
@@ -1573,7 +1573,7 @@
      256
     ]
    ],
-   "sha256": "24029f158bdf9d6e",
+   "sha256": "b023b4bf5cbb2b04",
    "warnings": 1
   },
   "mob/npc_grim.kfm": {
@@ -1593,7 +1593,7 @@
      1
     ]
    ],
-   "sha256": "3d7e7a9e9d974cc6",
+   "sha256": "fb239eb34825d74f",
    "warnings": 0
   },
   "prefabs/eps/epelements/epe[217].prefab": {
@@ -1621,7 +1621,7 @@
      256
     ]
    ],
-   "sha256": "86852423b68435e0",
+   "sha256": "ab13ba1902ae10e5",
    "warnings": 1
   }
  }

@@ -5,6 +5,7 @@ Khronos validator is installed (see tests/tools/gltf.py), that every file
 passes it with no errors and no warnings. bin/export_gltf.py exports one.
 """
 
+import json
 import re
 
 import pytest
@@ -263,15 +264,27 @@ def test_export_gltf_split_clips(build, bundle, unpacked, tmp_path):
 	whole = GLB(whole_file.read_bytes())
 	model = GLB((tmp_path / "split" / "actor_m.kfm.glb").read_bytes())
 	assert "animations" not in model.json
-	assert model["nodes"] == whole["nodes"] and model.get("meshes") == whole.get("meshes")
+
+	def by_names(nodes):
+		"The nodes with their Animations' clips by name only (each file numbers its own clips)"
+		nodes = json.loads(json.dumps(nodes))
+		for n in nodes:
+			for c in n.get("extras", {}).get("animation", {}).get("clips", []):
+				c.pop("animation", None)
+				c.pop("material_clip", None)
+		return nodes
+
+	assert model["nodes"] == by_names(whole["nodes"]) and model.get("meshes") == whole.get("meshes")
 
 	clips = sorted((tmp_path / "split").glob("actor_m.kfm@*.glb"))
 	assert len(clips) == len(whole["animations"]) > 200
 	by_name = {a["name"]: a for a in whole["animations"]}
 	for f in clips:
 		g = GLB(f.read_bytes())
-		assert g["nodes"] == [{k: v for k, v in n.items() if k not in ("mesh", "skin")} for n in whole["nodes"]]
+		assert by_names(g["nodes"]) == [{k: v for k, v in n.items() if k not in ("mesh", "skin")} for n in by_names(whole["nodes"])]
 		[a] = g["animations"]
+		refs = [c for n in g["nodes"] for c in n.get("extras", {}).get("animation", {}).get("clips", []) if "animation" in c]
+		assert refs and all(c == {"name": a["name"], "animation": 0} for c in refs)
 		assert f.name == "actor_m.kfm@%s.glb" % re.sub(r"[^\w.@-]", "_", a["name"])
 		w = by_name[a["name"]]
 		assert a["channels"] == w["channels"] and a.get("extras") == w.get("extras")

@@ -312,6 +312,8 @@ You'll also want to change the Forward or Up axes in the file selection menu whe
 
 Exports the prefabs (GameObjects) of an extracted asset file as glTF binaries (`.glb`), one per prefab: the Transform tree, meshes and materials with their textures embedded, skins, and the clips of the prefab's Animation components.
 Each material keeps the Unity material it came from (shader name, colours, floats, textures) in its `extras`.
+Each node with an Animation component keeps how it plays its clips in its `extras.animation`: the clip list in order (each clip's glTF animation), the default clip, the wrap mode, whether it plays automatically and whether it's enabled.
+A clip's curves move the nodes their paths name under that node, found as Unity finds them; the animation's `extras` list the paths that name no node (`unresolved`) or more than one (`ambiguous`, the first is animated).
 
 ```
 /path/to/export_gltf.py CustomAssetBundle-50513e574023b4e259c6fd245ae5bc06 -o out

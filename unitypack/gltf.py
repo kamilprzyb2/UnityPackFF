@@ -14,7 +14,11 @@ archive, say) are skipped, with a note in GLTFWriter.warnings.
 A GameObject exports with its skinned meshes (a skin per
 SkinnedMeshRenderer, using the mesh's stored bind poses, or the prefab's
 own pose where it has none) and the clips of its Animation components,
-resampled at each clip's rate and interpolated linearly. A scene file
+resampled at each clip's rate and interpolated linearly. Each clip's
+curves move the nodes their paths name under the Animation's own node, as
+Unity binds them; the node keeps how the Animation plays its clips (the
+list, the default, wrap mode, play automatically) in its extras (see
+GameObjectExport.add_animation()). A scene file
 exports whole (add_scene()), terrain included: its surface with the
 shifts applied and its splat textures blended into one base map, and its
 details (grass) as data in the material's extras.
@@ -297,17 +301,26 @@ class GLTFWriter:
 		for view in views:
 			self.json["bufferViews"][view]["buffer"] = self._cache[("buffer", name)]
 
-	def accessor(self, values, type_, component_type=FLOAT, target=None, minmax=False):
-		"values: flat; type_: SCALAR, VEC2, VEC3, VEC4 or MAT4"
+	def accessor(self, values, type_, component_type=FLOAT, target=None, minmax=False, share=False):
+		"""
+		values: flat; type_: SCALAR, VEC2, VEC3, VEC4 or MAT4. With share,
+		the same values (as stored) give the same accessor, once per document
+		"""
 		components = {"SCALAR": 1, "VEC2": 2, "VEC3": 3, "VEC4": 4, "MAT4": 16}[type_]
 		fmt = "<%d%s" % (len(values), _FORMATS[component_type])
 		data = struct.pack(fmt, *values)
+		key = ("accessor", type_, component_type, target, minmax, data)
+		if share and key in self._cache:
+			return self._cache[key]
 		acc = {"bufferView": self.buffer_view(data, target), "componentType": component_type, "count": len(values) // components, "type": type_}
 		if minmax:
 			stored = struct.unpack(fmt, data)  # as float32, so min/max match the data exactly
 			acc["min"] = [min(stored[i::components]) for i in range(components)]
 			acc["max"] = [max(stored[i::components]) for i in range(components)]
-		return self._add("accessors", acc)
+		index = self._add("accessors", acc)
+		if share:
+			self._cache[key] = index
+		return index
 
 	def add_texture(self, texture):
 		"A Texture2D (or a pointer to one) as an embedded PNG; None if it can't be decoded"
@@ -786,7 +799,10 @@ class GLTFWriter:
 		document's material_clips. A clip's document has the same nodes in
 		the same order, so a viewer can play it on the first one's model, but
 		no meshes, skins, materials or colliders: only that clip. Each is
-		ready for glb(). Warnings stay with the first.
+		ready for glb(). Warnings stay with the first. The nodes' references
+		to clips (extras.animation) point into each document's own clips,
+		and are dropped where it hasn't the clip, so only the names are left
+		in the first.
 		"""
 		animations = self.json.get("animations", [])
 		material_clips = self.json.get("extras", {}).get("material_clips", [])
@@ -807,6 +823,23 @@ class GLTFWriter:
 			extras["material_clips"] = copy.deepcopy(material_clips)
 		if "extras" in doc and not extras:
 			del doc["extras"]
+		# the Animations' references to clips, renumbered as in this document, or dropped if it hasn't the clip
+		def numbers(kept, whole):
+			"{index in whole: index in kept}, by identity (two clips can be equal)"
+			return {next(i for i, x in enumerate(whole) if x is item): new for new, item in enumerate(kept)}
+
+		renumber = {
+			"animation": numbers(animations, self.json.get("animations", [])),
+			"material_clip": numbers(material_clips, self.json.get("extras", {}).get("material_clips", [])),
+		}
+		for node in doc["nodes"]:
+			for entry in node.get("extras", {}).get("animation", {}).get("clips", []):
+				for key, new in renumber.items():
+					if key in entry:
+						if entry[key] in new:
+							entry[key] = new[entry[key]]
+						else:
+							del entry[key]
 		if not geometry:
 			for key in ("meshes", "skins", "materials", "textures", "images", "samplers"):
 				doc.pop(key, None)
@@ -977,11 +1010,11 @@ class GameObjectExport:
 		# with skinned_only, the Transforms the skins use: kept whatever they carry
 		self.joints = self.bones(gameobject) if skinned_only else set()
 		self.nodes = {}  # Transform path ID -> node index
-		self.paths = {}  # path from the root ("" for the root) -> node index
+		self.children = {}  # node index -> [(GameObject name, child node)], in order
 		self.local = {}  # node index -> local matrix, in Unity's coordinates
 		self.parent = {}  # node index -> parent node index
 		self.skinned = []  # (node, SkinnedMeshRenderer)
-		self.animations = []  # (path, Animation component)
+		self.animations = []  # (path, node, Animation component)
 		self.sample_rate = sample_rate
 		self.extra_roots = []
 		self.root = self.visit(gameobject, "")
@@ -993,14 +1026,8 @@ class GameObjectExport:
 				self.add_skin(node, smr)
 			else:
 				self.add_unskinned(node, smr)
-		if animations:
-			clips = {}
-			for path, animation in self.animations:
-				for ptr in _fields(animation)["m_Animations"]:
-					clip = writer.resolve(ptr)
-					if clip is not None and (path, clip.name) not in clips:
-						clips[(path, clip.name)] = clip
-						self.add_clip(path, clip)
+		for path, node, animation in self.animations:
+			self.add_animation(path, node, animation, animations)
 
 	def bones(self, gameobject):
 		"The path IDs of the Transforms the SkinnedMeshRenderers under a GameObject use as bones"
@@ -1045,7 +1072,8 @@ class GameObjectExport:
 		skinned = None
 		light = None
 		extras = {}
-		left_out = animated = False
+		left_out = False
+		animated = None
 		actor_bones = index_table = None
 		renderer = next((w.resolve(p) for cid, p in comps if cid == MESH_RENDERER), None)
 		for cid, ptr in comps:
@@ -1065,10 +1093,10 @@ class GameObjectExport:
 			elif cid == SKINNED_MESH_RENDERER:
 				skinned = w.resolve(ptr)
 			elif cid == ANIMATION:
-				animation = w.resolve(ptr)
-				if animation is not None:
-					self.animations.append((path, animation))
-					animated = True
+				animated = w.resolve(ptr)
+				if animated is not None:  # its node comes after its children's; its clips before theirs
+					slot = len(self.animations)
+					self.animations.append(None)
 			elif self.actor_bones and (cid == MONO_BEHAVIOUR or cid < 0):
 				script = w.resolve(ptr)
 				fields = _fields(script) if script is not None else {}
@@ -1092,6 +1120,7 @@ class GameObjectExport:
 					extras["rigidbody"] = {"mass": float(f["m_Mass"]), "kinematic": bool(f["m_IsKinematic"]), "gravity": bool(f["m_UseGravity"])}
 
 		children = []
+		named = []
 		for child_ptr in _fields(transform)["m_Children"]:
 			child = w.resolve(child_ptr)
 			child_go = w.resolve(_fields(child)["m_GameObject"]) if child is not None else None
@@ -1099,8 +1128,9 @@ class GameObjectExport:
 				node = self.visit(child_go, "%s/%s" % (path, child_go.name) if path else child_go.name)
 				if node is not None:
 					children.append(node)
+					named.append((child_go.name, node))
 
-		if (left_out and path and not children and skinned is None and light is None and not extras and not animated
+		if (left_out and path and not children and skinned is None and light is None and not extras and animated is None
 				and actor_bones is None and transform_ptr.path_id not in self.joints):
 			return None  # it only carried what was left out
 
@@ -1112,7 +1142,9 @@ class GameObjectExport:
 		node = w.add_node(gameobject.name, mesh=mesh, translation=t, rotation=q, scale=sc, children=children,
 			**({"extras": extras} if extras else {}))
 		self.nodes[transform_ptr.path_id] = node
-		self.paths.setdefault(path, node)
+		self.children[node] = named
+		if animated is not None:
+			self.animations[slot] = (path, node, animated)
 		if actor_bones is not None:
 			self.actor_tables.append((node, actor_bones))
 		if index_table is not None:
@@ -1216,10 +1248,69 @@ class GameObjectExport:
 			bones[gender] = indices
 		w.json["skins"][skin]["extras"] = {"actor_bones": bones}
 
-	def add_clip(self, path, clip):
+	def add_animation(self, path, node, animation, clips=True):
 		"""
-		One clip as a glTF animation: every transform curve sampled at the
-		clip's rate (or self.sample_rate), linearly interpolated. Curves on
+		An Animation component (on node, path from the exported root): its
+		clips (with clips) and, in the node's extras.animation, how it plays
+		them: "clips", in its order, each {"name": ..., "animation": glTF
+		animation index} or {"name": ..., "material_clip": index into the
+		document's extras.material_clips} (neither if it wasn't exported;
+		name None if it doesn't resolve); "default", the index in "clips"
+		of the default clip (listed last if the Animation doesn't list it,
+		since Unity plays it all the same) or None; "wrap_mode" (a WrapMode
+		name, or the number if it isn't one); "play_automatically",
+		"enabled", "animate_physics"; and "animate_if_visible" or
+		"culling_type", whichever the file has.
+		"""
+		from .engine.animation import WrapMode
+
+		w = self.writer
+		f = _fields(animation)
+		pointers = list(f["m_Animations"])
+		default = f.get("m_Animation")
+
+		def same(a, b):
+			return bool(a) and bool(b) and (a.file_id, a.path_id) == (b.file_id, b.path_id)
+
+		default_index = next((i for i, ptr in enumerate(pointers) if same(ptr, default)), None)
+		if default and default_index is None and w.resolve(default) is not None:
+			default_index = len(pointers)
+			pointers.append(default)
+		entries = []
+		exported = {}
+		for ptr in pointers:
+			clip = w.resolve(ptr)
+			if clip is None:
+				entries.append({"name": None})
+				continue
+			key = (ptr.file_id, ptr.path_id)
+			if key not in exported:
+				exported[key] = self.add_clip(path, node, clip) if clips else {}
+			entries.append(dict(name=clip.name, **exported[key]))
+		wrap = f.get("m_WrapMode", 0)
+		try:
+			wrap = WrapMode(wrap).name
+		except ValueError:
+			pass
+		info = {"clips": entries, "default": default_index, "wrap_mode": wrap,
+			"play_automatically": bool(f.get("m_PlayAutomatically", True)), "enabled": bool(f.get("m_Enabled", True)),
+			"animate_physics": bool(f.get("m_AnimatePhysics", False))}
+		if "m_AnimateIfVisible" in f:
+			info["animate_if_visible"] = bool(f["m_AnimateIfVisible"])
+		if "m_CullingType" in f:
+			info["culling_type"] = int(f["m_CullingType"])
+		w.json["nodes"][node].setdefault("extras", {})["animation"] = info
+
+	def add_clip(self, path, node, clip):
+		"""
+		One clip, as the Animation on node (path from the exported root)
+		plays it, as a glTF animation: every transform curve sampled at the
+		clip's rate (or self.sample_rate), linearly interpolated. A curve
+		moves the node its path names under the Animation's node, found as
+		Unity does (see unitypack.engine.animation.find_path()); paths
+		that name no exported node, or more than one, are listed in the
+		animation's extras as "unresolved" and "ambiguous" (relative to
+		the Animation's node; an ambiguous one moves the first). Curves on
 		other properties (material colours, say) are sampled the same way
 		into the animation's extras, as float_curves: {"<path>:<attribute>":
 		{"times": [...], "values": [...], "node": n}}, with the path from
@@ -1228,9 +1319,13 @@ class GameObjectExport:
 		clip's events go there too. A clip with no transform curve isn't a
 		glTF animation (one needs a channel): it goes into the document's
 		extras.material_clips, as {"name": ..., "float_curves": ...,
-		"events": ...}.
+		"events": ..., "unresolved": ..., "ambiguous": ...}. Returns
+		{"animation": index}, {"material_clip": index}, or {} if neither.
 		"""
+		from .engine.animation import bind_paths
+
 		w = self.writer
+		binding = bind_paths(node, clip.paths, lambda n: self.children.get(n, ()))
 		rate = self.sample_rate or clip.sample_rate or 30.0
 		length = clip.length
 		frames = int(round(length * rate)) + 1
@@ -1244,9 +1339,11 @@ class GameObjectExport:
 			n = len(values)
 			key = n
 			if key not in times_accessor:
-				times_accessor[key] = w.accessor(times[:n] if n > 1 else [0.0], "SCALAR", minmax=True)
+				times_accessor[key] = w.accessor(times[:n] if n > 1 else [0.0], "SCALAR", minmax=True, share=True)
 			flat = [x for v in values for x in v]
-			return w._add_to(anim, "samplers", {"input": times_accessor[key], "output": w.accessor(flat, type_), "interpolation": "LINEAR"})
+			# props that play the same clip share its samples
+			output = w.accessor(flat, type_, share=True)
+			return w._add_to(anim, "samplers", {"input": times_accessor[key], "output": output, "interpolation": "LINEAR"})
 
 		anim = {"name": clip.name, "channels": [], "samplers": []}
 		kinds = (
@@ -1254,14 +1351,9 @@ class GameObjectExport:
 			("translation", clip.position_curves, "VEC3"),
 			("scale", clip.scale_curves, "VEC3"),
 		)
-		missing = set()
 		for target, curves, type_ in kinds:
 			for p, curve in curves.items():
-				node = self.paths.get(full_path(p))
-				if node is None:
-					missing.add(full_path(p))
-					continue
-				if not curve.keys:
+				if p not in binding.targets or not curve.keys:
 					continue
 				values = [curve.evaluate(t) for t in times]
 				if target == "rotation":
@@ -1272,7 +1364,7 @@ class GameObjectExport:
 					values = [list(v) for v in values]
 				if all(v == values[0] for v in values):
 					values = values[:1]
-				anim["channels"].append({"sampler": sampler(values, type_), "target": {"node": node, "path": target}})
+				anim["channels"].append({"sampler": sampler(values, type_), "target": {"node": binding.targets[p], "path": target}})
 
 		extras = {}
 		floats = {}
@@ -1284,22 +1376,30 @@ class GameObjectExport:
 			if all(v == values[0] for v in values):
 				values = values[:1]
 			track = {"times": times[:len(values)] if len(values) > 1 else [0.0], "values": values}
-			node = self.paths.get(full_path(f.path))
-			if node is not None:
-				track["node"] = node
+			if f.path in binding.targets:
+				track["node"] = binding.targets[f.path]
 			floats["%s:%s" % (full_path(f.path), f.attribute)] = track
 		if floats:
 			extras["float_curves"] = dict(sorted(floats.items()))
 		if clip.events:
 			extras["events"] = [{"time": float(e["time"]), "function": e["functionName"]} for e in clip.events]
+		if binding.unresolved:
+			extras["unresolved"] = binding.unresolved
+			w.warnings.append("clip %r: no node for %d curve paths, such as %r" % (
+				clip.name, len(binding.unresolved), full_path(binding.unresolved[0])))
+		if binding.ambiguous:
+			extras["ambiguous"] = binding.ambiguous
+			w.warnings.append("clip %r: %d curve paths name more than one node, such as %r; the first is animated" % (
+				clip.name, len(binding.ambiguous), full_path(binding.ambiguous[0])))
 		if extras:
 			anim["extras"] = extras
-		if missing:
-			w.warnings.append("clip %r: no node for %d curve paths, such as %r" % (clip.name, len(missing), sorted(missing)[0]))
 		if anim["channels"]:
-			w._add("animations", anim)
-		elif floats:
-			w.json.setdefault("extras", {}).setdefault("material_clips", []).append(dict(name=clip.name, **extras))
+			return {"animation": w._add("animations", anim)}
+		if floats:
+			clips = w.json.setdefault("extras", {}).setdefault("material_clips", [])
+			clips.append(dict(name=clip.name, **extras))
+			return {"material_clip": len(clips) - 1}
+		return {}
 
 
 def _rotation_samples(values):
