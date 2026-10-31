@@ -16,7 +16,8 @@ SkinnedMeshRenderer, using the mesh's stored bind poses, or the prefab's
 own pose where it has none) and the clips of its Animation components,
 resampled at each clip's rate and interpolated linearly. A scene file
 exports whole (add_scene()), terrain included: its surface with the
-shifts applied and its splat textures blended into one base map.
+shifts applied and its splat textures blended into one base map, and its
+details (grass) as data in the material's extras.
 
 Material render state (alphaMode, doubleSided) comes from the shader's
 name, see alpha_state(). glTF can't animate material properties, so a
@@ -52,6 +53,7 @@ UNSIGNED_INT = 5125
 ARRAY_BUFFER = 34962
 ELEMENT_ARRAY_BUFFER = 34963
 
+NEAREST = 9728
 LINEAR = 9729
 LINEAR_MIPMAP_LINEAR = 9987
 REPEAT = 10497
@@ -344,8 +346,12 @@ class GLTFWriter:
 			self._cache[("brightness", index)] = self.add_image(_with_alpha(rgb, alpha), name + " (additive)", clamp)
 		return self._cache[("brightness", index)]
 
-	def add_image(self, image, name, clamp=False):
-		"A PIL image in Unity's orientation (bottom row first, as Texture2D.image gives it) as a texture"
+	def add_image(self, image, name, clamp=False, nearest=False):
+		"""
+		A PIL image in Unity's orientation (bottom row first, as
+		Texture2D.image gives it) as a texture; nearest samples it without
+		filtering, for images that hold data rather than colours
+		"""
 		from PIL import ImageOps
 
 		png = BytesIO()
@@ -355,10 +361,11 @@ class GLTFWriter:
 		else:
 			image_index = self._add("images", {"name": name, "mimeType": "image/png", "bufferView": self.buffer_view(png.getvalue())})
 		wrap = CLAMP_TO_EDGE if clamp else REPEAT
-		if ("sampler", wrap) not in self._cache:
-			self._cache[("sampler", wrap)] = self._add("samplers", {
-				"magFilter": LINEAR, "minFilter": LINEAR_MIPMAP_LINEAR, "wrapS": wrap, "wrapT": wrap})
-		return self._add("textures", {"source": image_index, "sampler": self._cache[("sampler", wrap)]})
+		key = ("sampler", wrap, nearest)
+		if key not in self._cache:
+			mag, min_ = (NEAREST, NEAREST) if nearest else (LINEAR, LINEAR_MIPMAP_LINEAR)
+			self._cache[key] = self._add("samplers", {"magFilter": mag, "minFilter": min_, "wrapS": wrap, "wrapT": wrap})
+		return self._add("textures", {"source": image_index, "sampler": self._cache[key]})
 
 	def add_material(self, material, main_texture=None):
 		"""
@@ -502,7 +509,8 @@ class GLTFWriter:
 		with its splat textures blended into one base colour texture (at
 		base_map_resolution, or the terrain's own m_BaseMapResolution). The
 		material's extras keep what a terrain shader needs: the splat and
-		control map textures, each splat's tiling, and the lightmap.
+		control map textures, each splat's tiling, the lightmap, and the
+		details (see add_details()).
 		"""
 		from .engine.terrain import blend_splats
 
@@ -564,8 +572,63 @@ class GLTFWriter:
 			material["pbrMetallicRoughness"]["baseColorTexture"] = {"index": self.add_image(base, (terrain.name or "terrain") + " base map", clamp=True)}
 		lightmap = self.add_texture(terrain.lightmap) if terrain.lightmap else None
 		material["extras"] = {"terrain": {"splats": splat_info, "controls": control_textures, "lightmap": lightmap}}
+		details = self.add_details(terrain)
+		if details is not None:
+			material["extras"]["terrain"]["details"] = details
 		primitive["material"] = self._add("materials", material)
 		return self._add("meshes", {"name": terrain.name or "terrain", "primitives": [primitive]})
+
+	def add_details(self, terrain):
+		"""
+		A TerrainData's details (grass) for a terrain material's extras, or
+		None if it has no detail prototypes: "resolution" (cells along each
+		side), "waving_grass" (tint, strength, amount, speed) and
+		"prototypes", each with its fields (see DetailPrototype; render_mode
+		by its DetailRenderMode name), "texture" (a glTF texture
+		index), "prototype" (its GameObject's name; meshes aren't exported)
+		and "density": a texture whose pixel values are how many instances
+		each cell holds, unfiltered, laid over the terrain as its texture
+		coordinates are (as the control maps are), or None if it has none.
+		Instances aren't placed: Unity scatters them in their cells at
+		random when it draws them.
+		"""
+		from PIL import Image
+
+		prototypes = terrain.detail_prototypes
+		if not prototypes:
+			return None
+		resolution = terrain.detail_resolution
+		layers = terrain.detail_layers()
+		name = terrain.name or "terrain"
+		out = []
+		for i, p in enumerate(prototypes):
+			gameobject = self.resolve(p.prototype) if p.prototype else None
+			if p.use_mesh:
+				self.warnings.append("detail prototype %d of %r is a mesh (%r), which isn't exported" % (
+					i, name, gameobject.name if gameobject is not None else p.prototype))
+			info = {
+				"texture": self.add_texture(p.texture) if self.resolve(p.texture) is not None else None,
+				"prototype": gameobject.name if gameobject is not None else None,
+				"use_mesh": p.use_mesh,
+				"render_mode": getattr(p.render_mode, "name", p.render_mode),
+				"min_width": float(p.min_width), "max_width": float(p.max_width),
+				"min_height": float(p.min_height), "max_height": float(p.max_height),
+				"noise_spread": float(p.noise_spread), "bend_factor": float(p.bend_factor),
+				"healthy_color": [float(c) for c in p.healthy_color], "dry_color": [float(c) for c in p.dry_color],
+				"grayscale_lighting": p.grayscale_lighting, "lightmap_factor": float(p.lightmap_factor),
+				"density": None,
+			}
+			if i in layers:
+				image = Image.frombytes("L", (resolution, resolution), layers[i])
+				info["density"] = self.add_image(image, "%s detail %d" % (name, i), clamp=True, nearest=True)
+			out.append(info)
+		waving = terrain.waving_grass
+		return {
+			"resolution": resolution,
+			"waving_grass": {"tint": [float(c) for c in waving["tint"]], "strength": float(waving["strength"]),
+				"amount": float(waving["amount"]), "speed": float(waving["speed"])},
+			"prototypes": out,
+		}
 
 	def add_node(self, name=None, mesh=None, translation=None, rotation=None, scale=None, children=None, **extra):
 		"A node; translation and rotation in Unity's coordinates (mirrored here)"

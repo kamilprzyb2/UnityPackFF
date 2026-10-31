@@ -214,8 +214,9 @@ def export_scenes(build, bundle, env_dir, out=None):
 		data = w.glb()
 		f = out / (path.name + ".glb")
 		f.write_bytes(data)
-		terrains = sum(1 for m in w.json.get("materials", []) if "terrain" in m.get("extras", {}))
-		ret[path.name] = dict(summary(data), terrains=terrains, warnings=len(w.warnings), _file=str(f))
+		terrains = [m["extras"]["terrain"] for m in w.json.get("materials", []) if "terrain" in m.get("extras", {})]
+		layers = sum(1 for t in terrains for p in t.get("details", {}).get("prototypes", []) if p["density"] is not None)
+		ret[path.name] = dict(summary(data), terrains=len(terrains), detail_layers=layers, warnings=len(w.warnings), _file=str(f))
 	return ret
 
 

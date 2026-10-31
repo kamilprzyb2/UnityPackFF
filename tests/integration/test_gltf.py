@@ -64,6 +64,7 @@ def test_scene(build, bundle, unpacked, expected, tmp_path):
 	expected.check("gltf-scene/" + bundle, stats)
 	if bundle.startswith("Map_04_02"):
 		assert all(s["terrains"] == 1 for s in stats.values())
+		assert all(s["detail_layers"] > 0 for s in stats.values())
 
 	if have_validator():
 		issues = validate(files)

@@ -320,6 +320,7 @@ Each material keeps the Unity material it came from (shader name, colours, float
 
 Pointers into other files resolve when those files are in the same folder as the input, or one folder down, as `fetch_bundles.py --unpack` lays them out; `--env` points elsewhere.
 A map tile scene (`BuildPlayer-Map_XX_YY`, which has no container) is exported whole, as one `.glb` named after it: every active GameObject, the terrain with its shifts applied and its splat textures blended into a base map, and the scene's lights.
+The terrain material's extras keep what a terrain shader needs: the splat and control map textures, the lightmap, and the details (grass): each detail prototype's texture and settings, the wind, and per prototype a density texture laid over the terrain like the control maps, whose pixel values are how many instances each cell holds (Unity scatters them in their cells at random as it draws them, so they aren't placed).
 Nanos, NPCs and mobs, shinies, the bus, vehicles and what players wear get the textures the game puts on them, which the XDT names (from the TableData file in the environment, or `--xdt`; `--no-xdt` keeps the prefabs' own).
 A prefab the game uses with several texture sets (car colours, hoverboard designs, a face's eye colours) is written once per set, as `<path>@<texture>.glb`.
 
