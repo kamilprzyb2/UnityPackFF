@@ -91,7 +91,7 @@
      128
     ]
    ],
-   "sha256": "a635370903f01bfa",
+   "sha256": "7a321f70e51d845f",
    "warnings": 0
   },
   "map/ep/suburbs_jumppad_02.nif": {
@@ -159,7 +159,7 @@
      128
     ]
    ],
-   "sha256": "bc82b5c3fc479ef2",
+   "sha256": "4347a0c9b9875b62",
    "warnings": 2
   },
   "map/etc/dt_mtsm_fence_ef02_5.nif": {
@@ -187,7 +187,7 @@
      128
     ]
    ],
-   "sha256": "1df7e5741210ca81",
+   "sha256": "647f25307e89025f",
    "warnings": 2
   },
   "map/etc/indun_roof_black.nif": {
@@ -203,7 +203,7 @@
      32
     ]
    ],
-   "sha256": "c72bdfca1c7cda46",
+   "sha256": "be517e236d7be2fe",
    "warnings": 1
   },
   "map/etc/indun_wall_12.nif": {
@@ -227,7 +227,7 @@
      512
     ]
    ],
-   "sha256": "37b16da441b3561c",
+   "sha256": "3003ceb153d89936",
    "warnings": 1
   },
   "map/etc/indun_wall_24.nif": {
@@ -251,7 +251,7 @@
      512
     ]
    ],
-   "sha256": "ed850dfd5974adc3",
+   "sha256": "8c3c155acb6fb520",
    "warnings": 1
   },
   "map/etc/indun_wall_48.nif": {
@@ -275,7 +275,7 @@
      512
     ]
    ],
-   "sha256": "51e9c82031e2ddb6",
+   "sha256": "63e62faf3d572051",
    "warnings": 1
   },
   "map/etc/wd_etc_stone06_03.nif": {
@@ -291,7 +291,7 @@
      256
     ]
    ],
-   "sha256": "8b2f521ef2bf87b0",
+   "sha256": "7aeecbb5b027dc46",
    "warnings": 1
   },
   "map/etc/wd_etc_stone07_01.nif": {
@@ -323,7 +323,7 @@
      256
     ]
    ],
-   "sha256": "4e5a14eb9cf9c512",
+   "sha256": "5dbe6b5375fd0c29",
    "warnings": 1
   },
   "map/etc/wd_etc_stone07_03.nif": {
@@ -371,7 +371,7 @@
      512
     ]
    ],
-   "sha256": "dfee43d28902ce43",
+   "sha256": "923d7d593a1d7603",
    "warnings": 1
   },
   "map/fuseslair/wd_dlfl_stone02.nif": {
@@ -387,7 +387,7 @@
      256
     ]
    ],
-   "sha256": "d210e53292190c14",
+   "sha256": "52eb6d89bf0970a2",
    "warnings": 1
   },
   "map/leakeylake/wd_bwll_cplant_01.nif": {
@@ -539,7 +539,7 @@
      128
     ]
    ],
-   "sha256": "91ae57ccb1c09e2a",
+   "sha256": "d733499a1037629c",
    "warnings": 5
   },
   "map/questitem/timemachine_01.nif": {
@@ -615,7 +615,7 @@
      256
     ]
    ],
-   "sha256": "e1fd0c401ab2c320",
+   "sha256": "2a212a5ca2496457",
    "warnings": 2
   },
   "map/twistedforest/wd_jutf_plant 03.nif": {
