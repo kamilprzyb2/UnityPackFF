@@ -575,6 +575,30 @@ def test_scripts():
 	assert waypoint == {"script": "Waypoint", "enabled": True, "fields": {"point": {"x": 1, "y": 2, "z": 3}, "prev": None, "next": None}}
 
 
+class TypedPointer(Pointer):
+	"A pointer whose object's type tree names a class (pointer.object.type)"
+
+	def __init__(self, target, path_id, type_name):
+		super().__init__(target, path_id)
+		self.object = type("ObjectInfo", (), {"type": type_name})()
+
+
+def test_script_class_from_its_monoscript():
+	# two scripts with no fields of their own share a type tree, named after
+	# one of them; the MonoScript says which each is
+	root = gameobject_tree()
+	for path_id, cls in ((901, "TerrainDetailManager"), (903, "EpSynchronizer")):
+		s = script()
+		s["m_Script"] = Pointer(fdict(m_ClassName=cls), path_id + 1)
+		root._obj["m_Component"].append((-3, TypedPointer(s, path_id, "TerrainDetailManager")))
+	# without a MonoScript, the type tree's name is all there is
+	root._obj["m_Component"].append((-3, TypedPointer(script(Field=1), 905, "Combiner")))
+	w = GLTFWriter()
+	w.add_gameobject(root, scripts=True)
+	scripts = w.json["nodes"][w.json["scenes"][0]["nodes"][0]]["extras"]["scripts"]
+	assert [s["script"] for s in scripts] == ["TerrainDetailManager", "EpSynchronizer", "Combiner"]
+
+
 def test_disabled_script():
 	w = GLTFWriter()
 	w.add_gameobject(scripted_tree(enabled=0), scripts=True)

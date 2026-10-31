@@ -5,13 +5,14 @@
    "VisibleSwitch": 100,
    "BillboardNode": 100,
    "(unknown)": 1,
-   "TerrainDetailManager": 2,
+   "TerrainDetailManager": 1,
    "MapAttributeTable": 1,
    "EPElementController": 104,
    "EpJumppadTrigger": 12,
    "EpPlatformTrigger": 40,
    "EpZiplineTrigger": 3,
    "EpRingTrigger": 49,
+   "EpSynchronizer": 1,
    "EffectEmitterController": 16,
    "DongColorSetup": 1
   },
@@ -22,7 +23,7 @@
  "Map_04_05.unity3d": {
   "counts": {
    "(unknown)": 1,
-   "TerrainDetailManager": 2,
+   "TerrainDetailManager": 1,
    "MapAttributeTable": 1,
    "EffectEmitterController": 22,
    "VisibleSwitch": 169,
@@ -37,6 +38,7 @@
    "CombineChildren": 3,
    "EpSlopeTrigger": 3,
    "EpRingTrigger": 122,
+   "EpSynchronizer": 1,
    "DongColorSetup": 1
   },
   "paths": 3,

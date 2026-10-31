@@ -857,17 +857,25 @@ class GLTFWriter:
 
 	@staticmethod
 	def _class_name(pointer, target):
-		"The class of an object: a script's own class name, else the engine class; None if unknown"
+		"""
+		The class of an object: a script's own class name (its MonoScript's
+		m_ClassName), else the class its type tree names, else the engine
+		class; None if unknown. The MonoScript comes first because scripts
+		whose fields are laid out alike share a type tree, named after one of
+		them: EpSynchronizer's objects read as TerrainDetailManager's (neither
+		has fields of its own).
+		"""
+		fields = _fields(target)
+		script = fields.get("m_Script") if hasattr(fields, "get") else None
+		if script:
+			ms = GLTFWriter._quiet_resolve(script)
+			if ms is not None and _fields(ms).get("m_ClassName"):
+				return _fields(ms)["m_ClassName"]
 		try:
 			t = pointer.object.type
 			return getattr(t, "name", None) or str(t)
 		except Exception:
 			pass
-		script = _fields(target).get("m_Script") if hasattr(_fields(target), "get") else None
-		if script:
-			ms = GLTFWriter._quiet_resolve(script)
-			if ms is not None and _fields(ms).get("m_ClassName"):
-				return _fields(ms)["m_ClassName"]
 		if isinstance(target, dict):  # fields read without a class (a script whose MonoScript isn't loaded)
 			return None
 		return type(target).__name__
