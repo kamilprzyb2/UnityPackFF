@@ -11,7 +11,6 @@
    "EpLauncherTrigger": 1,
    "EpSynchronizer": 1,
    "EffectEmitterController": 16,
-   "(unknown)": 1,
    "TerrainDetailManager": 1,
    "MapAttributeTable": 1,
    "Combiner": 4,
@@ -37,7 +36,6 @@
    "EpSynchronizer": 1,
    "Combiner": 4,
    "EffectEmitterController": 22,
-   "(unknown)": 1,
    "TerrainDetailManager": 1,
    "MapAttributeTable": 1,
    "DongColorSetup": 1

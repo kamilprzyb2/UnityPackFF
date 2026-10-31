@@ -831,7 +831,10 @@ class GLTFWriter:
 		anything else ("path" only if its file's container lists it; an
 		effect's prefab, say); null pointers become None. An array of more
 		than SCRIPT_ARRAY_LIMIT elements becomes {"omitted": its length},
-		with a warning (MapAttributeTable's grid, which mapdata reads).
+		with a warning (MapAttributeTable's grid, which mapdata reads). A
+		script whose class is unknown and that has no fields of its own (one
+		of Unity's built-in scripts, which no build ships) is left out, with
+		a warning.
 		"""
 		export = GameObjectExport(self, gameobject, skins, animations, sample_rate, inactive, colliders, skinned_only,
 			actor_bones, scripts)
@@ -941,6 +944,9 @@ class GLTFWriter:
 				self.warnings.append("node %d: script %r can't be read" % (node, pointer))
 				continue
 			name = self._class_name(pointer, script)
+			if name is None and all(k.startswith("m_") for k in fields):
+				self.warnings.append("node %d: a script of an unknown class, with no fields of its own: left out" % (node))
+				continue
 			entry = {"script": name, "enabled": bool(fields.get("m_Enabled", True)), "fields": {}}
 			for k, v in fields.items():
 				if k.startswith("m_"):

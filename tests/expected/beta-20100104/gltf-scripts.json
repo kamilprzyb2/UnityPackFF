@@ -4,7 +4,6 @@
    "Combiner": 4,
    "VisibleSwitch": 100,
    "BillboardNode": 100,
-   "(unknown)": 1,
    "TerrainDetailManager": 1,
    "MapAttributeTable": 1,
    "EPElementController": 104,
@@ -22,7 +21,6 @@
  },
  "Map_04_05.unity3d": {
   "counts": {
-   "(unknown)": 1,
    "TerrainDetailManager": 1,
    "MapAttributeTable": 1,
    "EffectEmitterController": 22,

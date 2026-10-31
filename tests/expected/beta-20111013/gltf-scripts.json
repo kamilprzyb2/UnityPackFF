@@ -4,7 +4,6 @@
    "VisibleSwitch": 100,
    "BillboardNode": 100,
    "Combiner": 4,
-   "(unknown)": 1,
    "TerrainDetailManager": 1,
    "MapAttributeTable": 1,
    "EPElementController": 105,
@@ -37,7 +36,6 @@
    "EpSynchronizer": 1,
    "EffectEmitterController": 22,
    "Combiner": 4,
-   "(unknown)": 1,
    "TerrainDetailManager": 1,
    "MapAttributeTable": 1,
    "DongColorSetup": 1

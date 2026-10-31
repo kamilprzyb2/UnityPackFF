@@ -599,6 +599,20 @@ def test_script_class_from_its_monoscript():
 	assert [s["script"] for s in scripts] == ["TerrainDetailManager", "EpSynchronizer", "Combiner"]
 
 
+def test_script_with_nothing_known_is_left_out():
+	# a script whose MonoScript isn't loaded (Unity's built-in ones): with
+	# no fields of its own it says nothing, so it's left out
+	root = gameobject_tree()
+	root._obj["m_Component"].append((114, Pointer(script(), 911)))
+	unknown_with_fields = script(speed=2.5)
+	root._obj["m_Component"].append((114, Pointer(unknown_with_fields, 912)))
+	w = GLTFWriter()
+	w.add_gameobject(root, scripts=True)
+	scripts = w.json["nodes"][w.json["scenes"][0]["nodes"][0]]["extras"]["scripts"]
+	assert scripts == [{"script": None, "enabled": True, "fields": {"speed": 2.5}}]
+	assert any("unknown class" in m for m in w.warnings)
+
+
 def test_disabled_script():
 	w = GLTFWriter()
 	w.add_gameobject(scripted_tree(enabled=0), scripts=True)
