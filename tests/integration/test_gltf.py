@@ -234,13 +234,14 @@ def test_export_gltf_float_curves(build, bundle, unpacked, tmp_path):
 	f = tmp_path / "actor_m.kfm.glb"
 	if not f.exists():
 		pytest.skip("no actors in this archive")
-	anims = {a["name"]: a for a in GLB(f.read_bytes())["animations"]}
+	g = GLB(f.read_bytes())
+	anims = {a["name"]: a for a in g["animations"]}
 	shape, height = anims["shape"]["extras"]["float_curves"], anims["height"]["extras"]["float_curves"]
 	assert sorted(shape) == sorted(height) == sorted(":[%d]._FatFactor" % i for i in range(10))
 	for track in shape.values():
-		at = dict(zip(track["times"], track["values"]))
+		at = dict(zip(g.accessor(track["input"]), g.accessor(track["output"])))
 		assert [at[0.0], at[0.5], at[1.0]] == pytest.approx([0.0075, 0.0, -0.0078])
-	assert all(track["values"] == [0.0] for track in height.values())
+	assert all(g.accessor(track["output"]) == [0.0] for track in height.values())
 
 
 @pytest.mark.bundles("CharacterSelection.resourceFile", "CharacterCreation.resourceFile")
@@ -287,7 +288,16 @@ def test_export_gltf_split_clips(build, bundle, unpacked, tmp_path):
 		assert refs and all(c == {"name": a["name"], "animation": 0} for c in refs)
 		assert f.name == "actor_m.kfm@%s.glb" % re.sub(r"[^\w.@-]", "_", a["name"])
 		w = by_name[a["name"]]
-		assert a["channels"] == w["channels"] and a.get("extras") == w.get("extras")
+		assert a["channels"] == w["channels"]
+
+		def extras(doc, animation):
+			"The animation's extras, its float curves' samples read from their accessors"
+			e = json.loads(json.dumps(animation.get("extras", {})))
+			for t in e.get("float_curves", {}).values():
+				t["input"], t["output"] = doc.accessor(t["input"]), doc.accessor(t["output"])
+			return e
+
+		assert extras(g, a) == extras(whole, w)
 		assert [g.accessor(s["output"]) for s in a["samplers"]] == [whole.accessor(s["output"]) for s in w["samplers"]]
 
 	if have_validator():

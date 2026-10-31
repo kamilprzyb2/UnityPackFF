@@ -571,12 +571,20 @@ def test_clip_extras_and_missing_paths():
 	)
 	w = GLTFWriter()
 	w.add_gameobject(rig(clips=[c]))
+	g = GLB(w.glb())
 	anim = w.json["animations"][0]
 	assert anim["extras"]["events"] == [{"time": 0.75, "function": "end"}]
-	assert anim["extras"]["float_curves"] == {":_Color.r": {"times": [0.0], "values": [0.0], "node": w.json["scenes"][0]["nodes"][0]}}
+	[(name, track)] = anim["extras"]["float_curves"].items()
+	assert name == ":_Color.r" and track["node"] == w.json["scenes"][0]["nodes"][0]
+	assert samples(g, track) == ([0.0], [0.0])
 	assert anim["extras"]["unresolved"] == ["gone"]
 	assert len(anim["channels"]) == 1
 	assert "no node for 1 curve paths, such as 'gone'" in w.warnings[0]
+
+
+def samples(g, track):
+	"A float curve's (times, values), read from its accessors"
+	return g.accessor(track["input"]), g.accessor(track["output"])
 
 
 def float_curve(attribute, *keys, path=""):
@@ -591,15 +599,28 @@ def test_clip_float_curve_values():
 			float_curve("_Color.r", key(0.0, 0.5, 0.0), key(1.0, 0.5, 0.0), path="bone"),
 		])
 	g = GLB(export_gameobject(rig(clips=[shape])))
-	curves = g["animations"][0]["extras"]["float_curves"]
+	anim = g["animations"][0]
+	curves = anim["extras"]["float_curves"]
 	assert list(curves) == [":[0]._FatFactor", "bone:_Color.r"]
 	fat = curves[":[0]._FatFactor"]
-	assert fat["times"] == [0, 0.5, 1]
-	assert fat["values"] == pytest.approx([0.0075, 0.0, -0.0078])
+	times, values = samples(g, fat)
+	assert times == [0, 0.5, 1]
+	assert values == pytest.approx([0.0075, 0.0, -0.0078])
 	assert g["nodes"][fat["node"]]["name"] == "rig"
+	# the same times as the channel's: one accessor
+	assert fat["input"] == anim["samplers"][0]["input"] or len(g.accessor(anim["samplers"][0]["input"])) == 1
 	# a constant curve: one sample, as for transforms
-	assert curves["bone:_Color.r"]["values"] == [0.5] and curves["bone:_Color.r"]["times"] == [0]
+	assert samples(g, curves["bone:_Color.r"]) == ([0], [0.5])
 	assert g["nodes"][curves["bone:_Color.r"]["node"]]["name"] == "bone"
+
+
+def test_clip_float_curve_with_infinite_values():
+	# an accessor can't hold them: lists instead, null for each
+	odd = clip("odd", float_curves=[float_curve("_Color.r", key(0.0, 0.0, 0.0), key(1.0, math.inf, 0.0))])
+	g = GLB(export_gameobject(rig(clips=[odd])))
+	[track] = g["extras"]["material_clips"][0]["float_curves"].values()
+	assert track["times"] == [0, 0.5, 1] and len(track["values"]) == 3 and track["values"][2] is None
+	assert "input" not in track
 
 
 def test_material_only_clip():
@@ -610,7 +631,7 @@ def test_material_only_clip():
 	assert "animations" not in g.json
 	[c] = g["extras"]["material_clips"]
 	assert c["name"] == "nif-default"
-	assert c["float_curves"][":_MainTex.offset.x"]["values"] == pytest.approx([0, 0.5, 1])
+	assert samples(g, c["float_curves"][":_MainTex.offset.x"])[1] == pytest.approx([0, 0.5, 1])
 	assert c["events"] == [{"time": 0.5, "function": "half"}]
 
 
@@ -1202,7 +1223,10 @@ def test_split_clips():
 			assert g.accessor(s["output"]) == whole.accessor(ws["output"])
 	scroll = GLB(clips[2][1].glb())
 	assert "animations" not in scroll.json
-	assert scroll["extras"]["material_clips"] == whole["extras"]["material_clips"]
+	[mine], [theirs] = scroll["extras"]["material_clips"], whole["extras"]["material_clips"]
+	assert mine["name"] == theirs["name"] == "scroll"
+	# the samples, in accessors this document numbers
+	assert {k: samples(scroll, t) for k, t in mine["float_curves"].items()} == {k: samples(whole, t) for k, t in theirs["float_curves"].items()}
 	assert scroll["nodes"][rig_node]["extras"]["animation"]["clips"][2] == {"name": "scroll", "material_clip": 0}
 
 

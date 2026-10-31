@@ -864,6 +864,10 @@ class GLTFWriter:
 		for animation in doc.get("animations", []):
 			for sampler in animation["samplers"]:
 				used.update((sampler["input"], sampler["output"]))
+		tracks = [t for clip in doc.get("animations", []) for t in clip.get("extras", {}).get("float_curves", {}).values()]
+		tracks += [t for clip in doc.get("extras", {}).get("material_clips", []) for t in clip.get("float_curves", {}).values()]
+		for track in tracks:
+			used.update(track[k] for k in ("input", "output") if k in track)
 		accessors = {old: new for new, old in enumerate(sorted(used))}
 		views = {self.json["accessors"][a]["bufferView"] for a in used}
 		views.update(i["bufferView"] for i in doc.get("images", []) if "bufferView" in i)
@@ -900,6 +904,10 @@ class GLTFWriter:
 		for animation in doc.get("animations", []):
 			for sampler in animation["samplers"]:
 				sampler["input"], sampler["output"] = accessors[sampler["input"]], accessors[sampler["output"]]
+		for track in tracks:
+			for k in ("input", "output"):
+				if k in track:
+					track[k] = accessors[track[k]]
 		for image in doc.get("images", []):
 			if "bufferView" in image:
 				image["bufferView"] = views[image["bufferView"]]
@@ -1313,9 +1321,13 @@ class GameObjectExport:
 		the Animation's node; an ambiguous one moves the first). Curves on
 		other properties (material colours, say) are sampled the same way
 		into the animation's extras, as float_curves: {"<path>:<attribute>":
-		{"times": [...], "values": [...], "node": n}}, with the path from
-		the exported root (as node names go) and the node it names, if
-		there is one; a curve that doesn't change has one sample. The
+		{"input": accessor, "output": accessor, "node": n}}, with the path
+		from the exported root (as node names go), the sample times and
+		values (SCALAR float accessors, as a channel's sampler has them),
+		and the node it names, if there is one; a curve that doesn't change
+		has one sample. A curve with an infinite or NaN sample, which an
+		accessor can't hold, has "times" and "values" lists instead, null
+		for those samples. The
 		clip's events go there too. A clip with no transform curve isn't a
 		glTF animation (one needs a channel): it goes into the document's
 		extras.material_clips, as {"name": ..., "float_curves": ...,
@@ -1372,10 +1384,15 @@ class GameObjectExport:
 			if not f.curve.keys:
 				continue
 			values = [float(f.curve.evaluate(t)) for t in times]
-			values = [v if math.isfinite(v) else None for v in values]
-			if all(v == values[0] for v in values):
+			if all(v == values[0] or v != v and values[0] != values[0] for v in values):
 				values = values[:1]
-			track = {"times": times[:len(values)] if len(values) > 1 else [0.0], "values": values}
+			track_times = times[:len(values)] if len(values) > 1 else [0.0]
+			if all(math.isfinite(v) for v in values):
+				# shared, as the samples of channels are: map tiles have hundreds of props playing a few clips
+				track = {"input": w.accessor(track_times, "SCALAR", minmax=True, share=True),
+					"output": w.accessor(values, "SCALAR", share=True)}
+			else:  # an accessor can't hold them (no clip of the three builds has any)
+				track = {"times": track_times, "values": [v if math.isfinite(v) else None for v in values]}
 			if f.path in binding.targets:
 				track["node"] = binding.targets[f.path]
 			floats["%s:%s" % (full_path(f.path), f.attribute)] = track

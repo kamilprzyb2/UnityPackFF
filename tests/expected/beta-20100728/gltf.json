@@ -91,7 +91,7 @@
      128
     ]
    ],
-   "sha256": "69a059c2d6fffdb8",
+   "sha256": "a635370903f01bfa",
    "warnings": 0
   },
   "map/ep/suburbs_jumppad_02.nif": {
@@ -159,7 +159,7 @@
      128
     ]
    ],
-   "sha256": "4362826825c836d3",
+   "sha256": "bc82b5c3fc479ef2",
    "warnings": 2
   },
   "map/etc/dt_mtsm_fence_ef02_5.nif": {
@@ -187,7 +187,7 @@
      128
     ]
    ],
-   "sha256": "51171141cdb7cfee",
+   "sha256": "1df7e5741210ca81",
    "warnings": 2
   },
   "map/etc/indun_roof_black.nif": {
@@ -539,7 +539,7 @@
      128
     ]
    ],
-   "sha256": "811f1d1bd397fd01",
+   "sha256": "91ae57ccb1c09e2a",
    "warnings": 5
   },
   "map/questitem/timemachine_01.nif": {
@@ -615,7 +615,7 @@
      256
     ]
    ],
-   "sha256": "a725cda77481ff2c",
+   "sha256": "e1fd0c401ab2c320",
    "warnings": 2
   },
   "map/twistedforest/wd_jutf_plant 03.nif": {
@@ -667,7 +667,7 @@
      128
     ]
    ],
-   "sha256": "b8bb230efb48088b",
+   "sha256": "1c5007244a8c210e",
    "warnings": 1
   },
   "map/twistedforest/wd_jutf_plant 07.nif": {
@@ -987,7 +987,7 @@
      256
     ]
    ],
-   "sha256": "bd98d99c8c0fdc36",
+   "sha256": "bd2f12a8cbdb2075",
    "warnings": 4
   },
   "mob/fusion_grim.kfm": {
@@ -1095,7 +1095,7 @@
      1
     ]
    ],
-   "sha256": "584ae04d8733bb54",
+   "sha256": "447f5514c11ac565",
    "warnings": 4
   },
   "mob/fusion_mandark.kfm": {
@@ -1135,7 +1135,7 @@
      1
     ]
    ],
-   "sha256": "33b7e9e871d51829",
+   "sha256": "dc432a43532b9e78",
    "warnings": 4
   },
   "mob/fusion_mayor.kfm": {
@@ -1223,7 +1223,7 @@
      1
     ]
    ],
-   "sha256": "d5c09bd800a54616",
+   "sha256": "a3aede9e87cf7c73",
    "warnings": 3
   },
   "mob/fusion_numbuhthree.kfm": {

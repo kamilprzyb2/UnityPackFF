@@ -138,12 +138,22 @@ def summary(glb_bytes, base=None):
 	h.update(json.dumps(g.get("materials", []), sort_keys=True).encode())
 	for skin in g.get("skins", []):
 		h.update(("%r;%r;" % (skin["joints"], g.accessor(skin["inverseBindMatrices"]))).encode())
+	def with_samples(extras):
+		"extras with each float curve's accessors replaced by their values, so the digest doesn't depend on numbering"
+		extras = json.loads(json.dumps(extras))
+		clips = [extras] + extras.get("material_clips", [])
+		for track in (t for c in clips for t in c.get("float_curves", {}).values()):
+			for k in ("input", "output"):
+				if k in track:
+					track[k] = g.accessor(track[k])
+		return extras
+
 	for anim in g.get("animations", []):
-		h.update(json.dumps([anim["name"], anim["channels"], anim.get("extras")], sort_keys=True).encode())
+		h.update(json.dumps([anim["name"], anim["channels"], with_samples(anim.get("extras", {}))], sort_keys=True).encode())
 		for s in anim["samplers"]:
 			h.update(("%r;%r;" % (g.accessor(s["input"]), g.accessor(s["output"]))).encode())
 	if "extras" in g.json:  # clips that only animate materials
-		h.update(json.dumps(g["extras"], sort_keys=True).encode())
+		h.update(json.dumps(with_samples(g["extras"]), sort_keys=True).encode())
 	images = [list(Image.open(io.BytesIO(g.image(i))).size) for i in range(len(g.get("images", [])))]
 	return {
 		"nodes": len(g.get("nodes", [])),
