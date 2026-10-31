@@ -524,6 +524,77 @@ def test_actor_bones_are_off_by_default():
 	assert "actor_bones" not in g["nodes"][g["scenes"][0]["nodes"][0]]["extras"]
 
 
+# Scripts: an Infected Zone platform on the root, pointing at a waypoint on
+# the child, at a prefab that isn't exported and at nothing.
+
+def scripted_tree(enabled=1):
+	root = gameobject_tree()
+	child_tr = root.component[0][1].target._obj["m_Children"][0]
+	child_go = child_tr.target._obj["m_GameObject"]
+	waypoint = script(point=vec(1, 2, 3), prev=Pointer(None, 0), next=Pointer(None, 0))
+	waypoint["m_GameObject"] = child_go
+	waypoint["m_Script"] = Pointer(fdict(m_ClassName="Waypoint"), 801)
+	waypoint_ptr = Pointer(waypoint, 802)
+	child_go.target._obj["m_Component"].append((-2, waypoint_ptr))
+	prefab = GameObject(fdict(m_Name="EPbarrier1", m_Component=[]))
+	platform = script(
+		triggerType=4, velocity=0.035, moveType=0, frm=vec(0, 0, 0), to=vec(115.5, 0, -1),
+		head=waypoint_ptr, nifObject=Pointer(prefab, 803), tail=Pointer(None, 0), broken=Pointer(None, 804),
+		odd=float("nan"), grid=list(range(5000)), keys=[fdict(time=0.0, genType=1)],
+	)
+	platform["m_Enabled"] = enabled
+	platform["m_Script"] = Pointer(fdict(m_ClassName="EpPlatformTrigger"), 805)
+	root._obj["m_Component"].append((-1, Pointer(platform, 806)))
+	return root
+
+
+def test_scripts():
+	w = GLTFWriter()
+	w.add_gameobject(scripted_tree(), scripts=True)
+	g = GLB(w.glb())
+	root = g["nodes"][g["scenes"][0]["nodes"][0]]
+	child_index = root["children"][0]
+	[platform] = root["extras"]["scripts"]
+	assert platform["script"] == "EpPlatformTrigger"
+	assert platform["enabled"] is True
+	f = platform["fields"]
+	# as stored: Unity's coordinates, not mirrored
+	assert f["to"] == {"x": 115.5, "y": 0, "z": -1}
+	assert (f["triggerType"], f["velocity"], f["moveType"]) == (4, pytest.approx(0.035), 0)
+	# a component on an exported GameObject: its node; anything else: what it is
+	assert f["head"] == {"node": child_index, "component": "Waypoint"}
+	assert f["nifObject"] == {"object": "EPbarrier1", "type": "GameObject"}
+	assert f["tail"] is None
+	assert f["broken"] == {"object": None, "type": None}  # points into a file that isn't loaded
+	assert f["odd"] is None
+	assert f["grid"] == {"omitted": 5000}
+	assert f["keys"] == [{"time": 0.0, "genType": 1}]
+	assert not any(k.startswith("m_") for k in f)
+	assert any("grid has 5000 elements" in m for m in w.warnings)
+	[waypoint] = g["nodes"][child_index]["extras"]["scripts"]
+	assert waypoint == {"script": "Waypoint", "enabled": True, "fields": {"point": {"x": 1, "y": 2, "z": 3}, "prev": None, "next": None}}
+
+
+def test_disabled_script():
+	w = GLTFWriter()
+	w.add_gameobject(scripted_tree(enabled=0), scripts=True)
+	root = w.json["nodes"][w.json["scenes"][0]["nodes"][0]]
+	assert root["extras"]["scripts"][0]["enabled"] is False
+
+
+def test_scripts_are_off_by_default():
+	w = GLTFWriter()
+	w.add_gameobject(scripted_tree())
+	assert not any("scripts" in n.get("extras", {}) for n in w.json["nodes"])
+
+
+def test_split_clips_leave_scripts_with_the_model():
+	w = GLTFWriter()
+	w.add_gameobject(scripted_tree(), scripts=True)
+	base, clips = w.split_clips()
+	assert any("scripts" in n.get("extras", {}) for n in base.json["nodes"])
+
+
 def test_skin_without_index_table():
 	w = GLTFWriter()
 	w.add_gameobject(rig(), actor_bones=True)

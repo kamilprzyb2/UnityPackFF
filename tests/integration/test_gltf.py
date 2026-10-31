@@ -72,6 +72,73 @@ def test_scene(build, bundle, unpacked, expected, tmp_path):
 		assert {f: r for f, r in issues.items() if r["errors"] or r["warnings"]} == {}
 
 
+@pytest.mark.bundles("Map_04_05.unity3d", "Map_04_02.unity3d")
+def test_scene_scripts(build, bundle, unpacked, expected, tmp_path):
+	"""
+	A scene's scripts in its nodes' extras: Map_04_05 holds Dizzy World's
+	Infected Zone (effects, rings, jump pads, moving platforms, slides with
+	their waypoints, the barrier around it)
+	"""
+	from unitypack.environment import UnityEnvironment
+	from unitypack.gltf import GLTFWriter
+
+	env = CuratedEnvironment(build)
+	try:
+		env.add_references(bundle)
+		uenv = UnityEnvironment(base_path=env.dir)
+		[path] = [p for p in build.inner_files(bundle) if p.name.startswith("BuildPlayer-") and not p.name.endswith(".sharedAssets")]
+		w = GLTFWriter()
+		w.add_scene(uenv.get_asset_by_filename(path.name), scripts=True)
+		data = w.glb()
+	finally:
+		env.close()
+	nodes = w.json["nodes"]
+	scripts = [(i, s) for i, n in enumerate(nodes) for s in n.get("extras", {}).get("scripts", [])]
+	counts = {}
+	for _, s in scripts:
+		name = s["script"] or "(unknown)"
+		counts[name] = counts.get(name, 0) + 1
+
+	def pointers(value):
+		if isinstance(value, dict):
+			if "node" in value:
+				yield value
+			for v in value.values():
+				yield from pointers(v)
+		elif isinstance(value, list):
+			for v in value:
+				yield from pointers(v)
+
+	for _, s in scripts:
+		for p in pointers(s["fields"]):
+			assert 0 <= p["node"] < len(nodes)
+	# each path's waypoints run from head to tail, waypointCount of them
+	waypoints = {i: s["fields"] for i, s in scripts if s["script"] == "Waypoint"}
+	paths = 0
+	for _, s in scripts:
+		f = s["fields"]
+		if s["script"] in ("EpSlopeTrigger", "EpPlatformTrigger") and f.get("head"):
+			node, count = f["head"]["node"], 1
+			while node != f["tail"]["node"]:
+				node = waypoints[node]["next"]["node"]
+				count += 1
+			assert count == f["waypointCount"]
+			paths += 1
+	# the barrier's effects name their prefab, and its container path where
+	# a bundle holds it (728's scenes keep it in their own sharedAssets)
+	barriers = [s["fields"] for _, s in scripts if s["script"] == "EffectEmitterController" and s["fields"]["effectName"] == "EPbarrier"]
+	assert all(b["nifObject"]["object"] == "EPbarrier1" for b in barriers)
+	assert all(b["nifObject"].get("path", "effect/epbarrier1.nif") == "effect/epbarrier1.nif" for b in barriers)
+	with_path = sum(1 for b in barriers if "path" in b["nifObject"])
+	expected.check("gltf-scripts/" + bundle, dict(counts=counts, paths=paths, barriers=len(barriers), barriers_with_path=with_path))
+
+	f = tmp_path / "scene.glb"
+	f.write_bytes(data)
+	if have_validator():
+		issues = validate([f])
+		assert {k: r for k, r in issues.items() if r["errors"] or r["warnings"]} == {}
+
+
 @pytest.mark.bundles("FutureNano.resourceFile")
 def test_export_gltf_xdt_textures(build, bundle, unpacked, expected, env_dir, tmp_path):
 	"""

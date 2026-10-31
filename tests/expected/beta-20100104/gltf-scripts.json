@@ -1,0 +1,46 @@
+{
+ "Map_04_02.unity3d": {
+  "counts": {
+   "Combiner": 4,
+   "VisibleSwitch": 100,
+   "BillboardNode": 100,
+   "(unknown)": 1,
+   "TerrainDetailManager": 2,
+   "MapAttributeTable": 1,
+   "EPElementController": 104,
+   "EpJumppadTrigger": 12,
+   "EpPlatformTrigger": 40,
+   "EpZiplineTrigger": 3,
+   "EpRingTrigger": 49,
+   "EffectEmitterController": 16,
+   "DongColorSetup": 1
+  },
+  "paths": 0,
+  "barriers": 12,
+  "barriers_with_path": 12
+ },
+ "Map_04_05.unity3d": {
+  "counts": {
+   "(unknown)": 1,
+   "TerrainDetailManager": 2,
+   "MapAttributeTable": 1,
+   "EffectEmitterController": 22,
+   "VisibleSwitch": 169,
+   "BillboardNode": 169,
+   "Combiner": 4,
+   "EPElementController": 205,
+   "EpPlatformTrigger": 42,
+   "EpJumppadTrigger": 33,
+   "EpZiplineTrigger": 3,
+   "EpLauncherTrigger": 2,
+   "Waypoint": 38,
+   "CombineChildren": 3,
+   "EpSlopeTrigger": 3,
+   "EpRingTrigger": 122,
+   "DongColorSetup": 1
+  },
+  "paths": 3,
+  "barriers": 18,
+  "barriers_with_path": 18
+ }
+}
