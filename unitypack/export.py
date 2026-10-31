@@ -52,6 +52,22 @@ class OBJVector4(OBJVector3):
 		return "%s %s %s %s" % (self.x, self.y, self.z, self.w)
 
 
+def vertex_colors(mesh):
+	"""
+	A mesh's vertex colours, as OBJVector4s of bytes (r, g, b, a), from its
+	m_Colors: one packed RGBA32 per vertex (red in the low byte), which
+	compressed meshes keep uncompressed beside m_CompressedMesh
+	"""
+	ret = []
+	for c in mesh._obj.get('m_Colors') or []:
+		if 'rgba' in c:
+			v = int(c['rgba'])
+			ret.append(OBJVector4(v & 255, (v >> 8) & 255, (v >> 16) & 255, (v >> 24) & 255))
+		else:
+			ret.append(OBJVector4(*(int(c[k]) for k in 'rgba')))
+	return ret
+
+
 def strip_to_triangles(indices):
 	"A triangle strip as a list of triangles: every other one flips, and degenerate ones are dropped"
 	triangles = []
@@ -106,6 +122,8 @@ class MeshData:
 
 		for v in self.mesh._obj['m_UV']:
 			self.uv1.append(OBJVector2(v['x'], v['y']))
+
+		self.colors = vertex_colors(self.mesh)
 
 	def extract_skin(self):
 		"Per vertex, its [(bone index, weight)] from m_Skin, leaving out zero weights"
@@ -286,6 +304,8 @@ class CompressedMeshData:
 			self.uv1, self.uv2 = uvs[:n], uvs[n:]
 		else:
 			self.uv1 = uvs
+
+		self.colors = vertex_colors(self.mesh)
 
 		# one index list for all submeshes, as in an uncompressed index buffer
 		indices = self.read_bits(cmesh['m_Triangles'])

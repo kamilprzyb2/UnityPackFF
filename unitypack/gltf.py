@@ -301,18 +301,21 @@ class GLTFWriter:
 		for view in views:
 			self.json["bufferViews"][view]["buffer"] = self._cache[("buffer", name)]
 
-	def accessor(self, values, type_, component_type=FLOAT, target=None, minmax=False, share=False):
+	def accessor(self, values, type_, component_type=FLOAT, target=None, minmax=False, share=False, normalized=False):
 		"""
 		values: flat; type_: SCALAR, VEC2, VEC3, VEC4 or MAT4. With share,
-		the same values (as stored) give the same accessor, once per document
+		the same values (as stored) give the same accessor, once per
+		document. normalized: integers that stand for 0 to 1 (colours)
 		"""
 		components = {"SCALAR": 1, "VEC2": 2, "VEC3": 3, "VEC4": 4, "MAT4": 16}[type_]
 		fmt = "<%d%s" % (len(values), _FORMATS[component_type])
 		data = struct.pack(fmt, *values)
-		key = ("accessor", type_, component_type, target, minmax, data)
+		key = ("accessor", type_, component_type, target, minmax, normalized, data)
 		if share and key in self._cache:
 			return self._cache[key]
 		acc = {"bufferView": self.buffer_view(data, target), "componentType": component_type, "count": len(values) // components, "type": type_}
+		if normalized:
+			acc["normalized"] = True
 		if minmax:
 			stored = struct.unpack(fmt, data)  # as float32, so min/max match the data exactly
 			acc["min"] = [min(stored[i::components]) for i in range(components)]
@@ -388,6 +391,9 @@ class GLTFWriter:
 		extras, since Unity shaders differ in what they do with them
 		(FusionFall's toon shaders double _Color, for one); its other
 		textures are embedded too, each with its glTF texture index there.
+		An additive shader's base colour texture is a copy with its
+		brightness as alpha (see _brightness_alpha()); the texture itself
+		is then extras.main_texture_index.
 		"""
 		return self._cached(("material", main_texture), material, lambda m: self._make_material(m, main_texture))
 
@@ -411,7 +417,8 @@ class GLTFWriter:
 		gltf_material = {"name": material.name, "pbrMetallicRoughness": pbr}
 		name = shader_name(shader)
 		gltf_material.update(alpha_state(name, floats, self._cache.get(("transparent", texture), False)))
-		if texture is not None and is_additive(name):
+		additive = texture is not None and is_additive(name)
+		if additive:
 			pbr["baseColorTexture"] = {"index": self._brightness_alpha(texture)}
 		textures = {}
 		for name, env in texenvs.items():
@@ -433,6 +440,9 @@ class GLTFWriter:
 		if main_texture is not None:
 			# what the material stores stays in "textures"
 			extras["main_texture"] = main_texture.name
+		if additive:
+			# the texture itself, for an importer that blends additively
+			extras["main_texture_index"] = texture
 		gltf_material["extras"] = extras
 		return self._add("materials", gltf_material)
 
@@ -448,13 +458,20 @@ class GLTFWriter:
 		return self._cache[("untextured", index)]
 
 	def mesh_attributes(self, data):
-		"The vertex attributes of an OBJMesh's mesh_data"
+		"""
+		The vertex attributes of an OBJMesh's mesh_data: positions, normals,
+		texture coordinates and vertex colours (COLOR_0, RGBA bytes as
+		stored: the vertexColorAD shaders light with them)
+		"""
 		n = len(data.vertices)
 		attrs = {"POSITION": self.accessor([c for v in data.vertices for c in (v.x, v.y, v.z)], "VEC3", target=ARRAY_BUFFER, minmax=True)}
 		if len(data.normals) == n:
 			attrs["NORMAL"] = self.accessor([c for v in data.normals for c in _unit(v.x, v.y, v.z)], "VEC3", target=ARRAY_BUFFER)
 		if len(data.uv1) == n:
 			attrs["TEXCOORD_0"] = self.accessor([c for v in data.uv1 for c in (v.x, 1 - v.y)], "VEC2", target=ARRAY_BUFFER)
+		if n and len(data.colors) == n:
+			attrs["COLOR_0"] = self.accessor([c for v in data.colors for c in (v.x, v.y, v.z, v.w)], "VEC4", UNSIGNED_BYTE,
+				ARRAY_BUFFER, normalized=True)
 		return attrs
 
 	def add_mesh(self, mesh, materials=(), attributes=None):

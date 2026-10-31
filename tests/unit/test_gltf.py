@@ -104,6 +104,33 @@ def test_compressed_mesh():
 	assert g.accessor(a["POSITION"]) == approx([(1, -1, -1), (-1, 1, 1), (0.6, -0.6, -0.6)])
 
 
+def test_vertex_colors():
+	# one packed RGBA32 per vertex, red in the low byte
+	m = mesh(**QUAD, indices=[0, 1, 2])
+	m._obj["m_Colors"] = [fdict(rgba=0xFF6E5A46), fdict(rgba=0x80000000), fdict(rgba=0xFFFFFFFF), fdict(rgba=0)]
+	g = GLB(export_mesh(m))
+	a = g["meshes"][0]["primitives"][0]["attributes"]
+	acc = g["accessors"][a["COLOR_0"]]
+	assert (acc["type"], acc["componentType"], acc.get("normalized")) == ("VEC4", 5121, True)  # unsigned bytes for 0 to 1
+	assert g.accessor(a["COLOR_0"]) == [(0x46, 0x5A, 0x6E, 0xFF), (0, 0, 0, 0x80), (255, 255, 255, 255), (0, 0, 0, 0)]
+
+
+def test_vertex_colors_of_compressed_mesh():
+	# kept uncompressed beside m_CompressedMesh
+	m = compressed_mesh([0] * 6, [1, 1, 1])
+	m._obj["m_Colors"] = [fdict(rgba=0xFF0000FF)] * 3
+	g = GLB(export_mesh(m))
+	a = g["meshes"][0]["primitives"][0]["attributes"]
+	assert g.accessor(a["COLOR_0"]) == [(255, 0, 0, 255)] * 3
+
+
+def test_no_vertex_colors_without_one_per_vertex():
+	m = mesh(**QUAD, indices=[0, 1, 2])
+	m._obj["m_Colors"] = [fdict(rgba=0xFFFFFFFF)]
+	g = GLB(export_mesh(m))
+	assert "COLOR_0" not in g["meshes"][0]["primitives"][0]["attributes"]
+
+
 def test_submeshes_and_materials():
 	m = mesh(**QUAD, indices=[0, 1, 2, 0, 2, 3], submeshes=[submesh(0, 3), submesh(6, 0), submesh(6, 3)])
 	red, blue = material("red", rgba=(1, 0, 0, 1)), material("blue", rgba=(0, 0, 1, 1))
@@ -819,6 +846,16 @@ def test_additive_material_gets_brightness_as_alpha():
 	img = Image.open(io.BytesIO(g.image(image))).convert("RGBA")
 	# upright: the second stored row on top
 	assert [img.getpixel((0, y)) for y in range(2)] == [(128, 64, 0, 128), (0, 0, 0, 0)]
+	# the texture itself, for drawing it additively
+	own = g["textures"][mat["extras"]["main_texture_index"]]["source"]
+	img = Image.open(io.BytesIO(g.image(own))).convert("RGBA")
+	assert [img.getpixel((0, y)) for y in range(2)] == [(128, 64, 0, 255), (0, 0, 0, 255)]
+
+
+def test_main_texture_index_only_for_additive_materials():
+	tex = Pointer(texture(), 5)
+	g = GLB(export_mesh(mesh(**QUAD, indices=[0, 1, 2]), [shaded_material('Shader "normal_blendSrcalphaInvsrcalpha" {}', tex)]))
+	assert "main_texture_index" not in g["materials"][0]["extras"]
 
 
 def terrain_data(splats=True):
