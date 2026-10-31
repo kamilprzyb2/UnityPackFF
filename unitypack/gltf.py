@@ -883,8 +883,14 @@ class GLTFWriter:
 			return None
 		return type(target).__name__
 
-	def _container_path(self, pointer):
-		"The container path the pointer's file lists the object under, or None"
+	def container_path(self, pointer):
+		"""
+		The container path the file a pointer points into lists its object
+		under (the name the game loads it by, such as an effect's
+		"effect/epbarrier1.nif"), or None: the file isn't loaded, has no
+		container, or doesn't list the object. Each file's container is read
+		once per writer.
+		"""
 		try:
 			asset = pointer.asset
 		except Exception:
@@ -917,7 +923,7 @@ class GLTFWriter:
 			if go and self._pointer_key(go) in self._gameobject_nodes:
 				return {"node": self._gameobject_nodes[self._pointer_key(go)], "component": typename}
 			ret = {"object": (fields.get("m_Name") if hasattr(fields, "get") else None) or None, "type": typename}
-			path = self._container_path(value)
+			path = self.container_path(value)
 			if path is not None:
 				ret["path"] = path
 			return ret

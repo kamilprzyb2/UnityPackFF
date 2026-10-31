@@ -613,6 +613,30 @@ def test_script_with_nothing_known_is_left_out():
 	assert any("unknown class" in m for m in w.warnings)
 
 
+def test_container_path():
+	"The name a file's container lists an object under"
+	class Obj:
+		def __init__(self, type_id, data=None):
+			self.type_id, self.data = type_id, data
+
+		def read(self):
+			return self.data
+
+	entry = fdict(asset=Pointer(None, 5))
+	asset = type("Asset", (), {"name": "CustomAssetBundle-effects", "objects": {
+		1: Obj(142, fdict(m_Container=[("effect/epbarrier1.nif", entry)])), 5: Obj(1)}})()
+
+	class FilePointer(Pointer):
+		def __init__(self, path_id, asset):
+			super().__init__(None, path_id)
+			self.asset = asset
+
+	w = GLTFWriter()
+	assert w.container_path(FilePointer(5, asset)) == "effect/epbarrier1.nif"
+	assert w.container_path(FilePointer(6, asset)) is None  # not listed
+	assert w.container_path(Pointer(None, 5)) is None  # its file isn't loaded
+
+
 def test_disabled_script():
 	w = GLTFWriter()
 	w.add_gameobject(scripted_tree(enabled=0), scripts=True)
