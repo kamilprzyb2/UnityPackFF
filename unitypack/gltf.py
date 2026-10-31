@@ -84,6 +84,9 @@ COLLIDERS = (MESH_COLLIDER, BOX_COLLIDER, SPHERE_COLLIDER, CAPSULE_COLLIDER, CHA
 RENDER_SETTINGS = 104
 # Unity's Light.m_Type
 LIGHT_TYPES = {0: "spot", 1: "directional", 2: "point"}
+ASSET_BUNDLE = 142
+# script fields with more elements than this are left out of extras.scripts
+SCRIPT_ARRAY_LIMIT = 4096
 
 
 def mirror_position(p):
@@ -238,6 +241,10 @@ class GLTFWriter:
 		self._geometry_views = None
 		self.left_out = []  # with skinned_only, the plain meshes left out (see add_gameobject())
 		self.unbound_skins = []  # with actor_bones, the skins without an ActorWearIndexTable
+		self._gameobject_nodes = {}  # pointer key (_pointer_key()) of a GameObject -> its node, for scripts
+		self._pending_scripts = []  # with scripts, (node, script component pointer) still to write
+		self._defer_scripts = False  # add_scene() writes them once every root is in
+		self._containers = {}  # asset name -> {path ID: container path}
 
 	def _add(self, key, item):
 		return self._add_to(self.json, key, item)
@@ -737,13 +744,16 @@ class GLTFWriter:
 	def add_root(self, node):
 		self.json["scenes"][0]["nodes"].append(node)
 
-	def add_scene(self, asset, skins=True, animations=True, sample_rate=None, inactive=False, colliders=False):
+	def add_scene(self, asset, skins=True, animations=True, sample_rate=None, inactive=False, colliders=False,
+			scripts=False):
 		"""
 		Every root GameObject of a scene file (BuildPlayer-...): props,
 		terrain, skinned and animated objects, lights. Inactive GameObjects
 		are left out unless inactive is true. The scene's extras get its
 		RenderSettings (fog, ambient light) and FusionFall's DongColorSetup
-		colours (fog depth, fog, sky, light). Returns the root nodes.
+		colours (fog depth, fog, sky, light). With scripts, the nodes get
+		their scripts' fields (see add_gameobject()); a pointer may name a
+		node under another root. Returns the root nodes.
 		"""
 		extras = self.json["scenes"][0].setdefault("extras", {})
 		settings = next((o.read() for o in asset.objects.values() if o.type_id == RENDER_SETTINGS), None)
@@ -759,20 +769,25 @@ class GLTFWriter:
 		if not extras:
 			del self.json["scenes"][0]["extras"]
 		roots = []
-		for obj in sorted(asset.objects.values(), key=lambda o: o.path_id):
-			if obj.type_id != TRANSFORM:
-				continue
-			transform = obj.read()
-			if transform.parent:
-				continue
-			gameobject = self.resolve(transform.game_object)
-			if gameobject is None or not (inactive or gameobject._obj.get("m_IsActive", True)):
-				continue
-			roots.append(self.add_gameobject(gameobject, skins, animations, sample_rate, inactive, colliders))
+		self._defer_scripts = True
+		try:
+			for obj in sorted(asset.objects.values(), key=lambda o: o.path_id):
+				if obj.type_id != TRANSFORM:
+					continue
+				transform = obj.read()
+				if transform.parent:
+					continue
+				gameobject = self.resolve(transform.game_object)
+				if gameobject is None or not (inactive or gameobject._obj.get("m_IsActive", True)):
+					continue
+				roots.append(self.add_gameobject(gameobject, skins, animations, sample_rate, inactive, colliders, scripts=scripts))
+		finally:
+			self._defer_scripts = False
+		self._write_scripts()
 		return roots
 
 	def add_gameobject(self, gameobject, skins=True, animations=True, sample_rate=None, inactive=True, colliders=False,
-			skinned_only=False, actor_bones=False):
+			skinned_only=False, actor_bones=False, scripts=False):
 		"""
 		A GameObject and everything under it: one node per Transform, with
 		the meshes of MeshFilter + MeshRenderer and SkinnedMeshRenderer
@@ -801,13 +816,131 @@ class GLTFWriter:
 		actorBones; they go into the skin's extras.actor_bones as {"m": [...],
 		"f": [...]}, one entry per joint (-1 for none). A skinned mesh
 		without one is listed in unbound_skins, by name.
+
+		With scripts, each node's script components (MonoBehaviours) go
+		into its extras.scripts, in order: {"script": the class name,
+		"enabled": ..., "fields": every field the script declares (Unity's
+		own m_ fields left out)}. FusionFall drives much of its world with
+		them: effects (EffectEmitterController), the Infected Zones' moving
+		platforms, rings, jump pads and their waypoints (Ep*Trigger,
+		Waypoint). Values are as stored, so vectors are in Unity's
+		coordinates, not mirrored: which of them are positions only the
+		script knows. Pointers become {"node": n} for a GameObject in this
+		export or a component on one (with "component", its class), and
+		{"object": name, "type": class, "path": container path} for
+		anything else ("path" only if its file's container lists it; an
+		effect's prefab, say); null pointers become None. An array of more
+		than SCRIPT_ARRAY_LIMIT elements becomes {"omitted": its length},
+		with a warning (MapAttributeTable's grid, which mapdata reads).
 		"""
 		export = GameObjectExport(self, gameobject, skins, animations, sample_rate, inactive, colliders, skinned_only,
-			actor_bones)
+			actor_bones, scripts)
 		self.add_root(export.root)
 		for node in export.extra_roots:
 			self.add_root(node)
+		if not self._defer_scripts:
+			self._write_scripts()
 		return export.root
+
+	@staticmethod
+	def _pointer_key(pointer):
+		"What a pointer points to, as seen from its file: (file name, file ID, path ID)"
+		return (pointer.source_asset.name, pointer.file_id, pointer.path_id)
+
+	@staticmethod
+	def _quiet_resolve(pointer):
+		"The object a pointer points to, or None (no warning: a script may point anywhere)"
+		try:
+			return pointer.resolve()
+		except Exception:
+			return None
+
+	@staticmethod
+	def _class_name(pointer, target):
+		"The class of an object: a script's own class name, else the engine class; None if unknown"
+		try:
+			t = pointer.object.type
+			return getattr(t, "name", None) or str(t)
+		except Exception:
+			pass
+		script = _fields(target).get("m_Script") if hasattr(_fields(target), "get") else None
+		if script:
+			ms = GLTFWriter._quiet_resolve(script)
+			if ms is not None and _fields(ms).get("m_ClassName"):
+				return _fields(ms)["m_ClassName"]
+		if isinstance(target, dict):  # fields read without a class (a script whose MonoScript isn't loaded)
+			return None
+		return type(target).__name__
+
+	def _container_path(self, pointer):
+		"The container path the pointer's file lists the object under, or None"
+		try:
+			asset = pointer.asset
+		except Exception:
+			return None
+		if asset.name not in self._containers:
+			paths = {}
+			for obj in asset.objects.values():
+				if obj.type_id == ASSET_BUNDLE:
+					for path, info in obj.read()["m_Container"]:
+						paths.setdefault(info["asset"].path_id, path)
+			self._containers[asset.name] = paths
+		return self._containers[asset.name].get(pointer.path_id)
+
+	def _script_value(self, value, depth=0):
+		"A script field's value as JSON (see add_gameobject())"
+		if depth > 32:
+			raise ValueError("script field nested too deep")
+		if hasattr(value, "path_id") and hasattr(value, "resolve"):  # a pointer
+			if not value:
+				return None
+			key = self._pointer_key(value)
+			if key in self._gameobject_nodes:
+				return {"node": self._gameobject_nodes[key]}
+			target = self._quiet_resolve(value)
+			if target is None:
+				return {"object": None, "type": None}
+			typename = self._class_name(value, target)
+			fields = _fields(target)
+			go = fields.get("m_GameObject") if hasattr(fields, "get") else None
+			if go and self._pointer_key(go) in self._gameobject_nodes:
+				return {"node": self._gameobject_nodes[self._pointer_key(go)], "component": typename}
+			ret = {"object": (fields.get("m_Name") if hasattr(fields, "get") else None) or None, "type": typename}
+			path = self._container_path(value)
+			if path is not None:
+				ret["path"] = path
+			return ret
+		if isinstance(value, bool) or value is None or isinstance(value, (int, str)):
+			return value
+		if isinstance(value, float):
+			return value if math.isfinite(value) else None
+		if isinstance(value, (bytes, bytearray, list, tuple)):
+			if len(value) > SCRIPT_ARRAY_LIMIT:
+				return {"omitted": len(value)}
+			return [self._script_value(v, depth + 1) for v in value]
+		fields = _fields(value)
+		if hasattr(fields, "items"):
+			return {str(k): self._script_value(v, depth + 1) for k, v in fields.items()}
+		return str(value)
+
+	def _write_scripts(self):
+		"The script components add_gameobject() collected, into their nodes' extras"
+		pending, self._pending_scripts = self._pending_scripts, []
+		for node, pointer in pending:
+			script = self._quiet_resolve(pointer)
+			fields = _fields(script) if script is not None else None
+			if not hasattr(fields, "items"):
+				self.warnings.append("node %d: script %r can't be read" % (node, pointer))
+				continue
+			name = self._class_name(pointer, script)
+			entry = {"script": name, "enabled": bool(fields.get("m_Enabled", True)), "fields": {}}
+			for k, v in fields.items():
+				if k.startswith("m_"):
+					continue
+				entry["fields"][k] = self._script_value(v)
+				if isinstance(v, (bytes, bytearray, list, tuple)) and len(v) > SCRIPT_ARRAY_LIMIT:
+					self.warnings.append("node %d: %s.%s has %d elements, left out" % (node, name, k, len(v)))
+			self.json["nodes"][node].setdefault("extras", {}).setdefault("scripts", []).append(entry)
 
 	def split_clips(self):
 		"""
@@ -865,6 +998,7 @@ class GLTFWriter:
 				node.pop("skin", None)
 				node_extras = node.get("extras", {})
 				node_extras.pop("colliders", None)  # their meshes are gone
+				node_extras.pop("scripts", None)
 				if "extras" in node and not node_extras:
 					del node["extras"]
 
@@ -1024,8 +1158,9 @@ class GameObjectExport:
 	"""
 
 	def __init__(self, writer, gameobject, skins=True, animations=True, sample_rate=None, inactive=True, colliders=False,
-			skinned_only=False, actor_bones=False):
+			skinned_only=False, actor_bones=False, scripts=False):
 		self.writer = writer
+		self.scripts = scripts
 		self.inactive = inactive
 		self.colliders = colliders
 		self.skinned_only = skinned_only
@@ -1100,6 +1235,7 @@ class GameObjectExport:
 		left_out = False
 		animated = None
 		actor_bones = index_table = None
+		scripts = []
 		renderer = next((w.resolve(p) for cid, p in comps if cid == MESH_RENDERER), None)
 		for cid, ptr in comps:
 			if cid == MESH_FILTER and renderer is not None:
@@ -1122,13 +1258,16 @@ class GameObjectExport:
 				if animated is not None:  # its node comes after its children's; its clips before theirs
 					slot = len(self.animations)
 					self.animations.append(None)
-			elif self.actor_bones and (cid == MONO_BEHAVIOUR or cid < 0):
-				script = w.resolve(ptr)
-				fields = _fields(script) if script is not None else {}
-				if "actorBones" in fields:
-					actor_bones = fields["actorBones"]
-				elif "transformIndicesM" in fields and "transformIndicesF" in fields:
-					index_table = fields
+			elif cid == MONO_BEHAVIOUR or cid < 0:
+				if self.scripts:
+					scripts.append(ptr)
+				if self.actor_bones:
+					script = w.resolve(ptr)
+					fields = _fields(script) if script is not None else {}
+					if "actorBones" in fields:
+						actor_bones = fields["actorBones"]
+					elif "transformIndicesM" in fields and "transformIndicesF" in fields:
+						index_table = fields
 			elif cid == LIGHT:
 				component = w.resolve(ptr)
 				if component is not None:
@@ -1167,6 +1306,11 @@ class GameObjectExport:
 		node = w.add_node(gameobject.name, mesh=mesh, translation=t, rotation=q, scale=sc, children=children,
 			**({"extras": extras} if extras else {}))
 		self.nodes[transform_ptr.path_id] = node
+		go_ptr = _fields(transform).get("m_GameObject")
+		if go_ptr:
+			w._gameobject_nodes.setdefault(w._pointer_key(go_ptr), node)
+		for ptr in scripts:
+			w._pending_scripts.append((node, ptr))
 		self.children[node] = named
 		if animated is not None:
 			self.animations[slot] = (path, node, animated)

@@ -34,6 +34,12 @@ as node indices, on its root; and on each worn item's skin, the index into
 that list of each joint, for boys and for girls (see
 unitypack.gltf.GLTFWriter.add_gameobject()).
 
+With --scripts, each node's scripts (MonoBehaviours) go into its extras
+with their fields: what the game's own scripts do with a scene, such as
+the effects it places (the Infected Zones' barriers), the zones' moving
+platforms and rings, and the waypoints they follow (see
+unitypack.gltf.GLTFWriter.add_gameobject()).
+
 With --split-clips, each export is written without its clips, as
 <name>.glb, and each clip on its own as <name>@<clip>.glb: the same nodes
 in the same order, with no meshes, so a viewer can load a clip when it's
@@ -232,6 +238,7 @@ def main():
 	p.add_argument('-o', '--outdir', default='.', help='output directory')
 	p.add_argument('--env', help='folder with the other extracted files (default: the input file\'s folder)')
 	p.add_argument('--colliders', action='store_true', help='add colliders and rigidbodies to the nodes\' extras, with collision meshes no node draws')
+	p.add_argument('--scripts', action='store_true', help='add each node\'s scripts (MonoBehaviours) and their fields to its extras: effects, Infected Zone elements, waypoints')
 	p.add_argument('--external', metavar='DIR', help='write images and mesh data to DIR, named by their content and shared by every export into it')
 	xdt_group = p.add_mutually_exclusive_group()
 	xdt_group.add_argument('--xdt', metavar='TABLEDATA', help='the TableData file whose XDT names the game\'s textures (default: the one in the environment)')
@@ -258,7 +265,7 @@ def main():
 
 		if not any(o.type_id == ASSET_BUNDLE for o in asset.objects.values()):
 			w = GLTFWriter(external=external)
-			w.add_scene(asset, colliders=args.colliders)
+			w.add_scene(asset, colliders=args.colliders, scripts=args.scripts)
 			out, clips = write(w, args.outdir, os.path.basename(args.file), args.split_clips)
 			print('scene -> {}{}'.format(out, clip_note(clips)))
 			report_external(external)
@@ -289,7 +296,8 @@ def main():
 			for swap in sets:
 				missing = set()
 				w = GLTFWriter(texture_override=override(swap, textures, missing) if swap else None, external=external)
-				w.add_gameobject(ptr.resolve(), colliders=args.colliders, skinned_only=key in worn, actor_bones=args.actor_bones)
+				w.add_gameobject(ptr.resolve(), colliders=args.colliders, skinned_only=key in worn, actor_bones=args.actor_bones,
+					scripts=args.scripts)
 				name = variant_name(path, swap, sets) if swap else path
 				note = ' ({} plain meshes left out)'.format(len(w.left_out)) if w.left_out else ''
 				out, clips = write(w, args.outdir, name, args.split_clips)
