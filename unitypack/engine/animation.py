@@ -9,13 +9,98 @@ from .component import Behaviour, Component
 from .object import Object, field
 
 
+class WrapMode(IntEnum):
+	"What a clip does at its end (Animation.wrap_mode; Default leaves it to the clip)"
+	Default = 0
+	Once = 1  # stops, and goes back to the first frame
+	Loop = 2
+	PingPong = 4
+	ClampForever = 8  # stays on the last frame
+
+
+class ClipBinding(namedtuple("ClipBinding", "targets unresolved ambiguous")):
+	"""
+	What a clip's curves move when an Animation plays it: targets is
+	{path: Transform} for each curve path that names one, unresolved the
+	paths that name none, ambiguous the paths that name more than one
+	(targets has the first, as Unity binds it). Both lists are sorted.
+	"""
+
+
+def find_path(root, path, children):
+	"""
+	Every node a curve path names under root, in the order Unity's
+	Transform.Find tries them: "" is root itself, "a/b" a child named b of
+	a child named a; depth first, children in order. children(node) gives
+	a node's (name, child) pairs in order.
+	"""
+	if not path:
+		yield root
+		return
+	head, _, rest = path.partition("/")
+	for name, child in children(root):
+		if name == head:
+			if rest:
+				yield from find_path(child, rest, children)
+			else:
+				yield child
+
+
+def transform_children(transform):
+	"A Transform's (GameObject name, Transform) children, for find_path(); those that don't resolve are left out"
+	for ptr in transform._obj["m_Children"]:
+		try:
+			child = ptr.resolve()
+			name = child._obj["m_GameObject"].resolve().name
+		except (KeyError, OSError):
+			continue
+		yield name, child
+
+
+def bind_paths(root, paths, children):
+	"A ClipBinding of paths under root (any kind of node, see find_path())"
+	targets, unresolved, ambiguous = {}, [], []
+	for path in sorted(set(paths)):
+		found = find_path(root, path, children)
+		first = next(found, None)
+		if first is None:
+			unresolved.append(path)
+			continue
+		targets[path] = first
+		if next(found, None) is not None:
+			ambiguous.append(path)
+	return ClipBinding(targets, unresolved, ambiguous)
+
+
 class Animation(Behaviour):
+	"""
+	Plays clips on its GameObject: animations is the clip list (pointers,
+	in order), animation the default clip (null for none), which
+	play_automatically starts when the object is loaded. wrap_mode is a
+	WrapMode. The curves of each clip move the Transforms their paths name
+	under the Animation's GameObject (see bind()).
+	"""
 	animate_physics = field("m_AnimatePhysics", bool)
-	culling_type = field("m_CullingType")
+	culling_type = field("m_CullingType")  # newer files; Unity 2.5 has animate_if_visible
+	animate_if_visible = field("m_AnimateIfVisible", bool)
 	play_automatically = field("m_PlayAutomatically", bool)
 	wrap_mode = field("m_WrapMode")
 	animation = field("m_Animation")
 	animations = field("m_Animations")
+
+	def transform(self):
+		"Its GameObject's Transform"
+		gameobject = self.game_object.resolve()
+		for c in gameobject.component:
+			# (class ID, pointer); newer files: {component: pointer}, the class only in the target
+			cid, ptr = c if isinstance(c, tuple) else (c["component"].object.type_id, c["component"])
+			if cid == 4:
+				return ptr.resolve()
+		raise KeyError("%r has no Transform" % (gameobject,))
+
+	def bind(self, clip):
+		"The ClipBinding of an AnimationClip's curve paths, as this Animation would play it"
+		return bind_paths(self.transform(), clip.paths, transform_children)
 
 
 class Motion(Object):
@@ -224,6 +309,12 @@ class AnimationClip(Motion):
 			FloatCurve(c["path"], c["attribute"], c["classID"], c["script"], AnimationCurve.from_dict(c["curve"]))
 			for c in self._obj["m_FloatCurves"]
 		]
+
+	@property
+	def paths(self):
+		"The transform path of every curve, sorted, each once"
+		return sorted(set(self.rotation_curves) | set(self.position_curves) | set(self.scale_curves)
+			| {c.path for c in self.float_curves})
 
 	def curves(self):
 		"Every curve of the clip"

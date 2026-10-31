@@ -8,7 +8,7 @@ Command-line tools that run the same operations as the integration tests, but wr
 | `survey.py` | Describes every file: format, type trees, class IDs, what UnityPackFF can read | `integration/test_survey.py` |
 | `roundtrip.py` | ffbuildtool extract → UnityPackFF save → ffbuildtool pack → re-open and compare; optionally a whole playable build | `integration/test_roundtrip.py` |
 | `meshes.py` | Exports every mesh of an archive as OBJ, plus the skin weights of skinned meshes | `integration/test_meshes.py` |
-| `clips.py` | Reads every AnimationClip of an archive and samples each curve at the clip's rate | `integration/test_clips.py` |
+| `clips.py` | Reads every AnimationClip of an archive and samples each curve at the clip's rate, and binds the clips of every Animation component to its Transforms | `integration/test_clips.py` |
 | `terrain.py` | Dumps every terrain of an archive with `bin/dump_terrain.py`, compares Unity's level-of-detail data with what `TerrainData` works out, and counts its details (grass) | `integration/test_terrain.py` |
 | `gltf.py` | Exports every prefab of an archive, or a map tile's whole scene, as glTF (`.glb`) and runs the Khronos validator on them when it's installed | `integration/test_gltf.py` |
 | `mapdata.py` | Reads the attribute grid and colours of map tiles and the music zones of `main.unity3d`, and dumps them with `bin/dump_mapdata.py` | `integration/test_mapdata.py` |
@@ -124,7 +124,7 @@ python3 -m tests.tools.clips --build 104 --bundle FutureNano.resourceFile
 python3 -m tests.tools.clips --build 1013 --bundle Nano_001.resourceFile
 ```
 
-Prints how many clips each archive has and how many store their rotations compressed. Writes, per serialized file, `out/clips/<build>/<archive>/<file>/<path ID>_<name>.json` for each clip: its name, sample rate, length and events, then per curve its kind (`rotation`, `position`, `scale` or `float`), the transform path it moves (for a `float` curve, path and property), its keys, and its values at every frame from 0 to the clip's length. Rotations are sampled as `evaluate()` returns them, without normalizing. Also writes `out/clips/<build>.json` with the statistics the integration test checks (curve and key counts per kind, length, event names, a digest of the samples).
+Prints how many clips each archive has, how many store their rotations compressed, and how many Animation components it has and how many of their clips' curve paths name no Transform or more than one (both 0 on every archive checked). Writes, per serialized file, `out/clips/<build>/<archive>/<file>/<path ID>_<name>.json` for each clip: its name, sample rate, length and events, then per curve its kind (`rotation`, `position`, `scale` or `float`), the transform path it moves (for a `float` curve, path and property), its keys, and its values at every frame from 0 to the clip's length. Rotations are sampled as `evaluate()` returns them, without normalizing. Also writes `out/clips/<build>.json` with the statistics the integration tests check: per clip, curve and key counts per kind, length, event names and a digest of the samples; per file, its Animation components (default clip listed, unlisted or none, wrap modes, play automatically, enabled) and their clips' bound, unresolved and ambiguous paths. Clips resolve against the curated archives and those the archive points into, as in `gltf.py`.
 
 ## terrain.py
 

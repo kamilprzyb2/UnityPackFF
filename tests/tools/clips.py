@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Every AnimationClip of an archive, read with unitypack's AnimationClip and
-sampled at the clip's own rate.
+sampled at the clip's own rate, and every Animation component with what
+its clips' curve paths bind to.
 
   python3 -m tests.tools.clips --build 104 --bundle FutureNano.resourceFile --out out/
 
@@ -19,7 +20,8 @@ from tests.tools._common import builds, bundles, parser
 
 from tests import serialized
 
-CLIP = 74  # class ID
+CLIP = 74  # class IDs
+ANIMATION = 111
 
 
 def clip_curves(clip):
@@ -93,14 +95,73 @@ def clip_stats(build, bundle, out=None):
 	return ret
 
 
+def binding_stats(build, bundle, env_dir):
+	"""
+	{file: stats} for the Animation components of the archive's files:
+	how many, how they play their clips (default clip listed or none,
+	wrap modes, play automatically, enabled), and over their clips (those
+	in files env_dir doesn't have are counted apart) how many curve paths
+	bind to a Transform, name none, or name more than one. Pointers resolve
+	against env_dir, as in tests.tools.gltf.
+	"""
+	from unitypack.environment import UnityEnvironment
+
+	env = UnityEnvironment(base_path=str(env_dir))
+	ret = {}
+	for path in build.inner_files(bundle):
+		if not serialized.looks_serialized(path.read_bytes()):
+			continue
+		asset = env.get_asset_by_filename(path.name)
+		stats = {"animations": 0, "clips": 0, "clips_elsewhere": 0, "default": {"listed": 0, "unlisted": 0, "none": 0},
+			"wrap_modes": {}, "play_automatically": 0, "enabled": 0, "paths": 0, "unresolved": 0, "ambiguous": 0}
+		for obj in asset.objects.values():
+			if obj.type_id != ANIMATION or obj.uses_structs_dat:
+				continue
+			animation = obj.read()
+			stats["animations"] += 1
+			stats["play_automatically"] += animation.play_automatically
+			stats["enabled"] += animation.enabled
+			wrap = str(animation.wrap_mode)
+			stats["wrap_modes"][wrap] = stats["wrap_modes"].get(wrap, 0) + 1
+			default = animation.animation
+			listed = [(p.file_id, p.path_id) for p in animation.animations if p]
+			kind = "none" if not default else "listed" if (default.file_id, default.path_id) in listed else "unlisted"
+			stats["default"][kind] += 1
+			for ptr in animation.animations:
+				try:
+					clip = ptr.resolve()
+				except KeyError:
+					stats["clips_elsewhere"] += 1
+					continue
+				binding = animation.bind(clip)
+				stats["clips"] += 1
+				stats["paths"] += len(binding.targets)
+				stats["unresolved"] += len(binding.unresolved)
+				stats["ambiguous"] += len(binding.ambiguous)
+		if stats["animations"]:
+			ret[path.name] = stats
+	return ret
+
+
 def main():
+	from tests.tools.gltf import CuratedEnvironment
+
 	args = parser(__doc__).parse_args()
 	for build in builds(args):
 		results = {}
-		for b in bundles(args, build):
-			r = results[b] = clip_stats(build, b, args.out / "clips" / build.name / b)
-			clips = [c for f in r.values() for c in f.values()]
-			print("%s %s: %d clips, %d compressed" % (build.alias, b, len(clips), sum(c["compressed"] for c in clips)))
+		env = CuratedEnvironment(build)
+		try:
+			for b in bundles(args, build):
+				r = clip_stats(build, b, args.out / "clips" / build.name / b)
+				clips = [c for f in r.values() for c in f.values()]
+				env.add_references(b)
+				bindings = binding_stats(build, b, env.dir)
+				results[b] = {"clips": r, "bindings": bindings}
+				print("%s %s: %d clips, %d compressed; %d Animation components, %d unresolved and %d ambiguous paths" % (
+					build.alias, b, len(clips), sum(c["compressed"] for c in clips), sum(s["animations"] for s in bindings.values()),
+					sum(s["unresolved"] for s in bindings.values()), sum(s["ambiguous"] for s in bindings.values())))
+		finally:
+			env.close()
 		(args.out / "clips").mkdir(parents=True, exist_ok=True)
 		(args.out / "clips" / ("%s.json" % build.name)).write_text(json.dumps(results, indent=1))
 

@@ -4,11 +4,13 @@ of every curve sampled at the clip's rate. Compressed clips come from the
 nanos of every build (uncompressed ones only from unit tests). Every
 rotation key is a unit quaternion, and compressed rotation curves end with
 the clip's position curves, to the 0.01 s their key times are stored in.
+Every curve path of every clip an Animation component plays (nanos and the
+props of a map tile) names exactly one Transform under it.
 """
 
 import pytest
 
-from tests.tools.clips import CLIP, clip_stats
+from tests.tools.clips import CLIP, binding_stats, clip_stats
 
 from tests import serialized
 
@@ -46,3 +48,20 @@ def test_rotation_keys(build, bundle, unpacked):
 		if clip.compressed and positions:
 			end = max(c.end_time for c in positions.values())
 			assert max(c.end_time for c in rotations.values()) == pytest.approx(end, abs=0.0101)
+
+
+@pytest.mark.bundles("FutureNano.resourceFile", "Nano_001.resourceFile", "Map_04_02.unity3d")
+def test_bindings(build, bundle, unpacked, expected):
+	from tests.tools.gltf import CuratedEnvironment
+
+	env = CuratedEnvironment(build)
+	try:
+		env.add_references(bundle)
+		stats = binding_stats(build, bundle, env.dir)
+	finally:
+		env.close()
+	assert stats
+	for s in stats.values():
+		assert s["clips"] > 0 and s["clips_elsewhere"] == 0
+		assert s["unresolved"] == 0 and s["ambiguous"] == 0
+	expected.check("bindings/" + bundle, stats)
