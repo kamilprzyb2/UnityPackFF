@@ -722,6 +722,60 @@ def test_terrain():
 	assert extras["lightmap"] is not None
 
 
+def detail_database(grass_texture):
+	"2 x 2 patches of 2 x 2 cells: a grass texture with instances, an unused one, and a mesh"
+	def prototype(texture=None, mesh=None, mode=0):
+		return fdict(prototype=mesh or Pointer(None, 0), prototypeTexture=texture or Pointer(None, 0),
+			minWidth=1.0, maxWidth=2.0, minHeight=1.0, maxHeight=0.5, noiseSpread=0.25, bendFactor=0.5,
+			healthyColor=color(0.25, 1.0, 0.0), dryColor=color(1.0, 0.5, 0.0), grayscaleLighting=0, lightmapFactor=1.0,
+			renderMode=mode, usePrototypeMesh=int(mesh is not None))
+
+	def patch(layers, counts):
+		return fdict(layerIndices=bytes(layers), numberOfObjects=bytes(counts))
+
+	bush = GameObject(fdict(m_Name="bush", m_Component=[]))
+	return fdict(
+		m_Patches=[patch([0], [0, 0, 1, 0]), patch([], []), patch([], []), patch([0, 2], [0, 0, 0, 2, 0, 0, 0, 0])],
+		m_DetailPrototypes=[prototype(Pointer(grass_texture, 43)), prototype(Pointer(None, 44)), prototype(mesh=Pointer(bush, 45), mode=1)],
+		m_PatchCount=2, m_PatchSamples=2,
+		m_WavingGrassTint=color(1.0, 0.875, 0.75), m_WavingGrassStrength=0.5, m_WavingGrassAmount=0.25, m_WavingGrassSpeed=0.125,
+	)
+
+
+def test_terrain_details():
+	t = terrain_data()
+	t._obj["m_DetailDatabase"] = detail_database(texture("grass"))
+	w = GLTFWriter()
+	w.add_root(w.add_node("t", mesh=w.add_terrain(t)))
+	g = GLB(w.glb())
+	details = g["materials"][0]["extras"]["terrain"]["details"]
+	assert details["resolution"] == 4
+	assert details["waving_grass"] == {"tint": [1.0, 0.875, 0.75, 1.0], "strength": 0.5, "amount": 0.25, "speed": 0.125}
+	grass, missing, bush = details["prototypes"]
+	assert g["images"][g["textures"][grass["texture"]]["source"]]["name"] == "grass"
+	assert grass["render_mode"] == "GrassBillboard" and grass["use_mesh"] is False and grass["prototype"] is None
+	assert (grass["min_width"], grass["max_width"], grass["healthy_color"]) == (1.0, 2.0, [0.25, 1.0, 0.0, 1.0])
+
+	# counts per cell, unfiltered and clamped, laid over the terrain as its texture coordinates are:
+	# glTF puts z = 0 at the bottom of the image, as for the terrain's own texture
+	density = g["textures"][grass["density"]]
+	assert g["samplers"][density["sampler"]] == {"magFilter": 9728, "minFilter": 9728, "wrapS": 33071, "wrapT": 33071}
+	img = Image.open(io.BytesIO(g.image(density["source"])))
+	assert img.mode == "L" and img.size == (4, 4)
+	cells = {(x, 3 - row): img.getpixel((x, row)) for x in range(4) for row in range(4) if img.getpixel((x, row))}
+	assert cells == {(0, 1): 1, (3, 3): 2}  # patch (0, 0) cell (0, 1); patch (1, 1) cell (1, 1)
+
+	assert missing["texture"] is None and missing["density"] is None  # its texture is elsewhere, and it has none
+	assert bush["prototype"] == "bush" and bush["use_mesh"] is True and bush["render_mode"] == "VertexLit"
+	assert any("detail prototype 2 of 'ground' is a mesh ('bush'), which isn't exported" in m for m in w.warnings)
+
+
+def test_terrain_without_details():
+	w = GLTFWriter()
+	w.add_root(w.add_node("t", mesh=w.add_terrain(terrain_data())))
+	assert "details" not in w.json["materials"][0]["extras"]["terrain"]
+
+
 def test_terrain_without_splats():
 	w = GLTFWriter()
 	w.add_root(w.add_node("t", mesh=w.add_terrain(terrain_data(splats=False))))

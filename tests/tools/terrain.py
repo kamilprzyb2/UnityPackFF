@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Every terrain of an archive: its heightmap dumped with bin/dump_terrain.py,
-and how Unity's level-of-detail data compares with what TerrainData works out
-from the heights.
+Every terrain of an archive: its heightmap dumped with bin/dump_terrain.py
+(and its details, --details), how Unity's level-of-detail data compares with
+what TerrainData works out from the heights, and its details (grass).
 
   python3 -m tests.tools.terrain --build 104 --bundle DongResources_04_02.resourceFile --out out/
 
-Writes out/terrain/<build>/<archive>/<file>.png and .shifts.json (as
-dump_terrain.py writes them) and out/terrain/<build>.json with the
+Writes out/terrain/<build>/<archive>/<file>.png, .shifts.json, .details.json
+and .detail<N>.png (as dump_terrain.py writes them) and out/terrain/<build>.json with the
 statistics the integration test checks.
 """
 
@@ -62,6 +62,19 @@ def lod_check(terrain):
 	return ret
 
 
+def detail_stats(terrain):
+	"The details: resolution, prototypes, render modes, and the instances per layer with a digest of each"
+	prototypes = terrain.detail_prototypes
+	layers = terrain.detail_layers()
+	return {
+		"resolution": terrain.detail_resolution,
+		"prototypes": len(prototypes),
+		"render_modes": sorted({int(p.render_mode) for p in prototypes}),
+		"meshes": sum(1 for p in prototypes if p.use_mesh),
+		"layers": {str(i): [sum(layer), hashlib.sha256(layer).hexdigest()[:16]] for i, layer in layers.items()},
+	}
+
+
 def terrain_stats(build, bundle, out=None):
 	"""
 	{file: stats} for every serialized file of the archive holding a
@@ -88,6 +101,7 @@ def terrain_stats(build, bundle, out=None):
 			"shifts": len(t.shifts),
 			"shift_flags": sorted({s.flags for s in t.shifts}),
 			"lod": lod_check(t),
+			"details": detail_stats(t),
 		}
 		if out:
 			out.mkdir(parents=True, exist_ok=True)
@@ -96,7 +110,7 @@ def terrain_stats(build, bundle, out=None):
 
 
 def dump(path, png):
-	subprocess.run([sys.executable, str(ROOT / "bin" / "dump_terrain.py"), str(path), str(png)],
+	subprocess.run([sys.executable, str(ROOT / "bin" / "dump_terrain.py"), str(path), str(png), "--details"],
 		check=True, stdout=subprocess.DEVNULL, env={"PYTHONPATH": str(ROOT)})
 
 
@@ -110,7 +124,8 @@ def main():
 		for b in bundles(args, build):
 			r = results[b] = terrain_stats(build, b, args.out / "terrain" / build.name / b)
 			for name, t in r.items():
-				print("%s %s: %dx%d, %d shifts, LOD %s" % (build.alias, b, t["size"][0], t["size"][1], t["shifts"], t["lod"]))
+				print("%s %s: %dx%d, %d shifts, LOD %s, %d detail instances" % (build.alias, b, t["size"][0], t["size"][1],
+					t["shifts"], t["lod"], sum(n for n, _ in t["details"]["layers"].values())))
 		(args.out / "terrain").mkdir(parents=True, exist_ok=True)
 		(args.out / "terrain" / ("%s.json" % build.name)).write_text(json.dumps(results, indent=1))
 

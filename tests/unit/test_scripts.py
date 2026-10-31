@@ -128,6 +128,25 @@ def test_dump_terrain(tmp_path):
 	assert (shifts["width"], shifts["max_height"], shifts["scale"]) == (33, 32766, [4.0, 600.0, 4.0])
 
 
+def test_dump_terrain_details(tmp_path):
+	from tests.unit.test_terrain import DETAIL_PATCHES
+
+	prototypes = [synth.detail_prototype(texture=(1, 7)), synth.detail_prototype(), synth.detail_prototype()]
+	details = synth.detail_database(DETAIL_PATCHES, prototypes, count=2, samples=2)
+	(tmp_path / "t").write_bytes(synth.terrain_file([0] * (33 * 33), details=details))
+	run("dump_terrain.py", tmp_path / "t", tmp_path / "h.png", "--details")
+
+	info = json.loads((tmp_path / "h.details.json").read_text())
+	assert info["resolution"] == 4 and info["waving_grass"]["amount"] == 0.25
+	assert len(info["prototypes"]) == 3
+	assert info["prototypes"][0]["texture"] == {"file_id": 1, "path_id": 7}  # in another file
+	assert info["prototypes"][0]["prototype"] is None and info["prototypes"][0]["render_mode"] == "GrassBillboard"
+	assert sorted(p.name for p in tmp_path.glob("h.detail*.png")) == ["h.detail0.png", "h.detail1.png"]
+	img = Image.open(tmp_path / "h.detail1.png")
+	assert img.mode == "L" and img.size == (4, 4)
+	assert img.getpixel((3, 2)) == 3  # north up: column x 3, row 3 - z for z 1
+
+
 def test_replace_terrain(tmp_path):
 	heights = [x * 100 + z for x in range(33) for z in range(33)]
 	(tmp_path / "t").write_bytes(synth.terrain_file(heights, [(1, 2, 8)]))

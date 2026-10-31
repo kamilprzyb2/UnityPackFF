@@ -3,7 +3,7 @@
 > **This is a fork** of [dongresource/UnityPackFF](https://github.com/dongresource/UnityPackFF). It keeps everything UnityPackFF does and adds:
 > - **Tests**: unit tests on made-up data, and integration tests on three official builds (beta-20100104, beta-20100728, beta-20111013), downloaded and checked by hash.
 > - **Fixes**: `Asset.save()` leaves the asset readable and round trips byte for byte; archives with several files; Academy's format-7 files; texture colour channels; mesh normals, strips and UV sets.
-> - **Decoders**: mesh skin weights, AnimationClip curves, lossless 16-bit terrain with its shifts, per-map data (attribute grids, colours, music zones), script objects as JSON.
+> - **Decoders**: mesh skin weights, AnimationClip curves, lossless 16-bit terrain with its shifts and details (grass), per-map data (attribute grids, colours, music zones), script objects as JSON.
 > - **glTF export**: models with materials, skins and animations; map tiles with terrain and lights; the textures the game puts on nanos, NPCs, vehicles and player clothing.
 > - **Scripts**: `fetch_bundles.py` (download and unpack a build's archives), `export_gltf.py`, `index_bundles.py`, `dump_script.py`, `dump_mapdata.py`.
 
@@ -320,6 +320,7 @@ Each material keeps the Unity material it came from (shader name, colours, float
 
 Pointers into other files resolve when those files are in the same folder as the input, or one folder down, as `fetch_bundles.py --unpack` lays them out; `--env` points elsewhere.
 A map tile scene (`BuildPlayer-Map_XX_YY`, which has no container) is exported whole, as one `.glb` named after it: every active GameObject, the terrain with its shifts applied and its splat textures blended into a base map, and the scene's lights.
+The terrain material's extras keep what a terrain shader needs: the splat and control map textures, the lightmap, and the details (grass): each detail prototype's texture and settings, the wind, and per prototype a density texture laid over the terrain like the control maps, whose pixel values are how many instances each cell holds (Unity scatters them in their cells at random as it draws them, so they aren't placed).
 Nanos, NPCs and mobs, shinies, the bus, vehicles and what players wear get the textures the game puts on them, which the XDT names (from the TableData file in the environment, or `--xdt`; `--no-xdt` keeps the prefabs' own).
 A prefab the game uses with several texture sets (car colours, hoverboard designs, a face's eye colours) is written once per set, as `<path>@<texture>.glb`.
 
@@ -345,6 +346,8 @@ Next to it (`out.png` -> `out.shifts.json`) it writes the terrain's scales and i
 ```
 /path/to/dump_terrain.py CustomAssetBundle-... heights.png
 ```
+
+With `--details` it also writes the terrain's details (grass): `out.details.json` with the detail prototypes (texture, sizes, colours, render mode), the wind and the detail resolution (512 cells along each side in FusionFall, 1 m apart), and for each prototype with any instances an 8-bit `out.detail<N>.png`, north up like the heightmap, whose pixel values are how many instances each cell holds.
 
 The PNG can be edited in any image editor that keeps 16 bits per pixel; brighter is higher.
 `replace_terrain.py` writes it back and saves the file:
