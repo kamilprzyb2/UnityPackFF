@@ -38,7 +38,7 @@
    "primitives": 469,
    "materials": 345,
    "skins": 98,
-   "animations": 1,
+   "animations": 497,
    "images": [
     [
      256,
@@ -1525,7 +1525,7 @@
      256
     ]
    ],
-   "sha256": "42bce758b14dbab5",
+   "sha256": "ef41ca0fc2aa44f9",
    "terrains": 1,
    "detail_layers": 18,
    "warnings": 0

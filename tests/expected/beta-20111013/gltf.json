@@ -8,7 +8,7 @@
    "skins": 2,
    "animations": 0,
    "images": [],
-   "sha256": "c9ce500eadefd6aa",
+   "sha256": "c3a5e4f7e94dca7b",
    "warnings": 3
   },
   "wear/f_face_001_type02.nif": {
@@ -19,7 +19,7 @@
    "skins": 2,
    "animations": 0,
    "images": [],
-   "sha256": "f6646e14f35afb0b",
+   "sha256": "1ec33df62bb8a7b6",
    "warnings": 3
   },
   "wear/m_face_001_type01.nif": {
@@ -30,7 +30,7 @@
    "skins": 2,
    "animations": 0,
    "images": [],
-   "sha256": "fc8885e6dab9a408",
+   "sha256": "243b9966f0db3f04",
    "warnings": 3
   },
   "wear/m_face_001_type02.nif": {
@@ -41,7 +41,7 @@
    "skins": 2,
    "animations": 0,
    "images": [],
-   "sha256": "d15455e33cf440fb",
+   "sha256": "f6fea39fc6d74915",
    "warnings": 3
   }
  },
@@ -63,7 +63,7 @@
      2
     ]
    ],
-   "sha256": "e71c62dbfd69de50",
+   "sha256": "a030a8f61796d097",
    "warnings": 1
   }
  }

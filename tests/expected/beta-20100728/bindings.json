@@ -1,0 +1,60 @@
+{
+ "FutureNano.resourceFile": {
+  "CustomAssetBundle-FutureNano": {
+   "animations": 3,
+   "clips": 96,
+   "clips_elsewhere": 0,
+   "default": {
+    "listed": 3,
+    "unlisted": 0,
+    "none": 0
+   },
+   "wrap_modes": {
+    "0": 3
+   },
+   "play_automatically": 3,
+   "enabled": 3,
+   "paths": 4057,
+   "unresolved": 0,
+   "ambiguous": 0
+  }
+ },
+ "Map_04_02.unity3d": {
+  "BuildPlayer-Map_04_02": {
+   "animations": 611,
+   "clips": 611,
+   "clips_elsewhere": 0,
+   "default": {
+    "listed": 611,
+    "unlisted": 0,
+    "none": 0
+   },
+   "wrap_modes": {
+    "0": 611
+   },
+   "play_automatically": 611,
+   "enabled": 611,
+   "paths": 3043,
+   "unresolved": 0,
+   "ambiguous": 0
+  },
+  "BuildPlayer-Map_04_02.sharedAssets": {
+   "animations": 2,
+   "clips": 2,
+   "clips_elsewhere": 0,
+   "default": {
+    "listed": 2,
+    "unlisted": 0,
+    "none": 0
+   },
+   "wrap_modes": {
+    "2": 2
+   },
+   "play_automatically": 2,
+   "enabled": 2,
+   "paths": 29,
+   "unresolved": 0,
+   "ambiguous": 0
+  }
+ }
+}

@@ -291,7 +291,7 @@ from tests.unit.test_export import skinned_mesh  # noqa: E402
 from unitypack.engine.animation import AnimationClip  # noqa: E402
 
 
-def rig(bind_poses=None, clips=(), bones=None):
+def rig(bind_poses=None, clips=(), bones=None, **animation_fields):
 	ids = iter(range(300, 400))
 
 	def node(name, pos):
@@ -312,7 +312,8 @@ def rig(bind_poses=None, clips=(), bones=None):
 		m._obj["m_BindPose"] = bind_poses
 	smr = fdict(m_GameObject=None, m_Mesh=Pointer(m, next(ids)), m_Materials=[],
 		m_Bones=bones if bones is not None else [root_tr, bone_tr])
-	animation = fdict(m_GameObject=None, m_Animations=[Pointer(c, next(ids)) for c in clips])
+	animation = fdict(m_GameObject=None, m_Animations=[c if isinstance(c, Pointer) else Pointer(c, next(ids)) for c in clips],
+		**animation_fields)
 	root._obj["m_Component"] += [(137, Pointer(smr, next(ids))), (111, Pointer(animation, next(ids)))]
 	return root
 
@@ -493,7 +494,7 @@ def test_actor_bones_are_off_by_default():
 	g = GLB(export_gameobject(worn()))
 	assert "extras" not in g["skins"][0]
 	g = GLB(export_gameobject(actor()))
-	assert "extras" not in g["nodes"][g["scenes"][0]["nodes"][0]]
+	assert "actor_bones" not in g["nodes"][g["scenes"][0]["nodes"][0]]["extras"]
 
 
 def test_skin_without_index_table():
@@ -570,11 +571,20 @@ def test_clip_extras_and_missing_paths():
 	)
 	w = GLTFWriter()
 	w.add_gameobject(rig(clips=[c]))
+	g = GLB(w.glb())
 	anim = w.json["animations"][0]
 	assert anim["extras"]["events"] == [{"time": 0.75, "function": "end"}]
-	assert anim["extras"]["float_curves"] == {":_Color.r": {"times": [0.0], "values": [0.0], "node": w.json["scenes"][0]["nodes"][0]}}
+	[(name, track)] = anim["extras"]["float_curves"].items()
+	assert name == ":_Color.r" and track["node"] == w.json["scenes"][0]["nodes"][0]
+	assert samples(g, track) == ([0.0], [0.0])
+	assert anim["extras"]["unresolved"] == ["gone"]
 	assert len(anim["channels"]) == 1
 	assert "no node for 1 curve paths, such as 'gone'" in w.warnings[0]
+
+
+def samples(g, track):
+	"A float curve's (times, values), read from its accessors"
+	return g.accessor(track["input"]), g.accessor(track["output"])
 
 
 def float_curve(attribute, *keys, path=""):
@@ -589,15 +599,28 @@ def test_clip_float_curve_values():
 			float_curve("_Color.r", key(0.0, 0.5, 0.0), key(1.0, 0.5, 0.0), path="bone"),
 		])
 	g = GLB(export_gameobject(rig(clips=[shape])))
-	curves = g["animations"][0]["extras"]["float_curves"]
+	anim = g["animations"][0]
+	curves = anim["extras"]["float_curves"]
 	assert list(curves) == [":[0]._FatFactor", "bone:_Color.r"]
 	fat = curves[":[0]._FatFactor"]
-	assert fat["times"] == [0, 0.5, 1]
-	assert fat["values"] == pytest.approx([0.0075, 0.0, -0.0078])
+	times, values = samples(g, fat)
+	assert times == [0, 0.5, 1]
+	assert values == pytest.approx([0.0075, 0.0, -0.0078])
 	assert g["nodes"][fat["node"]]["name"] == "rig"
+	# the same times as the channel's: one accessor
+	assert fat["input"] == anim["samplers"][0]["input"] or len(g.accessor(anim["samplers"][0]["input"])) == 1
 	# a constant curve: one sample, as for transforms
-	assert curves["bone:_Color.r"]["values"] == [0.5] and curves["bone:_Color.r"]["times"] == [0]
+	assert samples(g, curves["bone:_Color.r"]) == ([0], [0.5])
 	assert g["nodes"][curves["bone:_Color.r"]["node"]]["name"] == "bone"
+
+
+def test_clip_float_curve_with_infinite_values():
+	# an accessor can't hold them: lists instead, null for each
+	odd = clip("odd", float_curves=[float_curve("_Color.r", key(0.0, 0.0, 0.0), key(1.0, math.inf, 0.0))])
+	g = GLB(export_gameobject(rig(clips=[odd])))
+	[track] = g["extras"]["material_clips"][0]["float_curves"].values()
+	assert track["times"] == [0, 0.5, 1] and len(track["values"]) == 3 and track["values"][2] is None
+	assert "input" not in track
 
 
 def test_material_only_clip():
@@ -608,8 +631,127 @@ def test_material_only_clip():
 	assert "animations" not in g.json
 	[c] = g["extras"]["material_clips"]
 	assert c["name"] == "nif-default"
-	assert c["float_curves"][":_MainTex.offset.x"]["values"] == pytest.approx([0, 0.5, 1])
+	assert samples(g, c["float_curves"][":_MainTex.offset.x"])[1] == pytest.approx([0, 0.5, 1])
 	assert c["events"] == [{"time": 0.5, "function": "half"}]
+
+
+# How Animation components play their clips (extras.animation), and what a
+# clip's curve paths name: nodes under the Animation's own node, found the
+# way Unity's Transform.Find finds them
+
+def animation_fields(**kw):
+	"An Animation's other fields as Unity 2.5 stores them, with some changed"
+	fields = dict(m_Enabled=True, m_Animation=Pointer(None, 0), m_WrapMode=0, m_PlayAutomatically=True,
+		m_AnimatePhysics=False, m_AnimateIfVisible=True)
+	fields.update(kw)
+	return fields
+
+
+def test_animation_extras():
+	move = clip(position_curves=[curve_on("bone", key(0.0, vec(1, 0, 0), vec(1, 0, 0)), key(1.0, vec(2, 0, 0), vec(1, 0, 0)))])
+	scroll = clip("scroll", float_curves=[float_curve("_MainTex.offset.x", key(0.0, 0.0, 1.0), key(1.0, 1.0, 1.0))])
+	empty = clip("empty")
+	move_ptr, scroll_ptr = Pointer(move, 801), Pointer(scroll, 802)
+	root = rig(clips=[move_ptr, Pointer(None, 803), scroll_ptr, Pointer(empty, 804), move_ptr],
+		**animation_fields(m_Animation=scroll_ptr, m_Enabled=False, m_WrapMode=2, m_PlayAutomatically=False, m_AnimatePhysics=True))
+	g = GLB(export_gameobject(root))
+	info = g["nodes"][g["scenes"][0]["nodes"][0]]["extras"]["animation"]
+	assert info == {
+		# in order: a clip elsewhere has no name, one with nothing to export no index, the same clip twice one animation
+		"clips": [{"name": "move", "animation": 0}, {"name": None}, {"name": "scroll", "material_clip": 0}, {"name": "empty"},
+			{"name": "move", "animation": 0}],
+		"default": 2, "wrap_mode": "Loop", "play_automatically": False, "enabled": False, "animate_physics": True,
+		"animate_if_visible": True,
+	}
+	assert len(g["animations"]) == 1 and len(g["extras"]["material_clips"]) == 1
+
+
+def test_animation_default_clip_not_listed():
+	# Unity plays the default clip even if the list hasn't it: it goes last
+	move = clip(position_curves=[curve_on("bone", key(0.0, vec(1, 0, 0), vec(1, 0, 0)), key(1.0, vec(2, 0, 0), vec(1, 0, 0)))])
+	root = rig(clips=[], **animation_fields(m_Animation=Pointer(move, 805), m_WrapMode=3, m_CullingType=1))
+	del root.component[2][1].target["m_AnimateIfVisible"]
+	g = GLB(export_gameobject(root))
+	info = g["nodes"][g["scenes"][0]["nodes"][0]]["extras"]["animation"]
+	assert info["clips"] == [{"name": "move", "animation": 0}] and info["default"] == 0
+	assert info["wrap_mode"] == 3  # not a WrapMode: the number
+	assert info["culling_type"] == 1 and "animate_if_visible" not in info
+
+
+def test_animation_without_clips_exported():
+	move = clip(position_curves=[curve_on("bone", key(0.0, vec(1, 0, 0), vec(1, 0, 0)), key(1.0, vec(2, 0, 0), vec(1, 0, 0)))])
+	w = GLTFWriter()
+	w.add_gameobject(rig(clips=[move]), animations=False)
+	assert "animations" not in w.json
+	assert w.json["nodes"][w.json["scenes"][0]["nodes"][0]]["extras"]["animation"]["clips"] == [{"name": "move"}]
+
+
+def tree(spec, ids):
+	"""
+	A GameObject tree: spec is (name, [components], [child specs]), a
+	component (class ID, fields); returns the root GameObject
+	"""
+	name, comps, children = spec
+	go = GameObject(fdict(m_Name=name, m_Component=[]))
+	tr = Transform(fdict(m_GameObject=Pointer(go, next(ids)), m_LocalPosition=vec(0, 0, 0), m_LocalRotation=fdict(x=0, y=0, z=0, w=1),
+		m_LocalScale=vec(1, 1, 1), m_Children=[], m_Father=None))
+	for child in children:
+		child_go = tree(child, ids)
+		tr._obj["m_Children"].append(child_go.component[0][1])
+	go._obj["m_Component"] = [(4, Pointer(tr, next(ids)))] + [(cid, Pointer(fields, next(ids))) for cid, fields in comps]
+	return go
+
+
+def spin(name="nif-default", path="Plane01"):
+	"A clip turning path once about y"
+	return clip(name, rotation_curves=[curve_on(path,
+		key(0.0, fdict(x=0, y=0, z=0, w=1), fdict(x=0, y=0, z=0, w=0)),
+		key(1.0, fdict(x=0, y=1, z=0, w=0), fdict(x=0, y=0, z=0, w=0)))])
+
+
+def test_clip_paths_are_relative_to_the_animation():
+	# map tile props: unnamed siblings, each with an Animation and a clip of the same name, on its own Plane01
+	ids = iter(range(900, 1000))
+	shared = Pointer(spin(), 899)
+	prop = ("", [(111, fdict(m_GameObject=None, m_Animations=[shared], **animation_fields(m_Animation=shared)))], [("Plane01", [], [])])
+	root = tree(("Map_11_11", [], [prop, prop]), ids)
+	w = GLTFWriter()
+	w.add_gameobject(root)
+	g = GLB(w.glb())
+	planes = [i for i, n in enumerate(g["nodes"]) if n.get("name") == "Plane01"]
+	assert len(planes) == 2
+	assert sorted(a["channels"][0]["target"]["node"] for a in g["animations"]) == planes
+	props = [n for n in g["nodes"] if n.get("name") is None]
+	assert [n["extras"]["animation"]["clips"] for n in props] == [[{"name": "nif-default", "animation": a}] for a in (0, 1)]
+	assert w.warnings == []
+	# the same clip twice: its samples once
+	first, second = g["animations"]
+	assert [(s["input"], s["output"]) for s in first["samplers"]] == [(s["input"], s["output"]) for s in second["samplers"]]
+
+
+def test_clip_ambiguous_path():
+	# two children named "wheel": the first is animated, as in Unity
+	ids = iter(range(900, 1000))
+	animation = fdict(m_GameObject=None, m_Animations=[Pointer(spin(path="wheel/hub"), 898)], **animation_fields())
+	root = tree(("ride", [(111, animation)], [("wheel", [], []), ("wheel", [], [("hub", [], [])])]), ids)
+	w = GLTFWriter()
+	w.add_gameobject(root)
+	g = GLB(w.glb())
+	[a] = g["animations"]
+	hub = next(i for i, n in enumerate(g["nodes"]) if n.get("name") == "hub")
+	# the first wheel has no hub, so Transform.Find goes on to the second
+	assert a["channels"][0]["target"]["node"] == hub
+	assert "ambiguous" not in a.get("extras", {})
+
+	animation["m_Animations"] = [Pointer(spin(path="wheel"), 897)]
+	w = GLTFWriter()
+	w.add_gameobject(tree(("ride", [(111, animation)], [("wheel", [], []), ("wheel", [], [])]), iter(range(900, 1000))))
+	g = GLB(w.glb())
+	[a] = g["animations"]
+	wheels = [i for i, n in enumerate(g["nodes"]) if n.get("name") == "wheel"]
+	assert a["channels"][0]["target"]["node"] == wheels[0]
+	assert a["extras"]["ambiguous"] == ["wheel"]
+	assert "clip 'nif-default': 1 curve paths name more than one node, such as 'wheel'; the first is animated" in w.warnings
 
 
 def test_clip_without_channels_is_left_out():
@@ -1049,6 +1191,13 @@ def test_split_clips():
 
 	model = GLB(base.glb())
 	assert "animations" not in model.json and "extras" not in model.json
+	rig_node = next(i for i, n in enumerate(whole["nodes"]) if n.get("name") == "rig")
+	# the rig's Animation lists its clips by name only: the model has none of them
+	assert model["nodes"][rig_node]["extras"]["animation"]["clips"] == [{"name": "move"}, {"name": "turn"}, {"name": "scroll"}]
+	assert whole["nodes"][rig_node]["extras"]["animation"]["clips"] == [
+		{"name": "move", "animation": 0}, {"name": "turn", "animation": 1}, {"name": "scroll", "material_clip": 0}]
+	for n in model["nodes"] + whole["nodes"]:
+		n.pop("extras", None)
 	assert model["nodes"] == whole["nodes"]
 	assert model["meshes"] == whole["meshes"] and model["skins"] == whole["skins"]
 	skinned = model["meshes"][0]["primitives"][0]["attributes"]
@@ -1066,13 +1215,19 @@ def test_split_clips():
 			assert key not in g.json
 		[a] = g["animations"]
 		assert a["name"] == name == animation["name"]
+		# its own clip, as this document numbers it; the others by name
+		assert [c for c in g["nodes"][rig_node]["extras"]["animation"]["clips"] if len(c) > 1] == [{"name": name, "animation": 0}]
 		assert a["channels"] == animation["channels"]
 		for s, ws in zip(a["samplers"], animation["samplers"]):
 			assert g.accessor(s["input"]) == whole.accessor(ws["input"])
 			assert g.accessor(s["output"]) == whole.accessor(ws["output"])
 	scroll = GLB(clips[2][1].glb())
 	assert "animations" not in scroll.json
-	assert scroll["extras"]["material_clips"] == whole["extras"]["material_clips"]
+	[mine], [theirs] = scroll["extras"]["material_clips"], whole["extras"]["material_clips"]
+	assert mine["name"] == theirs["name"] == "scroll"
+	# the samples, in accessors this document numbers
+	assert {k: samples(scroll, t) for k, t in mine["float_curves"].items()} == {k: samples(whole, t) for k, t in theirs["float_curves"].items()}
+	assert scroll["nodes"][rig_node]["extras"]["animation"]["clips"][2] == {"name": "scroll", "material_clip": 0}
 
 
 def test_split_clips_with_external_files(tmp_path):

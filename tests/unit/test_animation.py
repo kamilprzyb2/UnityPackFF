@@ -6,6 +6,9 @@ way ObjectInfo.read() returns them.
 Rotations are mostly stored compressed: each quaternion packed into 32 bits,
 key times as steps of 0.01 s, and one slope per key. Positions, scales and
 material properties are plain keyframe lists.
+
+An Animation component plays clips on its GameObject: each curve's path
+names a Transform under it, found as Unity's Transform.Find finds it.
 """
 
 import math
@@ -14,8 +17,11 @@ import pytest
 
 import unitypack.engine
 from unitypack.engine.animation import (
-	AnimationClip, AnimationCurve, CurveInfinity, Keyframe, decompress_rotation_curve, unpack_quaternions
+	Animation, AnimationClip, AnimationCurve, ClipBinding, CurveInfinity, Keyframe, WrapMode, bind_paths,
+	decompress_rotation_curve, find_path, transform_children, unpack_quaternions
 )
+from unitypack.engine.component import Transform
+from unitypack.engine.object import GameObject
 from unitypack.object import FFOrderedDict
 
 
@@ -270,3 +276,88 @@ def test_curve_classes_dont_wrap_serialized_types(name):
 	# load_object() wraps every serialized value whose type has a class of the
 	# same name in unitypack.engine; these names are type tree types too
 	assert not hasattr(unitypack.engine, name)
+
+
+def test_clip_paths():
+	c = clip(m_ScaleCurves=[fdict(curve=serialized_curve([]), path="Bip01")])
+	assert c.paths == ["Bip01", "Bip01/Bip01 Pelvis", "Plane"]  # sorted, each once
+
+
+# Binding: a tree of (name, children) tuples stands in for Transforms
+
+def node(name, *children):
+	return (name, list(children))
+
+
+def children(n):
+	return [(c[0], c) for c in n[1]]
+
+
+TREE = node("root",
+	node("a"),  # no b under the first a
+	node("a", node("b", node("c")), node("b")),
+	node("d"),
+)
+
+
+def test_find_path():
+	assert list(find_path(TREE, "", children)) == [TREE]
+	assert list(find_path(TREE, "d", children)) == [TREE[1][2]]
+	# depth first, children in order: the first a has no b, so the second a's come
+	b1, b2 = TREE[1][1][1]
+	assert list(find_path(TREE, "a/b", children)) == [b1, b2]
+	assert list(find_path(TREE, "a/b/c", children)) == [b1[1][0]]
+	assert list(find_path(TREE, "a/x", children)) == []
+	assert list(find_path(TREE, "b", children)) == []  # not a grandchild
+
+
+def test_bind_paths():
+	b = bind_paths(TREE, ["d", "a/b", "gone", "a/b", "a", ""], children)
+	assert isinstance(b, ClipBinding)
+	assert sorted(b.targets) == ["", "a", "a/b", "d"]
+	assert b.targets["a/b"] is TREE[1][1][1][0]  # the first of two
+	assert b.targets["a"] is TREE[1][0]
+	assert b.unresolved == ["gone"]
+	assert b.ambiguous == ["a", "a/b"]
+
+
+class Pointer:
+	"Stands in for an ObjectPointer; resolve() raises KeyError for a target in a file that isn't loaded"
+
+	def __init__(self, target):
+		self.target = target
+
+	def resolve(self):
+		if self.target is None:
+			raise KeyError("No such asset")
+		return self.target
+
+
+def gameobject(name, *children, components=()):
+	go = GameObject(fdict(m_Name=name, m_Component=[]))
+	tr = Transform(fdict(m_GameObject=Pointer(go), m_Children=[Pointer(c.component[0][1].resolve()) for c in children]))
+	go._obj["m_Component"] = [(4, Pointer(tr))] + list(components)
+	return go
+
+
+def test_animation_bind():
+	animation = Animation(fdict(m_GameObject=None, m_Enabled=True, m_Animation=None, m_Animations=[], m_WrapMode=2,
+		m_PlayAutomatically=True, m_AnimatePhysics=False, m_AnimateIfVisible=False))
+	pelvis = gameobject("Bip01 Pelvis")
+	bip = gameobject("Bip01", pelvis)
+	root = gameobject("walker", bip, gameobject("Plane"), components=[(111, Pointer(animation))])
+	# a child in a file that isn't loaded is left out
+	root.component[0][1].resolve()._obj["m_Children"].append(Pointer(None))
+	animation._obj["m_GameObject"] = Pointer(root)
+
+	assert animation.transform() is root.component[0][1].resolve()
+	b = animation.bind(clip(m_FloatCurves=[fdict(curve=serialized_curve([]), attribute="_Color.r", path="Gone", classID=21, script=None)]))
+	assert b.targets == {"Bip01": bip.component[0][1].resolve(), "Bip01/Bip01 Pelvis": pelvis.component[0][1].resolve()}
+	assert b.unresolved == ["Gone"] and b.ambiguous == []
+	assert [name for name, _ in transform_children(root.component[0][1].resolve())] == ["Bip01", "Plane"]
+	assert WrapMode(animation.wrap_mode) is WrapMode.Loop
+	assert animation.enabled and animation.play_automatically and not animation.animate_if_visible
+
+
+def test_wrap_modes():
+	assert [(m.name, int(m)) for m in WrapMode] == [("Default", 0), ("Once", 1), ("Loop", 2), ("PingPong", 4), ("ClampForever", 8)]

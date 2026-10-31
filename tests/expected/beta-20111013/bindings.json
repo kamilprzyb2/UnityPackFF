@@ -1,0 +1,42 @@
+{
+ "Map_04_02.unity3d": {
+  "BuildPlayer-Map_04_02": {
+   "animations": 611,
+   "clips": 611,
+   "clips_elsewhere": 0,
+   "default": {
+    "listed": 611,
+    "unlisted": 0,
+    "none": 0
+   },
+   "wrap_modes": {
+    "0": 611
+   },
+   "play_automatically": 611,
+   "enabled": 611,
+   "paths": 3043,
+   "unresolved": 0,
+   "ambiguous": 0
+  }
+ },
+ "Nano_001.resourceFile": {
+  "CustomAssetBundle-Nano_001": {
+   "animations": 1,
+   "clips": 32,
+   "clips_elsewhere": 0,
+   "default": {
+    "listed": 1,
+    "unlisted": 0,
+    "none": 0
+   },
+   "wrap_modes": {
+    "0": 1
+   },
+   "play_automatically": 1,
+   "enabled": 1,
+   "paths": 1692,
+   "unresolved": 0,
+   "ambiguous": 0
+  }
+ }
+}

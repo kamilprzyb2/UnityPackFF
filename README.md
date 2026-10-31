@@ -3,7 +3,7 @@
 > **This is a fork** of [dongresource/UnityPackFF](https://github.com/dongresource/UnityPackFF). It keeps everything UnityPackFF does and adds:
 > - **Tests**: unit tests on made-up data, and integration tests on three official builds (beta-20100104, beta-20100728, beta-20111013), downloaded and checked by hash.
 > - **Fixes**: `Asset.save()` leaves the asset readable and round trips byte for byte; archives with several files; Academy's format-7 files; texture colour channels; mesh normals, strips and UV sets.
-> - **Decoders**: mesh skin weights, AnimationClip curves, lossless 16-bit terrain with its shifts and details (grass), per-map data (attribute grids, colours, music zones), script objects as JSON.
+> - **Decoders**: mesh skin weights, AnimationClip curves and what Animation components bind them to, lossless 16-bit terrain with its shifts and details (grass), per-map data (attribute grids, colours, music zones), script objects as JSON.
 > - **glTF export**: models with materials, skins and animations; map tiles with terrain and lights; the textures the game puts on nanos, NPCs, vehicles and player clothing.
 > - **Scripts**: `fetch_bundles.py` (download and unpack a build's archives), `export_gltf.py`, `index_bundles.py`, `dump_script.py`, `dump_mapdata.py`.
 
@@ -312,6 +312,8 @@ You'll also want to change the Forward or Up axes in the file selection menu whe
 
 Exports the prefabs (GameObjects) of an extracted asset file as glTF binaries (`.glb`), one per prefab: the Transform tree, meshes and materials with their textures embedded, skins, and the clips of the prefab's Animation components.
 Each material keeps the Unity material it came from (shader name, colours, floats, textures) in its `extras`.
+Each node with an Animation component keeps how it plays its clips in its `extras.animation`: the clip list in order (each clip's glTF animation), the default clip, the wrap mode, whether it plays automatically and whether it's enabled.
+A clip's curves move the nodes their paths name under that node, found as Unity finds them; the animation's `extras` list the paths that name no node (`unresolved`) or more than one (`ambiguous`, the first is animated).
 
 ```
 /path/to/export_gltf.py CustomAssetBundle-50513e574023b4e259c6fd245ae5bc06 -o out
